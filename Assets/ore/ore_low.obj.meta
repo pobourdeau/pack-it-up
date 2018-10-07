@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 2015b2f8cdf440d4381cc8191d70645c
+guid: f7737c5182445604f99ebbe20ef666db
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: armoire_low
+    100000: ore_low
     100002: //RootNode
-    400000: armoire_low
+    400000: ore_low
     400002: //RootNode
-    2100000: armoire_lowMat
-    2300000: armoire_low
-    3300000: armoire_low
-    4300000: armoire_low
+    2100000: ore_lowMat
+    2300000: ore_low
+    3300000: ore_low
+    4300000: ore_low
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -42,7 +42,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1.5
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
