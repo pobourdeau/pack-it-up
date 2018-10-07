@@ -1,0 +1,181 @@
+fileFormatVersion: 2
+guid: 89348a87c842e114c99cc7ccb12fe7ee
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: BatonPompe_low
+    100002: BatonTop1_low
+    100004: BatonTop2_low
+    100006: BatonTop3_low
+    100008: BatonTop4_low
+    100010: Chemine_low
+    100012: ConnectPompeFour_low
+    100014: Container_low
+    100016: //RootNode
+    100018: PatteTable1_low
+    100020: PatteTable2_low
+    100022: PatteTable3_low
+    100024: PatteTable4_low
+    100026: Pompe_low
+    100028: Strap1_low
+    100030: Strap2_low
+    100032: SurfaceTable_low
+    100034: TriangleTop_low
+    400000: BatonPompe_low
+    400002: BatonTop1_low
+    400004: BatonTop2_low
+    400006: BatonTop3_low
+    400008: BatonTop4_low
+    400010: Chemine_low
+    400012: ConnectPompeFour_low
+    400014: Container_low
+    400016: //RootNode
+    400018: PatteTable1_low
+    400020: PatteTable2_low
+    400022: PatteTable3_low
+    400024: PatteTable4_low
+    400026: Pompe_low
+    400028: Strap1_low
+    400030: Strap2_low
+    400032: SurfaceTable_low
+    400034: TriangleTop_low
+    2100000: lambert1
+    2300000: BatonPompe_low
+    2300002: BatonTop1_low
+    2300004: BatonTop2_low
+    2300006: BatonTop3_low
+    2300008: BatonTop4_low
+    2300010: Chemine_low
+    2300012: ConnectPompeFour_low
+    2300014: Container_low
+    2300016: PatteTable1_low
+    2300018: PatteTable2_low
+    2300020: PatteTable3_low
+    2300022: PatteTable4_low
+    2300024: Pompe_low
+    2300026: Strap1_low
+    2300028: Strap2_low
+    2300030: SurfaceTable_low
+    2300032: TriangleTop_low
+    3300000: BatonPompe_low
+    3300002: BatonTop1_low
+    3300004: BatonTop2_low
+    3300006: BatonTop3_low
+    3300008: BatonTop4_low
+    3300010: Chemine_low
+    3300012: ConnectPompeFour_low
+    3300014: Container_low
+    3300016: PatteTable1_low
+    3300018: PatteTable2_low
+    3300020: PatteTable3_low
+    3300022: PatteTable4_low
+    3300024: Pompe_low
+    3300026: Strap1_low
+    3300028: Strap2_low
+    3300030: SurfaceTable_low
+    3300032: TriangleTop_low
+    4300000: Container_low
+    4300002: Chemine_low
+    4300004: BatonTop1_low
+    4300006: TriangleTop_low
+    4300008: PatteTable1_low
+    4300010: PatteTable2_low
+    4300012: PatteTable3_low
+    4300014: PatteTable4_low
+    4300016: SurfaceTable_low
+    4300018: BatonTop2_low
+    4300020: BatonTop3_low
+    4300022: BatonTop4_low
+    4300024: ConnectPompeFour_low
+    4300026: Pompe_low
+    4300028: Strap1_low
+    4300030: BatonPompe_low
+    4300032: Strap2_low
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: f39a55fee00b1ce45bc0629a55247e09, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 2
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 600
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
