@@ -11,11 +11,20 @@ public class DeplacementPerso : MonoBehaviour {
     public float vDeplacement;
     public float vRotation;
 
+    public GameObject txtRecolter;
+    public int[] aInventaire;
+    // Bois
+    // Fer
+    // Cuir
+
 
 	// Use this for initialization
 	void Start () {
         rbPerso = GetComponent<Rigidbody>();
         animPerso = GetComponent<Animator>();
+        aInventaire[0] = 0;
+        aInventaire[1] = 0;
+        aInventaire[2] = 0;
 	}
 
     void FixedUpdate() {
@@ -23,10 +32,32 @@ public class DeplacementPerso : MonoBehaviour {
 
         vDeplacement = Input.GetAxis("Vertical") * vitesseDeplacement;
 
-        print(vDeplacement);
+        rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);   
+    }
 
-        rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
+    void OnTriggerEnter(Collider objCollider) {
+        txtRecolter.SetActive(true);
+    }
 
+    private void OnTriggerStay(Collider objCollider) {
+        if (Input.GetMouseButtonDown(0)) {
 
+            if(objCollider.gameObject.tag == "bois") {
+                aInventaire[0] = 1;
+            }
+            if (objCollider.gameObject.tag == "fer") {
+                aInventaire[1] = 1;
+            }
+            if (objCollider.gameObject.tag == "cuir") {
+                aInventaire[2] = 1;
+            }
+
+            objCollider.gameObject.SetActive(false);
+            txtRecolter.SetActive(false);
+        }
+    }
+
+    void OnTriggerExit(Collider objCollider) {
+        txtRecolter.SetActive(false);
     }
 }
