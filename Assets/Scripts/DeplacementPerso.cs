@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeplacementPerso : MonoBehaviour {
 
@@ -13,13 +14,17 @@ public class DeplacementPerso : MonoBehaviour {
 
     public GameObject txtRecolter;
     public int[] aInventaire;
-    // Bois
-    // Fer
-    // Cuir
+    // aInventaire[0] = Bois
+    // aInventaire[1] = Fer
+    // aInventaire[2] = Cuir
+    public GameObject[] aCrochetInv;
+    // aCrochetInv[0] = crochet Bois
+    // aCrochetInv[1] = crochet Fer
+    // aCrochetInv[2] = crochet Cuir
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         rbPerso = GetComponent<Rigidbody>();
         animPerso = GetComponent<Animator>();
         aInventaire[0] = 0;
@@ -36,24 +41,46 @@ public class DeplacementPerso : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider objCollider) {
-        txtRecolter.SetActive(true);
+
+        if (objCollider.gameObject.tag == "bois") {
+            if(aInventaire[0] < 1) {
+                txtRecolter.SetActive(true);
+            }
+        }
+        if (objCollider.gameObject.tag == "fer") {
+            if (aInventaire[1] < 1) {
+                txtRecolter.SetActive(true);
+            }
+        }
+        if (objCollider.gameObject.tag == "cuir") {
+            if (aInventaire[2] < 1) {
+                txtRecolter.SetActive(true);
+            }
+        }
+
     }
 
     private void OnTriggerStay(Collider objCollider) {
         if (Input.GetMouseButtonDown(0)) {
 
-            if(objCollider.gameObject.tag == "bois") {
+            if(objCollider.gameObject.tag == "bois" && aInventaire[0] < 1) {
                 aInventaire[0] = 1;
+                objCollider.gameObject.SetActive(false);
+                txtRecolter.SetActive(false);
+                aCrochetInv[0].SetActive(true);
             }
-            if (objCollider.gameObject.tag == "fer") {
+            if (objCollider.gameObject.tag == "fer" && aInventaire[1] < 1) {
                 aInventaire[1] = 1;
+                objCollider.gameObject.SetActive(false);
+                txtRecolter.SetActive(false);
+                aCrochetInv[1].SetActive(true);
             }
-            if (objCollider.gameObject.tag == "cuir") {
+            if (objCollider.gameObject.tag == "cuir" && aInventaire[2] < 1) {
                 aInventaire[2] = 1;
+                objCollider.gameObject.SetActive(false);
+                txtRecolter.SetActive(false);
+                aCrochetInv[2].SetActive(true);
             }
-
-            objCollider.gameObject.SetActive(false);
-            txtRecolter.SetActive(false);
         }
     }
 
