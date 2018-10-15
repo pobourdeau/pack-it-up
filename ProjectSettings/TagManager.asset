@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - bois
+  - cuir
+  - fer
   layers:
   - Default
   - TransparentFX
