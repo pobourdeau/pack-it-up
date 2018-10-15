@@ -13,63 +13,93 @@ using UnityEngine.UI;
 
 public class MenuPrinc : MonoBehaviour {
 
-    public GameObject BtnQuitter;
-    public GameObject BtnHeberger;
-    public GameObject BtnRejoindre;
-    public GameObject BtnAide;
-    public GameObject BtnReglages;
-    public GameObject BtnRetour;
-    public GameObject NetworkManager;
+    // Menu principal
+    public GameObject menuPrinc;
+    public Button btnQuitter;
+    public Button btnJouer;
+    public Button btnAide;
+    public Button btnReglages;
 
-    /**
-     * Ouvrir la scène pour rejoindre une partie
-     * @param : void
-     * @return : void
-     */
-    public void LancerSceneRejoindre() {
-        BtnHeberger.SetActive(false);
-        BtnRejoindre.SetActive(false);
-        BtnAide.SetActive(false);
-        BtnReglages.SetActive(false);
+    // Menu jouer
+    public GameObject menuJouer;
+    public InputField txtCreer;
+    public Button btnCreerPartie;
+    public InputField txtRejoindre;
+    public Button btnRejoindrePartie;
 
-        NetworkManager.SetActive(true);
-        BtnRetour.SetActive(true);
+    public GameObject menuAide;
+    public GameObject menuReglages;
+    public GameObject menuPerso;
+
+
+    void Start() {
+        // Menu principal
+        btnQuitter.onClick.AddListener(() => QuitterJeu());
+        btnJouer.onClick.AddListener(() => OuvrirMenuJouer());
+        btnAide.onClick.AddListener(() => OuvrirMenuAide());
+        btnReglages.onClick.AddListener(() => OuvrirMenuReglages());
+
+        // Menu Jouer
+        btnCreerPartie.onClick.AddListener(() => CreerPartie());
+        btnRejoindrePartie.onClick.AddListener(() => RejoindrePartie());
     }
 
+    void Update() {
 
-    /**
-     * Ouvrir la scène pour créer une nouvelle partie 
-     * @param : void
-     * @return : void
-     */
-    public void LancerSceneHeberger() {
-        BtnHeberger.SetActive(false);
-        BtnRejoindre.SetActive(false);
-        BtnAide.SetActive(false);
-        BtnReglages.SetActive(false);
+        // Si l'input field de nom de partie ne contient rien,
+        if (txtCreer.text != "") {
+            // Activer le bouton de création de partie
+            btnCreerPartie.interactable = true;
+        }
+        else {
+            // Désactiver le bouton de création de partie
+            btnCreerPartie.interactable = false;
+        }
 
-        NetworkManager.SetActive(true);
-    }
-
-
-    /**
-     * Ouvrir la scène d'aide
-     * @param : void
-     * @return : void
-     */
-    public void LancerSceneAide() {
-
-    }
-
-
-    /**
-     * Ouvrir la scène des réglages du jeu
-     * @param : void
-     * @return : void
-     */
-    public void LancerSceneReglages() {
+        // Si l'input field de nom de partie ne contient rien,
+        if (txtRejoindre.text != "") {
+            // Activer le bouton de création de partie
+            btnRejoindrePartie.interactable = true;
+        }
+        else {
+            // Désactiver le bouton de création de partie
+            btnRejoindrePartie.interactable = false;
+        }
 
     }
+
+    public void OuvrirMenuJouer() {
+        menuPrinc.SetActive(false);
+        menuJouer.SetActive(true);
+    }
+
+    public void OuvrirMenuAide() {
+
+    }
+
+    public void OuvrirMenuReglages() {
+
+    }
+
+    public void CreerPartie() {
+
+        // Créer la partie (Network Manager)
+
+        // Ouvrir le menu de choix de personnage
+        menuJouer.SetActive(false);
+        menuPerso.SetActive(true);
+        
+        
+    }
+
+    public void RejoindrePartie() {
+        // Créer la partie (Network Manager)
+
+        // Ouvrir le menu de choix de personnage
+        menuJouer.SetActive(false);
+        menuPerso.SetActive(true);
+    }
+
 
 
     /**
