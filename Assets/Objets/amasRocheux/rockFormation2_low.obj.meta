@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 388ced13013438448be0bc574e4c8e54
+guid: 4c09086c90b02c84d8976f94f48e9af8
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: g_knight_low_knight_low
-    100002: //RootNode
-    400000: g_knight_low_knight_low
-    400002: //RootNode
-    2100000: g_knight_low_knight_lowMat
-    2300000: g_knight_low_knight_low
-    3300000: g_knight_low_knight_low
-    4300000: g_knight_low_knight_low
+    100000: //RootNode
+    100002: rockFormation_low
+    400000: //RootNode
+    400002: rockFormation_low
+    2100000: initialShadingGroup
+    2300000: rockFormation_low
+    3300000: rockFormation_low
+    4300000: rockFormation_low
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -42,7 +42,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.85
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
@@ -69,7 +69,7 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
