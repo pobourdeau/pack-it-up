@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /* ================================== */
 // Script du menu principal
 // Gestionnaire des boutons
 // Auteur: Pier-Olivier Bourdeau
-// Dernière modification : 2018-10-09
+// Dernière modification : 2018-10-19
 /* ================================== */
 
 public class MenuPrinc : MonoBehaviour {
@@ -26,6 +27,11 @@ public class MenuPrinc : MonoBehaviour {
     public Button btnCreerPartie;
     public InputField txtRejoindre;
     public Button btnRejoindrePartie;
+    public Toggle cchPretJ1;
+    public Toggle cchPretJ2;
+    public Toggle cchPretJ3;
+    public Toggle cchPretJ4;
+    public Button btnCommencer;
 
     public GameObject menuAide;
     public GameObject menuReglages;
@@ -42,6 +48,7 @@ public class MenuPrinc : MonoBehaviour {
         // Menu Jouer
         btnCreerPartie.onClick.AddListener(() => CreerPartie());
         btnRejoindrePartie.onClick.AddListener(() => RejoindrePartie());
+        btnCommencer.onClick.AddListener(() => CommencerPartie());
     }
 
     void Update() {
@@ -66,21 +73,52 @@ public class MenuPrinc : MonoBehaviour {
             btnRejoindrePartie.interactable = false;
         }
 
+        if(cchPretJ1.isOn && cchPretJ2.isOn && cchPretJ3.isOn && cchPretJ4.isOn) {
+            btnCommencer.interactable = true;
+        }
+        else {
+            btnCommencer.interactable = false;
+        }
     }
 
+
+    /**
+     * Ouvrir le menu pour lancer une partie
+     * @param void
+     * @return void
+     */
     public void OuvrirMenuJouer() {
         menuPrinc.SetActive(false);
         menuJouer.SetActive(true);
     }
 
-    public void OuvrirMenuAide() {
 
+    /**
+     * Ouvrir le menu d'aide
+     * @param void
+     * @return void
+     */
+    public void OuvrirMenuAide() {
+        menuPrinc.SetActive(false);
+        menuAide.SetActive(true);
     }
 
+
+    /**
+     * Ouvrir le menu des réglages
+     * @param void
+     * @return void
+     */
     public void OuvrirMenuReglages() {
 
     }
 
+
+    /**
+     * Ouvrir le menu pour créer une partie
+     * @param void
+     * @return void
+     */
     public void CreerPartie() {
 
         // Créer la partie (Network Manager)
@@ -92,6 +130,12 @@ public class MenuPrinc : MonoBehaviour {
         
     }
 
+
+    /**
+     * Ouvrir le menu pour rejoindre une partie
+     * @param void
+     * @return void
+     */
     public void RejoindrePartie() {
         // Créer la partie (Network Manager)
 
@@ -100,6 +144,15 @@ public class MenuPrinc : MonoBehaviour {
         menuPerso.SetActive(true);
     }
 
+
+    /**
+     * Lancer la scène de jeu
+     * @param void
+     * @return void
+     */
+    public void CommencerPartie() {
+        SceneManager.LoadScene("SceneJeu");
+    }
 
 
     /**
