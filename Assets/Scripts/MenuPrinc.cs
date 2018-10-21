@@ -15,6 +15,8 @@ using UnityEngine.SceneManagement;
 public class MenuPrinc : MonoBehaviour {
 
     // Menu principal
+    public GameObject imgDebut;
+    public static bool premierLancement = true;
     public GameObject menuPrinc;
     public Button btnQuitter;
     public Button btnJouer;
@@ -37,6 +39,11 @@ public class MenuPrinc : MonoBehaviour {
     public GameObject menuReglages;
     public GameObject menuPerso;
 
+    void Awake() {
+        if (premierLancement) {
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
 
     void Start() {
         // Menu principal
@@ -53,32 +60,44 @@ public class MenuPrinc : MonoBehaviour {
 
     void Update() {
 
-        // Si l'input field de nom de partie ne contient rien,
-        if (txtCreer.text != "") {
-            // Activer le bouton de création de partie
-            btnCreerPartie.interactable = true;
+        if (Input.GetKeyDown(KeyCode.Space) && premierLancement) {
+            premierLancement = false;
+            imgDebut.SetActive(false);
+            menuPrinc.SetActive(true);
         }
         else {
-            // Désactiver le bouton de création de partie
-            btnCreerPartie.interactable = false;
+            imgDebut.SetActive(false);
+            menuPrinc.SetActive(true);
         }
 
-        // Si l'input field de nom de partie ne contient rien,
-        if (txtRejoindre.text != "") {
-            // Activer le bouton de création de partie
-            btnRejoindrePartie.interactable = true;
-        }
-        else {
-            // Désactiver le bouton de création de partie
-            btnRejoindrePartie.interactable = false;
-        }
 
-        if(cchPretJ1.isOn && cchPretJ2.isOn && cchPretJ3.isOn && cchPretJ4.isOn) {
-            btnCommencer.interactable = true;
-        }
-        else {
-            btnCommencer.interactable = false;
-        }
+            // Si l'input field de nom de partie ne contient rien,
+            if (txtCreer.text != "") {
+                // Activer le bouton de création de partie
+                btnCreerPartie.interactable = true;
+            }
+            else {
+                // Désactiver le bouton de création de partie
+                btnCreerPartie.interactable = false;
+            }
+
+            // Si l'input field de nom de partie ne contient rien,
+            if (txtRejoindre.text != "") {
+                // Activer le bouton de création de partie
+                btnRejoindrePartie.interactable = true;
+            }
+            else {
+                // Désactiver le bouton de création de partie
+                btnRejoindrePartie.interactable = false;
+            }
+
+            if (cchPretJ1.isOn && cchPretJ2.isOn && cchPretJ3.isOn && cchPretJ4.isOn) {
+                btnCommencer.interactable = true;
+            }
+            else {
+                btnCommencer.interactable = false;
+            }
+
     }
 
 
@@ -126,8 +145,6 @@ public class MenuPrinc : MonoBehaviour {
         // Ouvrir le menu de choix de personnage
         menuJouer.SetActive(false);
         menuPerso.SetActive(true);
-        
-        
     }
 
 
