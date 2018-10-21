@@ -10,11 +10,18 @@ public class gestionnaireVideo : MonoBehaviour {
     public GameObject oVideo;
     public GameObject oCamPrinc;
     public GameObject menu;
+    public GameObject gestionMenu;
 
 	// Use this for initialization
 	void Start () {
-        Invoke("LancerVideo", 0);
-        InvokeRepeating("VerifierVideo", 2f, 1f);
+        if(MenuPrinc.premierLancement == true) {
+            Invoke("LancerVideo", 0);
+            InvokeRepeating("VerifierVideo", 2f, 1f);
+        }
+        else {
+            gestionMenu.SetActive(true);
+            menu.SetActive(true);
+        }
     }
 	
 	// Update is called once per frame
@@ -34,6 +41,7 @@ public class gestionnaireVideo : MonoBehaviour {
             cam.SetActive(false);
             oCamPrinc.SetActive(true);
             oVideo.SetActive(false);
+            gestionMenu.SetActive(true);
             menu.SetActive(true);
         }
     }

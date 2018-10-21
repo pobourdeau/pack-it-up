@@ -56,4 +56,8 @@ public class GestionnaireJeu : MonoBehaviour {
     public void OuvrirMenuDeJeu() {
         
     }
+
+    public void RetourMenuPrinc() {
+        SceneManager.LoadScene("SceneMenu");
+    }
 }
