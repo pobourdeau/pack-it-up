@@ -39,13 +39,18 @@ public class MenuPrinc : MonoBehaviour {
     public GameObject menuReglages;
     public GameObject menuPerso;
 
+
+
     void Awake() {
-        if (premierLancement) {
+        /*if (premierLancement) {
             DontDestroyOnLoad(this.gameObject);
-        }
+        }*/
     }
 
     void Start() {
+
+        //GetComponent<AudioSource>().Play();
+
         // Menu principal
         btnQuitter.onClick.AddListener(() => QuitterJeu());
         btnJouer.onClick.AddListener(() => OuvrirMenuJouer());
@@ -60,12 +65,17 @@ public class MenuPrinc : MonoBehaviour {
 
     void Update() {
 
-        if (Input.GetKeyDown(KeyCode.Space) && premierLancement) {
-            premierLancement = false;
-            imgDebut.SetActive(false);
-            menuPrinc.SetActive(true);
+        //print(Input.GetKeyDown(KeyCode.Space) && premierLancement);
+
+        if (premierLancement) {
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                premierLancement = false;
+                imgDebut.SetActive(false);
+                menuPrinc.SetActive(true);
+            }
         }
         else {
+            
             imgDebut.SetActive(false);
             menuPrinc.SetActive(true);
         }
@@ -168,6 +178,7 @@ public class MenuPrinc : MonoBehaviour {
      * @return void
      */
     public void CommencerPartie() {
+        //GetComponent<AudioSource>().Pause();
         SceneManager.LoadScene("SceneJeu");
     }
 
