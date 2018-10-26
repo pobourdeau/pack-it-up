@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: ea8c24efca730cf4697c2a6eb2a0b7aa
+guid: b5ebfc3444ce13f46b9be9d6c5a7071a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: polySurface1
-    400000: //RootNode
-    400002: polySurface1
-    2100000: polySurface1Mat
-    2300000: polySurface1
-    3300000: polySurface1
-    4300000: polySurface1
+    100000: fond:polySurface1
+    100002: //RootNode
+    400000: fond:polySurface1
+    400002: //RootNode
+    2100000: fond_polySurface1Mat
+    2300000: fond:polySurface1
+    3300000: fond:polySurface1
+    4300000: fond:polySurface1
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -42,7 +42,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 12
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
