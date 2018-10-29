@@ -7,6 +7,7 @@ TagManager:
   - bois
   - cuir
   - fer
+  - forge
   layers:
   - Default
   - TransparentFX
