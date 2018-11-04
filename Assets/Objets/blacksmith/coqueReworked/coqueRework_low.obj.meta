@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 3f6fc7422e253b44aa01f7c786cf2647
+guid: 99ad120b4e1bdcc4fa48660056cc6a63
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: g_toit_low_toit_low
+    100000: coqueRework_low
     100002: //RootNode
-    400000: g_toit_low_toit_low
+    400000: coqueRework_low
     400002: //RootNode
-    2100000: g_toit_low_toit_lowMat
-    2300000: g_toit_low_toit_low
-    3300000: g_toit_low_toit_low
-    4300000: g_toit_low_toit_low
+    2100000: coqueRework_lowMat
+    2300000: coqueRework_low
+    3300000: coqueRework_low
+    4300000: coqueRework_low
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -42,7 +42,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.35
+    globalScale: 0.3
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
