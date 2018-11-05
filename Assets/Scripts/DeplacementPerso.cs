@@ -17,8 +17,6 @@ public class DeplacementPerso : MonoBehaviour {
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
     public float vDeplacement; // Vélocité de déplacement
     public float vRotation; // Vélocité de rotation
-    public GameObject camSuivie;
-    public GameObject camMaison;
 
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
@@ -151,11 +149,6 @@ public class DeplacementPerso : MonoBehaviour {
                     break;
             }
         }
-
-        if(objCollider.gameObject.name == "maison") {
-            camMaison.SetActive(true);
-            camSuivie.SetActive(false);
-        }
     }
 
 
@@ -248,12 +241,6 @@ public class DeplacementPerso : MonoBehaviour {
             aCaseRougeInv[0].SetActive(false);
             aCaseRougeInv[1].SetActive(false);
             aCaseRougeInv[2].SetActive(false);
-        }
-
-        if (objCollider.gameObject.name == "maison") {
-            camSuivie.SetActive(true);
-            camMaison.SetActive(false);
-            
         }
     }
 
