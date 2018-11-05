@@ -25,6 +25,7 @@ public class DeplacementPerso : MonoBehaviour {
     private bool aLarme = false; // S'il a l'arme
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
+    public GameObject camSuivie;
 
     public int[] aInventaire; // Inventaire du joueur
     // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
@@ -149,6 +150,10 @@ public class DeplacementPerso : MonoBehaviour {
                     break;
             }
         }
+
+        if (objCollider.gameObject.name == "maison") {
+            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 9.5f, 3.5f);
+        }
     }
 
 
@@ -241,6 +246,10 @@ public class DeplacementPerso : MonoBehaviour {
             aCaseRougeInv[0].SetActive(false);
             aCaseRougeInv[1].SetActive(false);
             aCaseRougeInv[2].SetActive(false);
+        }
+
+        if (objCollider.gameObject.name == "maison") {
+            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 20f, 10f);
         }
     }
 
