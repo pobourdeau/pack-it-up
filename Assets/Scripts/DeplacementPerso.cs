@@ -17,8 +17,6 @@ public class DeplacementPerso : MonoBehaviour {
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
     public float vDeplacement; // Vélocité de déplacement
     public float vRotation; // Vélocité de rotation
-    public GameObject camSuivie;
-    public GameObject camMaison;
 
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
@@ -27,6 +25,7 @@ public class DeplacementPerso : MonoBehaviour {
     private bool aLarme = false; // S'il a l'arme
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
+    public GameObject camSuivie;
 
     public int[] aInventaire; // Inventaire du joueur
     // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
@@ -152,9 +151,8 @@ public class DeplacementPerso : MonoBehaviour {
             }
         }
 
-        if(objCollider.gameObject.name == "maison") {
-            camMaison.SetActive(true);
-            camSuivie.SetActive(false);
+        if (objCollider.gameObject.name == "maison") {
+            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 9.5f, 3.5f);
         }
     }
 
@@ -251,9 +249,7 @@ public class DeplacementPerso : MonoBehaviour {
         }
 
         if (objCollider.gameObject.name == "maison") {
-            camSuivie.SetActive(true);
-            camMaison.SetActive(false);
-            
+            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 20f, 10f);
         }
     }
 
