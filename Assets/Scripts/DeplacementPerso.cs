@@ -293,6 +293,8 @@ public class DeplacementPerso : MonoBehaviour {
         aInventaire[1] = 0;
         aInventaire[2] = 0;
 
+        print("Bravo");
+
         aLarme = true;
         arme.SetActive(true);
     }
