@@ -152,7 +152,7 @@ public class DeplacementPerso : MonoBehaviour {
         }
 
         if (objCollider.gameObject.name == "maison") {
-            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 9.5f, 3.5f);
+            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 15f, 8f);
         }
     }
 
