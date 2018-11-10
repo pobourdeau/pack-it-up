@@ -69,6 +69,14 @@ public class DeplacementPerso : MonoBehaviour {
             // Arrêter le timer de construction
             StopCoroutine("ConstructionArme");
         }
+
+        // Si le personnage est en mouvement,
+        if(rbPerso.velocity != Vector3.zero) {
+            animPerso.SetBool("marche", true);
+        }
+        else {
+            animPerso.SetBool("marche", false);
+        }
     }
 
 
