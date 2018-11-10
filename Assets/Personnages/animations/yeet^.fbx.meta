@@ -1,65 +1,72 @@
 fileFormatVersion: 2
-guid: a6ce9c58849774a499aba94c856d4c67
+guid: 794c303d07a86a04085ebf992231e154
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: CTRL_chest1
     100002: CTRL_cou1
     100004: CTRL_global1
-    100006: //RootNode
-    100008: ikHandle3
-    100010: joint1
-    100012: joint10
-    100014: joint11
-    100016: joint13
-    100018: joint14
-    100020: joint15
-    100022: joint16
-    100024: joint2
-    100026: joint3
-    100028: joint4
-    100030: joint5
-    100032: joint6
-    100034: joint7
-    100036: joint8
-    100038: joint9
-    100040: knight_model
-    100042: knight_rig
-    100044: nurbsCircle2
-    100046: polySurface7
-    100048: polySurface8
-    100050: polySurface9
+    100006: ikHandle3
+    100008: joint1
+    100010: joint10
+    100012: joint11
+    100014: joint13
+    100016: joint14
+    100018: joint15
+    100020: joint16
+    100022: joint2
+    100024: joint3
+    100026: joint4
+    100028: joint5
+    100030: joint6
+    100032: joint7
+    100034: joint8
+    100036: joint9
+    100038: knight_model
+    100040: knight_rig
+    100042: nurbsCircle2
+    100044: polySurface7
+    100046: polySurface8
+    100048: polySurface9
+    100050: //RootNode
     400000: CTRL_chest1
     400002: CTRL_cou1
     400004: CTRL_global1
-    400006: //RootNode
-    400008: ikHandle3
-    400010: joint1
-    400012: joint10
-    400014: joint11
-    400016: joint13
-    400018: joint14
-    400020: joint15
-    400022: joint16
-    400024: joint2
-    400026: joint3
-    400028: joint4
-    400030: joint5
-    400032: joint6
-    400034: joint7
-    400036: joint8
-    400038: joint9
-    400040: knight_model
-    400042: knight_rig
-    400044: nurbsCircle2
-    400046: polySurface7
-    400048: polySurface8
-    400050: polySurface9
-    2100000: lambert2
+    400006: ikHandle3
+    400008: joint1
+    400010: joint10
+    400012: joint11
+    400014: joint13
+    400016: joint14
+    400018: joint15
+    400020: joint16
+    400022: joint2
+    400024: joint3
+    400026: joint4
+    400028: joint5
+    400030: joint6
+    400032: joint7
+    400034: joint8
+    400036: joint9
+    400038: knight_model
+    400040: knight_rig
+    400042: nurbsCircle2
+    400044: polySurface7
+    400046: polySurface8
+    400048: polySurface9
+    400050: //RootNode
+    2100000: lambert3
     4300000: polySurface8
     4300002: polySurface9
     4300004: polySurface7
     7400000: Take 001
+    7400002: slap
+    7400004: idle
+    7400006: gallop
+    7400008: attack
+    7400010: attacked
+    7400012: dash
+    7400014: death
     9500000: //RootNode
     13700000: polySurface7
     13700002: polySurface8
