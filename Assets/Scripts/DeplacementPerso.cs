@@ -17,6 +17,7 @@ public class DeplacementPerso : MonoBehaviour {
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
     public float vDeplacement; // Vélocité de déplacement
     public float vRotation; // Vélocité de rotation
+    public int indVie = 3;
 
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
@@ -26,6 +27,8 @@ public class DeplacementPerso : MonoBehaviour {
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
     public GameObject camSuivie;
+    public GameObject[] aBarreVie;
+    public Sprite vieVide;
 
     public int[] aInventaire; // Inventaire du joueur
     // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
@@ -72,11 +75,21 @@ public class DeplacementPerso : MonoBehaviour {
 
         // Si le personnage est en mouvement,
         if(rbPerso.velocity != Vector3.zero) {
+            // Faire jouer l'animation de déplacement
             animPerso.SetBool("marche", true);
         }
         else {
+            // Faire jouer l'animation de idle
             animPerso.SetBool("marche", false);
         }
+
+        // Si le joueur appui sur la touche droite de la souris,
+        if (Input.GetKeyDown(KeyCode.Mouse1) && aLarme) {
+            // Faire jouer l'animation d'attaque
+            animPerso.SetTrigger("attaque");
+        }
+
+        GestionVie();
     }
 
 
@@ -155,6 +168,10 @@ public class DeplacementPerso : MonoBehaviour {
                         aCaseRougeInv[2].SetActive(true);
                         aCaseRougeInv[2].GetComponent<Animator>().enabled = true;
                     }
+                    break;
+                case "arme":
+                    animPerso.SetTrigger("dommage");
+                    indVie--;
                     break;
             }
         }
@@ -256,7 +273,9 @@ public class DeplacementPerso : MonoBehaviour {
             aCaseRougeInv[2].SetActive(false);
         }
 
+        // Si le personnage rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
+            // Changer la position de la caméra
             camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 20f, 10f);
         }
     }
@@ -285,5 +304,30 @@ public class DeplacementPerso : MonoBehaviour {
      */
     private void AnimationConstruireArme() {
         imgConstruire.fillAmount -= 1.0f / 5f * Time.deltaTime;
+    }
+
+    /**
+     * Gérer l'affichage de l'état de la vie du personnage
+     * @param void
+     * @return void
+     */
+    private void GestionVie() {
+
+        // La vie du personnage
+        switch (indVie) {
+            case 2:
+                aBarreVie[2].GetComponent<Image>().sprite = vieVide;
+                break;
+            case 1:
+                aBarreVie[1].GetComponent<Image>().sprite = vieVide;
+                break;
+            case 0:
+                aBarreVie[0].GetComponent<Image>().sprite = vieVide;
+
+                // Jouer l'animation de mort
+                animPerso.SetBool("mort", true);
+                break;
+
+        }
     }
 }
