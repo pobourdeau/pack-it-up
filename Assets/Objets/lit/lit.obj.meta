@@ -23,6 +23,9 @@ ModelImporter:
     4300000: lit_low_lit_low
     4300002: lit_low_oreiller1_low
     4300004: oreiller2_low_lit_low
+    6400000: lit_low_lit_low
+    6400002: lit_low_oreiller1_low
+    6400004: oreiller2_low_lit_low
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -56,7 +59,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 0.7
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
