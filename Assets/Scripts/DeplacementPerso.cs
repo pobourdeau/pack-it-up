@@ -73,6 +73,10 @@ public class DeplacementPerso : MonoBehaviour {
             StopCoroutine("ConstructionArme");
         }
 
+        /*Gestion du mouvement du blend tree*/
+		animPerso.SetFloat("VelY",Input.GetAxis("Vertical"));
+        animPerso.SetFloat("VelX",Input.GetAxis("Horizontal"));
+        /* 
         // Si le personnage est en mouvement,
         if(rbPerso.velocity != Vector3.zero) {
             // Faire jouer l'animation de déplacement
@@ -82,10 +86,11 @@ public class DeplacementPerso : MonoBehaviour {
             // Faire jouer l'animation de idle
             animPerso.SetBool("marche", false);
         }
-
+        */
+        
         // Si le joueur appui sur la touche droite de la souris,
-        if (Input.GetKeyDown(KeyCode.Mouse1) && aLarme) {
-            // Faire jouer l'animation d'attaque
+        if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
+            // Faire jouer l'animation d'attaque    
             animPerso.SetTrigger("attaque");
         }
 
