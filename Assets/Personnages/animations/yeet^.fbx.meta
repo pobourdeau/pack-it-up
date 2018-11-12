@@ -56,6 +56,7 @@ ModelImporter:
     400048: polySurface9
     400050: //RootNode
     2100000: lambert3
+    2100002: lambert2
     4300000: polySurface8
     4300002: polySurface9
     4300004: polySurface7
