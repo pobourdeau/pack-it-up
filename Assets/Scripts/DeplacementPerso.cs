@@ -87,7 +87,7 @@ public class DeplacementPerso : MonoBehaviour {
             animPerso.SetBool("marche", false);
         }
         */
-        
+
         // Si le joueur appui sur la touche droite de la souris,
         if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
             // Faire jouer l'animation d'attaque    
