@@ -4233,6 +4233,12 @@ MonoBehaviour:
   iMinuteRestante: 10
   txtTimer: {fileID: 1079877448}
   imgTimer: {fileID: 883743955}
+  oBois: {fileID: 0}
+  oFer: {fileID: 0}
+  oCuir: {fileID: 0}
+  aSpawnerBois: []
+  aSpawnerFer: []
+  aSpawnerCuir: []
 --- !u!4 &522830369
 Transform:
   m_ObjectHideFlags: 0
@@ -15158,7 +15164,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1717832725}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 54, y: 0, z: -15.4}
+  m_LocalPosition: {x: 53.05, y: 0, z: -15.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 344039134}
