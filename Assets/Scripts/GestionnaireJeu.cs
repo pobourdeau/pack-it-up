@@ -15,9 +15,14 @@ public class GestionnaireJeu : MonoBehaviour {
 
     public int iSecondeRestante; // Seconde restante
     public int iMinuteRestante; // Minute restante
+    private int iSecondeTotal;
     public Text txtTimer; // UI text où le temps est écrit
+    public Image imgTimer;
 
     void Start() {
+
+        iSecondeTotal = iMinuteRestante * 60 + iSecondeRestante;
+
         // Appeler la fonction timer à chaque seconde
         InvokeRepeating("Timer", 0, 1f);
     }
@@ -30,7 +35,7 @@ public class GestionnaireJeu : MonoBehaviour {
     void Timer() {
         
         // S'il reste plus que 0 seconde, diminuer la seconde
-        if(iSecondeRestante > 0) {
+        if (iSecondeRestante > 0) {
             iSecondeRestante--;
         }
         // Sinon, remettre 59 secondes et diminuer la minute
@@ -47,14 +52,13 @@ public class GestionnaireJeu : MonoBehaviour {
             txtTimer.text = iMinuteRestante + ":" + iSecondeRestante;
         }
 
+        imgTimer.fillAmount = (float)(iMinuteRestante * 60 + iSecondeRestante) / iSecondeTotal;
+
         // S'il ne reste plus de temps, annuler l'appel de la fonction
         if (iMinuteRestante == 0 && iSecondeRestante == 0) {
             CancelInvoke();
+            RetourMenuPrinc();
         }
-    }
-
-    public void OuvrirMenuDeJeu() {
-        
     }
 
     public void RetourMenuPrinc() {
