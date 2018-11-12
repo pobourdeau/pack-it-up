@@ -4,29 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-/* ================================== */
-// Script du gestionnaire de jeu
-// Gérer le chronomètre de partie
-// Auteur: Pier-Olivier Bourdeau
-// Dernière modification : 2018-10-09
-/* ================================== */
-
+/**
+ * Gestionnaire de jeu : Temps restant à la partie, génération des objets aléatoirement et génération des personnages à leur position de spawn.
+ * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou
+ * @version 2018-11-12
+ */
 public class GestionnaireJeu : MonoBehaviour {
 
     public int iSecondeRestante; // Seconde restante
     public int iMinuteRestante; // Minute restante
     private int iSecondeTotal;
     public Text txtTimer; // UI text où le temps est écrit
-    public Image imgTimer;
+    public Image imgTimer; // Image du timer
 
-    public GameObject oBois;
-    public GameObject oFer;
-    public GameObject oCuir;
-    public GameObject[] aSpawnerBois;
-    public GameObject[] aSpawnerFer;
-    public GameObject[] aSpawnerCuir;
+    public GameObject oBois; // Prefab du bois
+    public GameObject oFer; // Prefab du fer
+    public GameObject oCuir; // Prefab du cuir
+    public GameObject[] aSpawnerBois; // Tous les points de spawn du bois
+    public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
+    public GameObject[] aSpawnerCuir; // Tous les points de spawn du cuir
 
-    private int lastNumber;
+    public GameObject oKnight; // Le joueur principal
+    public GameObject oMagicien; // Le joueur secondaire
+    public GameObject[] aSpawnerJoueur;  // Tous les points de spawn des joueurs
 
     void Start() {
         // Calculer le nombre de seconde total à la partie
@@ -35,21 +35,56 @@ public class GestionnaireJeu : MonoBehaviour {
         // Appeler la fonction timer à chaque seconde
         InvokeRepeating("Timer", 0, 1f);
 
+        // Générer les ressources aléatoirement sur la carte
         GenererRessources();
+
+        // Générer les joueur
+        oKnight.transform.position = aSpawnerJoueur[0].transform.position;
+        oMagicien.transform.position = aSpawnerJoueur[1].transform.position;
     }
 
+    /**
+     * Générer les ressources sur la carte aléatoirement
+     * @param void
+     * @return void
+     */
     void GenererRessources() {
-        for(int iBois = 0; iBois<5; iBois++) {
-            //print(GetRandom(0, aSpawnerBois.Length));
+        // Générer aléatoirement l'emplacement du bois
+        Shuffle(aSpawnerBois);
+
+        for(int iBois=0; iBois<aSpawnerBois.Length / 2; iBois++) {
+            GameObject oCloneBois = Instantiate(oBois, aSpawnerBois[iBois].transform.position, Quaternion.Euler(aSpawnerBois[iBois].transform.eulerAngles), aSpawnerBois[iBois].transform);
         }
+
+        // Générer aléatoirement l'emplacement du fer
+        Shuffle(aSpawnerFer);
+
+        for (int iFer = 0; iFer < aSpawnerFer.Length / 2; iFer++) {
+            GameObject oCloneFer = Instantiate(oFer, aSpawnerFer[iFer].transform.position, Quaternion.Euler(aSpawnerFer[iFer].transform.eulerAngles), aSpawnerFer[iFer].transform);
+        }
+
+        // Générer aléatoirement l'emplacement du cuir
+        Shuffle(aSpawnerCuir);
+
+        for (int iCuir = 0; iCuir < aSpawnerCuir.Length / 2; iCuir++) {
+            GameObject oCloneCuir = Instantiate(oCuir, aSpawnerCuir[iCuir].transform.position, Quaternion.Euler(aSpawnerCuir[iCuir].transform.eulerAngles), aSpawnerCuir[iCuir].transform);
+        }
+
     }
 
-    int GetRandom(int min, int max) {
-        int rand = Random.Range(min, max);
-        while (rand == lastNumber)
-            rand = Random.Range(min, max);
-        lastNumber = rand;
-        return rand;
+
+    /**
+     * Mélanger un tableau sans répétition et doublons
+     * @param GameObject[] aTab
+     * @return void
+     */
+    void Shuffle(GameObject[] aTab) {
+        for (int t = 0; t < aTab.Length; t++) {
+            GameObject tmp = aTab[t];
+            int r = Random.Range(t, aTab.Length);
+            aTab[t] = aTab[r];
+            aTab[r] = tmp;
+        }
     }
 
     /**
@@ -86,6 +121,11 @@ public class GestionnaireJeu : MonoBehaviour {
         }
     }
 
+    /**
+     * Retourner au menu principal
+     * @param void
+     * @return void
+     */
     public void RetourMenuPrinc() {
         SceneManager.LoadScene("SceneMenu");
     }

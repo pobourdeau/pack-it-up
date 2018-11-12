@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /**
- * Gérer les déplacements du joueur et les interractions avec les ressources (inventaire et assemblage de l'arme)
- * @author Pier-Olivier Bourdeau
- * @version 2018-10-29
+ * Gérer les déplacements du joueur, attaques, dégâts(vie) et les interractions avec les ressources (inventaire et assemblage de l'arme)
+ * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou
+ * @version 2018-11-12
  */
 
 public class DeplacementPerso : MonoBehaviour {
@@ -17,7 +18,7 @@ public class DeplacementPerso : MonoBehaviour {
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
     public float vDeplacement; // Vélocité de déplacement
     public float vRotation; // Vélocité de rotation
-    public int indVie = 3;
+    public int indVie = 3; // Le nombre de vie restante
 
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
@@ -26,9 +27,10 @@ public class DeplacementPerso : MonoBehaviour {
     private bool aLarme = false; // S'il a l'arme
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
-    public GameObject camSuivie;
-    public GameObject[] aBarreVie;
-    public Sprite vieVide;
+    public GameObject camSuivie; // Caméra qui suit le personnage
+    public GameObject[] aBarreVie; // Barre de vie
+    public Sprite vieVide; // Sprite de coeur vide
+    public bool attaque = false; // Si le joueur attaque
 
     public int[] aInventaire; // Inventaire du joueur
     // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
@@ -63,38 +65,48 @@ public class DeplacementPerso : MonoBehaviour {
      */
     void Update() {
 
-        // Si le joueur est entrain de construire son arme,
-        if (entrainDeConstruire) {
-            // Jouer l'animation de construction
-            AnimationConstruireArme();
+        // Si l'animation d'attaque avec épée joue,
+        if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
+            // Attaque est à true
+            attaque = true;
         }
         else {
-            // Arrêter le timer de construction
-            StopCoroutine("ConstructionArme");
+            attaque = false;
         }
 
-        /*Gestion du mouvement du blend tree*/
-		animPerso.SetFloat("VelY",Input.GetAxis("Vertical"));
-        animPerso.SetFloat("VelX",Input.GetAxis("Horizontal"));
-        /* 
-        // Si le personnage est en mouvement,
-        if(rbPerso.velocity != Vector3.zero) {
-            // Faire jouer l'animation de déplacement
-            animPerso.SetBool("marche", true);
+
+        // Si le personnage n'est pas mort,
+        if (animPerso.GetBool("mort") == false) {
+                    
+            // Si le joueur est entrain de construire son arme,
+            if (entrainDeConstruire) {
+                // Jouer l'animation de construction
+                AnimationConstruireArme();
+            }
+            else {
+                // Arrêter le timer de construction
+                StopCoroutine("ConstructionArme");
+            }
+
+            // Gestion du mouvement du blend tree
+		    animPerso.SetFloat("VelY",Input.GetAxis("Vertical"));
+            animPerso.SetFloat("VelX",Input.GetAxis("Horizontal"));
+        
+            // Si le joueur appui sur la touche droite de la souris,
+            if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
+                // Faire jouer l'animation d'attaque    
+                animPerso.SetTrigger("attaque");
+            }
+            else if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme == false) {
+                animPerso.SetTrigger("attaque");
+            }
+
+            // Gestion de la vie du personnage
+            GestionVie();
         }
         else {
-            // Faire jouer l'animation de idle
-            animPerso.SetBool("marche", false);
+            StartCoroutine("OuvrirMenu");
         }
-        */
-
-        // Si le joueur appui sur la touche droite de la souris,
-        if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
-            // Faire jouer l'animation d'attaque    
-            animPerso.SetTrigger("attaque");
-        }
-
-        GestionVie();
     }
 
 
@@ -104,12 +116,15 @@ public class DeplacementPerso : MonoBehaviour {
      * @return void
      */
     void FixedUpdate() {
-        //
-        transform.Rotate(0, Input.GetAxis("Horizontal") * vRotation, 0);
+        // Si le personnage n'est pas mort,
+        if (animPerso.GetBool("mort") == false) {
+            // Déplacer le personnage
+            transform.Rotate(0, Input.GetAxis("Horizontal") * vRotation, 0);
 
-        vDeplacement = Input.GetAxis("Vertical") * vitesseDeplacement;
+            vDeplacement = Input.GetAxis("Vertical") * vitesseDeplacement;
 
-        rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);   
+            rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
+        }
     }
 
 
@@ -174,6 +189,7 @@ public class DeplacementPerso : MonoBehaviour {
                         aCaseRougeInv[2].GetComponent<Animator>().enabled = true;
                     }
                     break;
+                // Arme
                 case "arme":
                     animPerso.SetTrigger("dommage");
                     indVie--;
@@ -181,7 +197,9 @@ public class DeplacementPerso : MonoBehaviour {
             }
         }
 
+        // Si on rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
+            // Changer la position de la caméra
             camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 15f, 8f);
         }
     }
@@ -291,17 +309,21 @@ public class DeplacementPerso : MonoBehaviour {
      * @return void
      */
     private IEnumerator ConstructionArme() {
+        // Attendre que l'arme se construise
         yield return new WaitForSeconds(5f);
         oImgConstruire.SetActive(false);
 
+        // Retirer les ressources de l'inventaire du joueur
         aInventaire[0] = 0;
         aInventaire[1] = 0;
         aInventaire[2] = 0;
 
         print("Bravo");
 
+        // Afficher l'arme et 
         aLarme = true;
         arme.SetActive(true);
+        animPerso.SetBool("aLarme", true);
     }
 
     /**
@@ -336,5 +358,15 @@ public class DeplacementPerso : MonoBehaviour {
                 break;
 
         }
+    }
+
+    /**
+     * Attendre 3 secondes avant de retourner au menu principal
+     * @param void
+     * @return void
+     */
+    public IEnumerator OuvrirMenu() {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("SceneMenu");
     }
 }
