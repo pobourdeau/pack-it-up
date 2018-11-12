@@ -19,12 +19,37 @@ public class GestionnaireJeu : MonoBehaviour {
     public Text txtTimer; // UI text où le temps est écrit
     public Image imgTimer;
 
-    void Start() {
+    public GameObject oBois;
+    public GameObject oFer;
+    public GameObject oCuir;
+    public GameObject[] aSpawnerBois;
+    public GameObject[] aSpawnerFer;
+    public GameObject[] aSpawnerCuir;
 
+    private int lastNumber;
+
+    void Start() {
+        // Calculer le nombre de seconde total à la partie
         iSecondeTotal = iMinuteRestante * 60 + iSecondeRestante;
 
         // Appeler la fonction timer à chaque seconde
         InvokeRepeating("Timer", 0, 1f);
+
+        GenererRessources();
+    }
+
+    void GenererRessources() {
+        for(int iBois = 0; iBois<5; iBois++) {
+            //print(GetRandom(0, aSpawnerBois.Length));
+        }
+    }
+
+    int GetRandom(int min, int max) {
+        int rand = Random.Range(min, max);
+        while (rand == lastNumber)
+            rand = Random.Range(min, max);
+        lastNumber = rand;
+        return rand;
     }
 
     /**
