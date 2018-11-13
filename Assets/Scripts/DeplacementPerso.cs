@@ -62,6 +62,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Vérifier si le joueur est entrain de construire son arme
      * @param void
      * @return void
+     * @author Vincent Gagnon
      */
     void Update() {
 
@@ -114,6 +115,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Gérer le déplacement du joueur
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     void FixedUpdate() {
         // Si le personnage n'est pas mort,
@@ -132,6 +134,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Lorsqu'on entre dans la zone de collision avec un collider
      * @param Collider objCollider
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     void OnTriggerEnter(Collider objCollider) {
 
@@ -209,6 +212,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Lorsqu'on reste dans la zone de collision avec un collider
      * @param Collider objCollider
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     private void OnTriggerStay(Collider objCollider) {
         // Si on appuie sur la touche Gauche de la souris et que le joueur n'a pas construit son arme,
@@ -270,6 +274,7 @@ public class DeplacementPerso : MonoBehaviour {
      * À la sortie de la collision avec un collider
      * @param Collider objCollider
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     void OnTriggerExit(Collider objCollider) {
 
@@ -307,6 +312,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Construire l'arme
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     private IEnumerator ConstructionArme() {
         // Attendre que l'arme se construise
@@ -330,6 +336,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Animation d'un timer quand on construit l'arme
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     private void AnimationConstruireArme() {
         imgConstruire.fillAmount -= 1.0f / 5f * Time.deltaTime;
@@ -339,6 +346,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Gérer l'affichage de l'état de la vie du personnage
      * @param void
      * @return void
+     * @author Issam Aloulou
      */
     private void GestionVie() {
 
@@ -364,6 +372,7 @@ public class DeplacementPerso : MonoBehaviour {
      * Attendre 3 secondes avant de retourner au menu principal
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public IEnumerator OuvrirMenu() {
         yield return new WaitForSeconds(3f);
