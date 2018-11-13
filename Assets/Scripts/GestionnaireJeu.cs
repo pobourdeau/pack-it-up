@@ -47,6 +47,7 @@ public class GestionnaireJeu : MonoBehaviour {
      * Générer les ressources sur la carte aléatoirement
      * @param void
      * @return void
+     * @author Vincent Gagnon
      */
     void GenererRessources() {
         // Générer aléatoirement l'emplacement du bois
@@ -91,6 +92,7 @@ public class GestionnaireJeu : MonoBehaviour {
      * Gérer le temps restant de la partie
      * @param void
      * @return void
+     * @author Issam Aloulou
      */
     void Timer() {
         

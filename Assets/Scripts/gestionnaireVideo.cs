@@ -6,7 +6,7 @@ using UnityEngine.Video;
 
 /**
  * Gestionnaire de vidéo d'intro : Lancer la vidéo en ouverture de jeu
- * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou
+ * @author Pier-Olivier Bourdeau
  * @version 2018-11-12
  */
 public class gestionnaireVideo : MonoBehaviour {
@@ -18,12 +18,13 @@ public class gestionnaireVideo : MonoBehaviour {
     public GameObject menu; // Menu principal
     public GameObject gestionMenu; // Gestionnaire du menu principal
 
-	/**
+    /**
      * Au commencement du jeu
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
-	void Start () {
+    void Start () {
         // Si c'est le premier lancement du jeu
         if(MenuPrinc.premierLancement == true) {
             // Lancer la vidéo et vérifier si elle joue à chaque seconde
@@ -40,6 +41,7 @@ public class gestionnaireVideo : MonoBehaviour {
      * Lancer la vidéo 
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public void LancerVideo() {
         video.Play();
@@ -49,6 +51,7 @@ public class gestionnaireVideo : MonoBehaviour {
      * Vérifier si la vidéo est entrain de jouer
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public void VerifierVideo() {
         // Si la vidéo ne joue pas,

@@ -5,51 +5,46 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-/* ================================== */
-// Script du menu principal
-// Gestionnaire des boutons
-// Auteur: Pier-Olivier Bourdeau
-// Dernière modification : 2018-10-19
-/* ================================== */
-
+/**
+ * Gestionnaire du menu principal
+ * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou
+ * @version 2018-11-12
+ */
 public class MenuPrinc : MonoBehaviour {
 
     // Menu principal
-    public GameObject imgDebut;
-    public static bool premierLancement = true;
-    public GameObject menuPrinc;
-    public Button btnQuitter;
-    public Button btnJouer;
-    public Button btnAide;
-    public Button btnReglages;
+    public GameObject imgDebut; // Image du début
+    public static bool premierLancement = true; // Est-ce le premier lancement du jeu?
+    public GameObject menuPrinc; // Objet MenuPrinc
+    public Button btnQuitter; // Bouton Quitter
+    public Button btnJouer; // Bouton Jouer
+    public Button btnAide; // Bouton d'aide
+    public Button btnReglages; // Bouton des réglages
 
     // Menu jouer
-    public GameObject menuJouer;
-    public InputField txtCreer;
-    public Button btnCreerPartie;
-    public InputField txtRejoindre;
-    public Button btnRejoindrePartie;
-    public Toggle cchPretJ1;
-    public Toggle cchPretJ2;
-    public Toggle cchPretJ3;
-    public Toggle cchPretJ4;
-    public Button btnCommencer;
+    public GameObject menuJouer; // Objet du menu pour lancer une partie
+    public InputField txtCreer; // Inputfield pour créer une partie
+    public Button btnCreerPartie; // Bouton pour créer une partie
+    public InputField txtRejoindre; // Inputfield pour rejoindre une partie
+    public Button btnRejoindrePartie; // Bouton pour rejoindre une partie
+    public Toggle cchPretJ1; // Case à cocher Prêt? du Joueur 1
+    public Toggle cchPretJ2; // Case à cocher Prêt? du Joueur 2
+    public Toggle cchPretJ3; // Case à cocher Prêt? du Joueur 3
+    public Toggle cchPretJ4; // Case à cocher Prêt? du Joueur 4
+    public Button btnCommencer; // Bouton commencer la partie
 
-    public GameObject menuAide;
-    public GameObject menuReglages;
-    public GameObject menuPerso;
+    // Menu aide
+    public GameObject menuAide; // Objet menu aide
+    public GameObject menuReglages; // Objet des réglages
+    public GameObject menuPerso; // Objet Menu personnage
 
-
-
-    void Awake() {
-        /*if (premierLancement) {
-            DontDestroyOnLoad(this.gameObject);
-        }*/
-    }
-
+    /**
+     * Ajout d'événement sur tous les boutons du menu
+     * @param void
+     * @return void
+     * @author Pier-Olivier Bourdeau
+     */
     void Start() {
-
-        //GetComponent<AudioSource>().Play();
 
         // Menu principal
         btnQuitter.onClick.AddListener(() => QuitterJeu());
@@ -63,11 +58,11 @@ public class MenuPrinc : MonoBehaviour {
         btnCommencer.onClick.AddListener(() => CommencerPartie());
     }
 
+
     void Update() {
-
-        //print(Input.GetKeyDown(KeyCode.Space) && premierLancement);
-
+        // Si c'est le premier lancement,
         if (premierLancement) {
+            // Appuyer sur la barre d'espace pour ouvrir le menu
             if (Input.GetKeyDown(KeyCode.Space)) {
                 premierLancement = false;
                 imgDebut.SetActive(false);
@@ -75,7 +70,7 @@ public class MenuPrinc : MonoBehaviour {
             }
         }
         else {
-            
+            // Ouvrir le menu
             imgDebut.SetActive(false);
             menuPrinc.SetActive(true);
         }
@@ -115,6 +110,7 @@ public class MenuPrinc : MonoBehaviour {
      * Ouvrir le menu pour lancer une partie
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public void OuvrirMenuJouer() {
         menuPrinc.SetActive(false);
@@ -126,6 +122,7 @@ public class MenuPrinc : MonoBehaviour {
      * Ouvrir le menu d'aide
      * @param void
      * @return void
+     * @author Vincent Gagnon
      */
     public void OuvrirMenuAide() {
         menuPrinc.SetActive(false);
@@ -147,9 +144,9 @@ public class MenuPrinc : MonoBehaviour {
      * Ouvrir le menu pour créer une partie
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public void CreerPartie() {
-
         // Créer la partie (Network Manager)
 
         // Ouvrir le menu de choix de personnage
@@ -162,6 +159,7 @@ public class MenuPrinc : MonoBehaviour {
      * Ouvrir le menu pour rejoindre une partie
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public void RejoindrePartie() {
         // Créer la partie (Network Manager)
@@ -176,9 +174,9 @@ public class MenuPrinc : MonoBehaviour {
      * Lancer la scène de jeu
      * @param void
      * @return void
+     * @author Pier-Olivier Bourdeau
      */
     public void CommencerPartie() {
-        //GetComponent<AudioSource>().Pause();
         SceneManager.LoadScene("SceneJeu");
     }
 
@@ -187,6 +185,7 @@ public class MenuPrinc : MonoBehaviour {
      * Quitter le jeu
      * @param : void
      * @return : void
+     * @author Issam Aloulou
      */
     public void QuitterJeu() {
         Application.Quit();
