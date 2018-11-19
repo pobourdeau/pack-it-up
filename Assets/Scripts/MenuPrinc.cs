@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 /**
  * Gestionnaire du menu principal
@@ -20,6 +21,8 @@ public class MenuPrinc : MonoBehaviour {
     public Button btnJouer; // Bouton Jouer
     public Button btnAide; // Bouton d'aide
     public Button btnReglages; // Bouton des réglages
+    public GameObject LobbyListe;
+    private JoindreLobby joindreLobby;
 
     // Menu jouer
     public GameObject menuJouer; // Objet du menu pour lancer une partie
@@ -27,11 +30,7 @@ public class MenuPrinc : MonoBehaviour {
     public Button btnCreerPartie; // Bouton pour créer une partie
     public InputField txtRejoindre; // Inputfield pour rejoindre une partie
     public Button btnRejoindrePartie; // Bouton pour rejoindre une partie
-    public Toggle cchPretJ1; // Case à cocher Prêt? du Joueur 1
-    public Toggle cchPretJ2; // Case à cocher Prêt? du Joueur 2
-    public Toggle cchPretJ3; // Case à cocher Prêt? du Joueur 3
-    public Toggle cchPretJ4; // Case à cocher Prêt? du Joueur 4
-    public Button btnCommencer; // Bouton commencer la partie
+    public LobbyManager lobbyManager;
 
     // Menu aide
     public GameObject menuAide; // Objet menu aide
@@ -55,7 +54,6 @@ public class MenuPrinc : MonoBehaviour {
         // Menu Jouer
         btnCreerPartie.onClick.AddListener(() => CreerPartie());
         btnRejoindrePartie.onClick.AddListener(() => RejoindrePartie());
-        btnCommencer.onClick.AddListener(() => CommencerPartie());
     }
 
 
@@ -94,13 +92,6 @@ public class MenuPrinc : MonoBehaviour {
             else {
                 // Désactiver le bouton de création de partie
                 btnRejoindrePartie.interactable = false;
-            }
-
-            if (cchPretJ1.isOn && cchPretJ2.isOn && cchPretJ3.isOn && cchPretJ4.isOn) {
-                btnCommencer.interactable = true;
-            }
-            else {
-                btnCommencer.interactable = false;
             }
 
     }
@@ -148,10 +139,12 @@ public class MenuPrinc : MonoBehaviour {
      */
     public void CreerPartie() {
         // Créer la partie (Network Manager)
+        lobbyManager.StopMatchMaker();
+        lobbyManager.StartMatchMaker();
+        lobbyManager.matchMaker.CreateMatch(txtCreer.text, (uint)lobbyManager.maxPlayers, true, "", "", "", 0, 0, lobbyManager.OnMatchCreate);
 
         // Ouvrir le menu de choix de personnage
         menuJouer.SetActive(false);
-        menuPerso.SetActive(true);
     }
 
 
@@ -163,21 +156,10 @@ public class MenuPrinc : MonoBehaviour {
      */
     public void RejoindrePartie() {
         // Créer la partie (Network Manager)
+        lobbyManager.StartMatchMaker();
 
-        // Ouvrir le menu de choix de personnage
-        menuJouer.SetActive(false);
-        menuPerso.SetActive(true);
-    }
-
-
-    /**
-     * Lancer la scène de jeu
-     * @param void
-     * @return void
-     * @author Pier-Olivier Bourdeau
-     */
-    public void CommencerPartie() {
-        SceneManager.LoadScene("SceneJeu");
+        joindreLobby = LobbyListe.GetComponent<JoindreLobby>();
+        joindreLobby.RafraichirListe();
     }
 
 

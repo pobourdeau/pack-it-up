@@ -9,6 +9,8 @@ TagManager:
   - fer
   - forge
   - arme
+  - lobbyParent
+  - networkManager
   layers:
   - Default
   - TransparentFX

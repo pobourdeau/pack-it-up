@@ -39,8 +39,8 @@ public class GestionnaireJeu : MonoBehaviour {
         GenererRessources();
 
         // Générer les joueur
-        oKnight.transform.position = aSpawnerJoueur[0].transform.position;
-        oMagicien.transform.position = aSpawnerJoueur[1].transform.position;
+        //oKnight.transform.position = aSpawnerJoueur[0].transform.position;
+        //oMagicien.transform.position = aSpawnerJoueur[1].transform.position;
     }
 
     /**
