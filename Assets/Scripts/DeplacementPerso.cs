@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 /**
  * Gérer les déplacements du joueur, attaques, dégâts(vie) et les interractions avec les ressources (inventaire et assemblage de l'arme)
@@ -10,7 +11,7 @@ using UnityEngine.SceneManagement;
  * @version 2018-11-12
  */
 
-public class DeplacementPerso : MonoBehaviour {
+public class DeplacementPerso : NetworkBehaviour {
 
     private Rigidbody rbPerso; // Rigidbody du joueur
     private Animator animPerso; // Animator du joueur
@@ -66,6 +67,10 @@ public class DeplacementPerso : MonoBehaviour {
      */
     void Update() {
 
+        if (!isLocalPlayer) {
+            return;
+        }
+
         // Si l'animation d'attaque avec épée joue,
         if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
             // Attaque est à true
@@ -118,6 +123,11 @@ public class DeplacementPerso : MonoBehaviour {
      * @author Pier-Olivier Bourdeau
      */
     void FixedUpdate() {
+
+        if (!isLocalPlayer) {
+            return;
+        }
+
         // Si le personnage n'est pas mort,
         if (animPerso.GetBool("mort") == false) {
             // Déplacer le personnage
