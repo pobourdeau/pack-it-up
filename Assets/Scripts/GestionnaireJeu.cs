@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
+using Photon.Realtime;
 
 /**
  * Gestionnaire de jeu : Temps restant à la partie, génération des objets aléatoirement et génération des personnages à leur position de spawn.
  * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou
  * @version 2018-11-12
  */
-public class GestionnaireJeu : MonoBehaviour {
+public class GestionnaireJeu : MonoBehaviourPunCallbacks {
 
     public int iSecondeRestante; // Seconde restante
     public int iMinuteRestante; // Minute restante
@@ -119,7 +121,7 @@ public class GestionnaireJeu : MonoBehaviour {
         // S'il ne reste plus de temps, annuler l'appel de la fonction
         if (iMinuteRestante == 0 && iSecondeRestante == 0) {
             CancelInvoke();
-            RetourMenuPrinc();
+            //RetourMenuPrinc();
         }
     }
 
@@ -128,7 +130,35 @@ public class GestionnaireJeu : MonoBehaviour {
      * @param void
      * @return void
      */
-    public void RetourMenuPrinc() {
-        SceneManager.LoadScene("SceneMenu");
+    /*public override void OnLeftRoom() {
+        SceneManager.LoadScene("SceneRejoindre");
     }
+
+    public void LeaveRoom() {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public override void OnPlayerEnteredRoom(Player nouveauJoueur) {
+        Debug.LogFormat("OnPlayerEnteredRoom() {0}", nouveauJoueur.NickName);
+        if (PhotonNetwork.IsMasterClient) {
+            LoadArena();
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Player nouveauJoueur) {
+        Debug.LogFormat("OnPlayerLeftRoom() {0}", nouveauJoueur.NickName);
+
+        if (PhotonNetwork.IsMasterClient) {
+            LoadArena();
+        }
+    }
+
+    void LoadArena() {
+        if (!PhotonNetwork.IsMasterClient) {
+            
+        }
+
+        PhotonNetwork.LoadLevel("SceneJeu");
+
+    }*/
 }

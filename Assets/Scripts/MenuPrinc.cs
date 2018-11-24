@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
 
 /**
  * Gestionnaire du menu principal
@@ -21,16 +20,6 @@ public class MenuPrinc : MonoBehaviour {
     public Button btnJouer; // Bouton Jouer
     public Button btnAide; // Bouton d'aide
     public Button btnReglages; // Bouton des réglages
-    public GameObject LobbyListe;
-    private JoindreLobby joindreLobby;
-
-    // Menu jouer
-    public GameObject menuJouer; // Objet du menu pour lancer une partie
-    public InputField txtCreer; // Inputfield pour créer une partie
-    public Button btnCreerPartie; // Bouton pour créer une partie
-    public InputField txtRejoindre; // Inputfield pour rejoindre une partie
-    public Button btnRejoindrePartie; // Bouton pour rejoindre une partie
-    public LobbyManager lobbyManager;
 
     // Menu aide
     public GameObject menuAide; // Objet menu aide
@@ -50,10 +39,6 @@ public class MenuPrinc : MonoBehaviour {
         btnJouer.onClick.AddListener(() => OuvrirMenuJouer());
         btnAide.onClick.AddListener(() => OuvrirMenuAide());
         btnReglages.onClick.AddListener(() => OuvrirMenuReglages());
-
-        // Menu Jouer
-        btnCreerPartie.onClick.AddListener(() => CreerPartie());
-        btnRejoindrePartie.onClick.AddListener(() => RejoindrePartie());
     }
 
 
@@ -73,27 +58,6 @@ public class MenuPrinc : MonoBehaviour {
             menuPrinc.SetActive(true);
         }
 
-
-            // Si l'input field de nom de partie ne contient rien,
-            if (txtCreer.text != "") {
-                // Activer le bouton de création de partie
-                btnCreerPartie.interactable = true;
-            }
-            else {
-                // Désactiver le bouton de création de partie
-                btnCreerPartie.interactable = false;
-            }
-
-            // Si l'input field de nom de partie ne contient rien,
-            if (txtRejoindre.text != "") {
-                // Activer le bouton de création de partie
-                btnRejoindrePartie.interactable = true;
-            }
-            else {
-                // Désactiver le bouton de création de partie
-                btnRejoindrePartie.interactable = false;
-            }
-
     }
 
 
@@ -104,8 +68,7 @@ public class MenuPrinc : MonoBehaviour {
      * @author Pier-Olivier Bourdeau
      */
     public void OuvrirMenuJouer() {
-        menuPrinc.SetActive(false);
-        menuJouer.SetActive(true);
+        SceneManager.LoadScene(1);
     }
 
 
@@ -130,24 +93,6 @@ public class MenuPrinc : MonoBehaviour {
 
     }
 
-
-    /**
-     * Ouvrir le menu pour créer une partie
-     * @param void
-     * @return void
-     * @author Pier-Olivier Bourdeau
-     */
-    public void CreerPartie() {
-        // Créer la partie (Network Manager)
-        lobbyManager.StopMatchMaker();
-        lobbyManager.StartMatchMaker();
-        lobbyManager.matchMaker.CreateMatch(txtCreer.text, (uint)lobbyManager.maxPlayers, true, "", "", "", 0, 0, lobbyManager.OnMatchCreate);
-
-        // Ouvrir le menu de choix de personnage
-        menuJouer.SetActive(false);
-    }
-
-
     /**
      * Ouvrir le menu pour rejoindre une partie
      * @param void
@@ -156,10 +101,6 @@ public class MenuPrinc : MonoBehaviour {
      */
     public void RejoindrePartie() {
         // Créer la partie (Network Manager)
-        lobbyManager.StartMatchMaker();
-
-        joindreLobby = LobbyListe.GetComponent<JoindreLobby>();
-        joindreLobby.RafraichirListe();
     }
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
+using Photon.Pun;
 
 /**
  * Gérer les déplacements du joueur, attaques, dégâts(vie) et les interractions avec les ressources (inventaire et assemblage de l'arme)
@@ -11,7 +11,9 @@ using UnityEngine.Networking;
  * @version 2018-11-12
  */
 
-public class DeplacementPerso : NetworkBehaviour {
+public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
+
+    public static GameObject LocalPlayerInstance;
 
     private Rigidbody rbPerso; // Rigidbody du joueur
     private Animator animPerso; // Animator du joueur
@@ -40,6 +42,15 @@ public class DeplacementPerso : NetworkBehaviour {
     public GameObject[] aCaseRougeInv; // Les cases rouges de l'inventaire 
     // aCaseRougeInv[0] = case Bois, aCaseRougeInv[1] = case Fer, aCaseRougeInv[2] = case Cuir
 
+    
+    void Awake() {
+        if (photonView.IsMine) {
+            DeplacementPerso.LocalPlayerInstance = this.gameObject;
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+    }
+
 
     /**
      * Initialisation des variables
@@ -56,7 +67,19 @@ public class DeplacementPerso : NetworkBehaviour {
         aInventaire[0] = 0;
         aInventaire[1] = 0;
         aInventaire[2] = 0;
-	}
+
+
+        DeplacementCam _cameraWork = this.gameObject.GetComponent<DeplacementCam>();
+
+        if (_cameraWork != null) {
+            if (photonView.IsMine) {
+                _cameraWork.OnStartFollowing();
+            }
+        }
+        else {
+            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+        }
+    }
 
 
     /**
@@ -67,7 +90,7 @@ public class DeplacementPerso : NetworkBehaviour {
      */
     void Update() {
 
-        if (!isLocalPlayer) {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
         }
 
@@ -97,15 +120,18 @@ public class DeplacementPerso : NetworkBehaviour {
             // Gestion du mouvement du blend tree
 		    animPerso.SetFloat("VelY",Input.GetAxis("Vertical"));
             animPerso.SetFloat("VelX",Input.GetAxis("Horizontal"));
-        
+
             // Si le joueur appui sur la touche droite de la souris,
-            if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
-                // Faire jouer l'animation d'attaque    
-                animPerso.SetTrigger("attaque");
+            if (photonView.IsMine) {
+                if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
+                    // Faire jouer l'animation d'attaque    
+                    animPerso.SetTrigger("attaque");
+                }
+                else if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme == false) {
+                    animPerso.SetTrigger("attaque");
+                }
             }
-            else if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme == false) {
-                animPerso.SetTrigger("attaque");
-            }
+            
 
             // Gestion de la vie du personnage
             GestionVie();
@@ -123,10 +149,6 @@ public class DeplacementPerso : NetworkBehaviour {
      * @author Pier-Olivier Bourdeau
      */
     void FixedUpdate() {
-
-        if (!isLocalPlayer) {
-            return;
-        }
 
         // Si le personnage n'est pas mort,
         if (animPerso.GetBool("mort") == false) {
@@ -204,6 +226,11 @@ public class DeplacementPerso : NetworkBehaviour {
                     break;
                 // Arme
                 case "arme":
+
+                    if (!photonView.IsMine) {
+                        return;
+                    }
+
                     animPerso.SetTrigger("dommage");
                     indVie--;
                     break;
@@ -213,7 +240,7 @@ public class DeplacementPerso : NetworkBehaviour {
         // Si on rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
             // Changer la position de la caméra
-            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 15f, 8f);
+            //camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 15f, 8f);
         }
     }
 
@@ -314,7 +341,7 @@ public class DeplacementPerso : NetworkBehaviour {
         // Si le personnage rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
             // Changer la position de la caméra
-            camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 20f, 10f);
+            //camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 20f, 10f);
         }
     }
 
@@ -373,6 +400,8 @@ public class DeplacementPerso : NetworkBehaviour {
 
                 // Jouer l'animation de mort
                 animPerso.SetBool("mort", true);
+
+                GameManager.Instance.LeaveRoom();
                 break;
 
         }
@@ -387,5 +416,20 @@ public class DeplacementPerso : NetworkBehaviour {
     public IEnumerator OuvrirMenu() {
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("SceneMenu");
+    }
+
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+
+        if (stream.IsWriting) {
+            // We own this player: send the others our data
+            stream.SendNext(attaque);
+            stream.SendNext(indVie);
+        }
+        else {
+            // Network player, receive data
+            this.attaque = (bool)stream.ReceiveNext();
+            this.indVie = (int)stream.ReceiveNext();
+        }
     }
 }
