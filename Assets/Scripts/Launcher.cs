@@ -50,8 +50,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
     }
 
     public override void OnJoinedRoom() {
+        
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1) {
-            PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LoadLevel("SceneRejoindre");
         }
     }
 
@@ -59,6 +60,5 @@ public class Launcher : MonoBehaviourPunCallbacks {
         progressionConnexion.SetActive(false);
         panConnexion.SetActive(true);
     }
-
 
 }

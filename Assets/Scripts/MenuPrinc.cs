@@ -17,14 +17,6 @@ public class MenuPrinc : MonoBehaviour {
     public static bool premierLancement = true; // Est-ce le premier lancement du jeu?
     public GameObject menuPrinc; // Objet MenuPrinc
     public Button btnQuitter; // Bouton Quitter
-    public Button btnJouer; // Bouton Jouer
-    public Button btnAide; // Bouton d'aide
-    public Button btnReglages; // Bouton des réglages
-
-    // Menu aide
-    public GameObject menuAide; // Objet menu aide
-    public GameObject menuReglages; // Objet des réglages
-    public GameObject menuPerso; // Objet Menu personnage
 
     /**
      * Ajout d'événement sur tous les boutons du menu
@@ -36,9 +28,6 @@ public class MenuPrinc : MonoBehaviour {
 
         // Menu principal
         btnQuitter.onClick.AddListener(() => QuitterJeu());
-        btnJouer.onClick.AddListener(() => OuvrirMenuJouer());
-        btnAide.onClick.AddListener(() => OuvrirMenuAide());
-        btnReglages.onClick.AddListener(() => OuvrirMenuReglages());
     }
 
 
@@ -68,39 +57,7 @@ public class MenuPrinc : MonoBehaviour {
      * @author Pier-Olivier Bourdeau
      */
     public void OuvrirMenuJouer() {
-        SceneManager.LoadScene(1);
-    }
-
-
-    /**
-     * Ouvrir le menu d'aide
-     * @param void
-     * @return void
-     * @author Vincent Gagnon
-     */
-    public void OuvrirMenuAide() {
-        menuPrinc.SetActive(false);
-        menuAide.SetActive(true);
-    }
-
-
-    /**
-     * Ouvrir le menu des réglages
-     * @param void
-     * @return void
-     */
-    public void OuvrirMenuReglages() {
-
-    }
-
-    /**
-     * Ouvrir le menu pour rejoindre une partie
-     * @param void
-     * @return void
-     * @author Pier-Olivier Bourdeau
-     */
-    public void RejoindrePartie() {
-        // Créer la partie (Network Manager)
+        SceneManager.LoadScene("SceneRejoindre");
     }
 
 
