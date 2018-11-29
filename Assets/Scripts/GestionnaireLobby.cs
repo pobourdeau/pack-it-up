@@ -25,6 +25,10 @@ public class GestionnaireLobby : MonoBehaviour {
     public Toggle cchKnight;
     public Toggle cchMage;
 
+    public Image imgPerso;
+    public Sprite sprite_knight;
+    public Sprite sprite_mage;
+
 
     // Use this for initialization
     void Start () {
@@ -34,13 +38,29 @@ public class GestionnaireLobby : MonoBehaviour {
 
         cchKnight.onValueChanged.AddListener(delegate {
             if (cchKnight.isOn) {
-                print("ON");
+                cchMage.isOn = false;
+                imgPerso.sprite = sprite_knight;
             }
             else {
-                print("OFF");
+                cchMage.isOn = true;
+                imgPerso.sprite = sprite_mage;
             }
-            
         });
+
+        cchMage.onValueChanged.AddListener(delegate {
+            if (cchMage.isOn) {
+                cchKnight.isOn = false;
+                imgPerso.sprite = sprite_mage;
+            }
+            else {
+                cchKnight.isOn = true;
+                imgPerso.sprite = sprite_knight;
+            }
+        });
+    }
+
+    void FixedUpdate() {
+        
     }
 
     void AfficherPartie() {

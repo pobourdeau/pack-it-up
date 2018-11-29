@@ -9,20 +9,27 @@ using Photon.Realtime;
 public class NomJoueur : MonoBehaviour {
 
     const string pseudoJoueurPrefKey = "PlayerName";
-    public Button btnChoisirNom;
     InputField txtPseudoJoueur;
+    public Text lblNomJoueur;
+    public Button btnConnexion;
 
     // Use this for initialization
     void Start () {
         string pseudoDefaut = string.Empty;
         txtPseudoJoueur = this.GetComponent<InputField>();
 
+        lblNomJoueur.text = "";
+
         if (txtPseudoJoueur != null) {
 
             if (PlayerPrefs.HasKey(pseudoJoueurPrefKey)) {
                 pseudoDefaut = PlayerPrefs.GetString(pseudoJoueurPrefKey);
                 txtPseudoJoueur.text = pseudoDefaut;
+                lblNomJoueur.text = pseudoDefaut;
             }
+        }
+        else {
+            btnConnexion.interactable = false;
         }
 
         PhotonNetwork.NickName = pseudoDefaut;
@@ -35,17 +42,10 @@ public class NomJoueur : MonoBehaviour {
         }
 
         PhotonNetwork.NickName = value;
+        lblNomJoueur.text = value;
 
         PlayerPrefs.SetString(pseudoJoueurPrefKey, value);
-    }
 
-
-    void FixedUpdate() {
-        if(txtPseudoJoueur.text == "") {
-            btnChoisirNom.interactable = false;
-        }
-        else {
-            btnChoisirNom.interactable = true;
-        }
+        btnConnexion.interactable = true;
     }
 }

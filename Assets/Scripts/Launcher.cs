@@ -12,6 +12,9 @@ public class Launcher : MonoBehaviourPunCallbacks {
     private GameObject panConnexion;
     [SerializeField]
     private GameObject progressionConnexion;
+    [SerializeField]
+    private GameObject btnConnexion;
+
 
     bool estConnecte;
 
@@ -52,7 +55,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1) {
-            PhotonNetwork.LoadLevel("SceneRejoindre");
+            PhotonNetwork.LoadLevel("SceneJeu");
         }
     }
 
