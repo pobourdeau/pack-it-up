@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using Photon.Pun;
-using Photon.Realtime;
 
-public class GestionnaireLobby : MonoBehaviourPunCallbacks {
+public class GestionnaireLobby : MonoBehaviour {
 
     public GameObject btnPartie;
     public GameObject panPartie;
@@ -24,11 +22,9 @@ public class GestionnaireLobby : MonoBehaviourPunCallbacks {
     public Sprite spriteReglages_neutre;
     public Sprite spriteReglages_actif;
 
-    public Text txtNbJoueur;
-    public Text txtStatut;
+    public Toggle cchKnight;
+    public Toggle cchMage;
 
-    public GameObject panJoueur;
-    public GameObject[] aDrapeaux;
 
     // Use this for initialization
     void Start () {
@@ -36,8 +32,15 @@ public class GestionnaireLobby : MonoBehaviourPunCallbacks {
         btnProfil.GetComponent<Button>().onClick.AddListener(() => AfficherProfil());
         btnReglages.GetComponent<Button>().onClick.AddListener(() => AfficherReglages());
 
-        // Créer les joueurs dans le lobby d'attente
-        CreationJoueurAttente();
+        cchKnight.onValueChanged.AddListener(delegate {
+            if (cchKnight.isOn) {
+                print("ON");
+            }
+            else {
+                print("OFF");
+            }
+            
+        });
     }
 
     void AfficherPartie() {
@@ -69,43 +72,6 @@ public class GestionnaireLobby : MonoBehaviourPunCallbacks {
         btnProfil.GetComponent<Image>().sprite = spriteProfil_neutre;
         btnReglages.GetComponent<Image>().sprite = spriteReglages_actif;
 
-    }
-
-    void CreationJoueurAttente() {
-        GameObject oJoueur = PhotonNetwork.Instantiate(aDrapeaux[PhotonNetwork.CurrentRoom.PlayerCount-1].gameObject.name, new Vector3(0, 0, 0), Quaternion.identity, 0);
-        oJoueur.transform.parent = panJoueur.transform;
-    }
-
-
-    public override void OnPlayerEnteredRoom(Player nouveauJoueur) {
-        Debug.LogFormat("OnPlayerEnteredRoom() {0}", nouveauJoueur.NickName);
-        if (PhotonNetwork.IsMasterClient) {
-            txtNbJoueur.text = PhotonNetwork.CurrentRoom.PlayerCount + "/4";
-        }
-
-        if(PhotonNetwork.CurrentRoom.PlayerCount > 1) {
-            txtStatut.text = "Prêt à lancer une partie.";
-        }
-    }
-
-    public override void OnPlayerLeftRoom(Player nouveauJoueur) {
-        if (PhotonNetwork.IsMasterClient) {
-            txtNbJoueur.text = PhotonNetwork.CurrentRoom.PlayerCount + "/4";
-        }
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount <= 1) {
-            
-            // Désactiver le bouton "Lancer la partie"
-            txtStatut.text = "En attente d'autres joueurs...";
-        }
-    }
-
-    public override void OnLeftRoom() {
-        SceneManager.LoadScene("SceneMenu");
-    }
-
-    public void LeaveRoom() {
-        PhotonNetwork.LeaveRoom();
     }
 
 }

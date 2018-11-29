@@ -49,7 +49,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114886643776379270}
   viewIdField: 0
-  InstantiationId: 0
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!114 &114837473589131956
 MonoBehaviour:
@@ -114,6 +114,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 41.84, y: -97.505}
-  m_SizeDelta: {x: 83.68, y: 167.82}
+  m_AnchoredPosition: {x: 66.845, y: -159.505}
+  m_SizeDelta: {x: 133.69, y: 254.88}
   m_Pivot: {x: 0.5, y: 0.5}
