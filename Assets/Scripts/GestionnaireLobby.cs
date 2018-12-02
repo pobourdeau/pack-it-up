@@ -29,6 +29,8 @@ public class GestionnaireLobby : MonoBehaviour {
     public Sprite sprite_knight;
     public Sprite sprite_mage;
 
+    public static string choixPersoJoueur = "knight";
+
 
     // Use this for initialization
     void Start () {
@@ -40,10 +42,12 @@ public class GestionnaireLobby : MonoBehaviour {
             if (cchKnight.isOn) {
                 cchMage.isOn = false;
                 imgPerso.sprite = sprite_knight;
+                choixPersoJoueur = "knight";
             }
             else {
                 cchMage.isOn = true;
                 imgPerso.sprite = sprite_mage;
+                choixPersoJoueur = "mage";
             }
         });
 
@@ -51,16 +55,14 @@ public class GestionnaireLobby : MonoBehaviour {
             if (cchMage.isOn) {
                 cchKnight.isOn = false;
                 imgPerso.sprite = sprite_mage;
+                choixPersoJoueur = "mage";
             }
             else {
                 cchKnight.isOn = true;
                 imgPerso.sprite = sprite_knight;
+                choixPersoJoueur = "knight";
             }
         });
-    }
-
-    void FixedUpdate() {
-        
     }
 
     void AfficherPartie() {
