@@ -13,6 +13,16 @@ using Photon.Pun;
 
 public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
+    // Les sons
+    public AudioClip bruitSlash;
+    public AudioClip bruitAttacked;
+    public AudioClip bruitDead;
+    public AudioClip bruitConstruction;
+    public AudioClip bruitAttackSpecial;
+    public AudioClip bruitForge;
+
+    public AudioSource audioSourcePerso;
+
     public static GameObject LocalPlayerInstance;
 
     private Rigidbody rbPerso; // Rigidbody du joueur
@@ -65,6 +75,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         rbPerso = GetComponent<Rigidbody>();
         // Animator du joueur
         animPerso = GetComponent<Animator>();
+        // Speaker du joueur
+        audioSourcePerso = GetComponent<AudioSource>();
 
         // Inventaire du joueur
         aInventaire[0] = 0;
@@ -315,6 +327,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 if (aInventaire[0] >= 1 && aInventaire[1] >= 1 && aInventaire[2] >= 1) {
                     // Entrain de construire
                     entrainDeConstruire = true;
+                    
+                    //Déclencher le son de la forge
+                    audioSourcePerso.PlayOneShot(bruitForge, 0.7F);
 
                     // Afficher le timer de construction
                     oImgConstruire.SetActive(true);
@@ -343,6 +358,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         
         // Si on quitte le collider de la forge,
         if(objCollider.gameObject.tag == "forge") {
+            //Arrêter le bruit de la forge
+            audioSourcePerso.Stop();
+
             // Entrain de constuire est à faux
             entrainDeConstruire = false;
             // Désactiver l'image du timer de construction et le texte
@@ -407,24 +425,25 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Issam Aloulou
      */
     private void GestionVie() {
-
         // La vie du personnage
         switch (indVie) {
             case 2:
                 aBarreVie[2].GetComponent<Image>().sprite = vieVide;
+                audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                 break;
             case 1:
                 aBarreVie[1].GetComponent<Image>().sprite = vieVide;
+                audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                 break;
             case 0:
                 aBarreVie[0].GetComponent<Image>().sprite = vieVide;
+                audioSourcePerso.PlayOneShot(bruitDead,1f);
 
                 // Jouer l'animation de mort
                 animPerso.SetBool("mort", true);
 
                 GameManager.Instance.LeaveRoom();
                 break;
-
         }
     }
 
