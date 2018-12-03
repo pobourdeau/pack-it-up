@@ -17,6 +17,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
     private Rigidbody rbPerso; // Rigidbody du joueur
     private Animator animPerso; // Animator du joueur
+    float LongueurRayCast = 100f; // Distance maximale du RayCast
 
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
     public float vDeplacement; // Vélocité de déplacement
@@ -41,6 +42,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     // aCrochetInv[0] = crochet Bois, aCrochetInv[1] = crochet Fer, aCrochetInv[2] = crochet Cuir
     public GameObject[] aCaseRougeInv; // Les cases rouges de l'inventaire 
     // aCaseRougeInv[0] = case Bois, aCaseRougeInv[1] = case Fer, aCaseRougeInv[2] = case Cuir
+
+    
 
     
     void Awake() {
@@ -94,6 +97,20 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             return;
         }
 
+
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit infoCollision;
+
+        // Si le tir part, créer un nouveau raycast qui part du fusil
+        if (Physics.Raycast(camRay.origin, camRay.direction, out infoCollision, 5000, LayerMask.GetMask("Plancher"))) {
+            Vector3 pointARegarder = infoCollision.point;
+
+            pointARegarder.y = 0;
+            transform.LookAt(pointARegarder);
+            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+        }
+
+
         // Si l'animation d'attaque avec épée joue,
         if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
             // Attaque est à true
@@ -116,10 +133,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // Arrêter le timer de construction
                 StopCoroutine("ConstructionArme");
             }
-
-            // Gestion du mouvement du blend tree
-		    animPerso.SetFloat("VelY",Input.GetAxis("Vertical"));
-            animPerso.SetFloat("VelX",Input.GetAxis("Horizontal"));
 
             // Si le joueur appui sur la touche droite de la souris,
             if (photonView.IsMine) {
@@ -152,13 +165,21 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         // Si le personnage n'est pas mort,
         if (animPerso.GetBool("mort") == false) {
-            // Déplacer le personnage
-            transform.Rotate(0, Input.GetAxis("Horizontal") * vRotation, 0);
 
-            vDeplacement = Input.GetAxis("Vertical") * vitesseDeplacement;
+             var vDeplacement = Input.GetAxis("Vertical");
+             var hDeplacement = Input.GetAxis("Horizontal");
 
-            rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
-        }
+             rbPerso.velocity = new Vector3(hDeplacement, 0, vDeplacement).normalized * vitesseDeplacement;
+
+             // Gestion du mouvement du blend tree
+             animPerso.SetFloat("VelY", vDeplacement);
+             animPerso.SetFloat("VelX", hDeplacement);
+
+             // Faire pivoter le joueur
+             Pivoter();
+         }
+
+
     }
 
 
@@ -430,6 +451,31 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             // Network player, receive data
             this.attaque = (bool)stream.ReceiveNext();
             this.indVie = (int)stream.ReceiveNext();
+        }
+    }
+
+
+    /**
+     * Faire pivoter le personnage en fonction de la souris du joueur
+     * @param void
+     * @return void;
+     */
+    void Pivoter() {
+
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(camRay, out hit, LongueurRayCast)) {
+            // Create a vector from the player to the point on the floor the raycast from the mouse hit.
+            Vector3 pointARegarder = hit.point - transform.position;
+
+            pointARegarder.y = 0f;
+
+            // Regarder le nouveau point
+            Quaternion rotation = Quaternion.LookRotation(pointARegarder);
+
+            // Faire pivoter le joueur
+            rbPerso.MoveRotation(rotation);
         }
     }
 }

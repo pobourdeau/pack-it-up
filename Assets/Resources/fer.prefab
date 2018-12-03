@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4870917152832254}
   - component: {fileID: 65422046665081666}
   - component: {fileID: 65891580310569094}
+  - component: {fileID: 114376866581755384}
   m_Layer: 0
   m_Name: fer
   m_TagString: fer
@@ -167,3 +168,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.2418365, y: 2.220725, z: 7.9312687}
   m_Center: {x: -0.22769928, y: 0.6103625, z: -0.07131958}
+--- !u!114 &114376866581755384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1567990257230646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

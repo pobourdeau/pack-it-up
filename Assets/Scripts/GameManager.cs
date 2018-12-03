@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public Button btnLancer;
     public Text nbJoueurRoom;
 
+    public GameObject[] aSpawnerBois; // Tous les points de spawn du bois
+    public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
+    public GameObject[] aSpawnerCuir; // Tous les points de spawn du cuir
+
 
     void Start() {
         Instance = this;
@@ -42,6 +46,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
         if (PhotonNetwork.IsMasterClient) {
             txtMaster.text = PhotonNetwork.PlayerList[0].NickName;
         }
+
+        // Générer les ressources sur la carte
+        GenererRessources();
     }
 
     public override void OnLeftRoom() {
@@ -93,5 +100,54 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         print("JE LANCE LA PARTIE!!");
 
+    }
+
+
+    /**
+     * Générer les ressources sur la carte aléatoirement
+     * @param void
+     * @return void
+     * @author Vincent Gagnon
+     */
+    void GenererRessources() {
+        // Générer aléatoirement l'emplacement du bois
+        Shuffle(aSpawnerBois);
+
+        for (int iBois = 0; iBois < aSpawnerBois.Length / 2; iBois++) {
+            GameObject oCloneBois = PhotonNetwork.Instantiate("bois", aSpawnerBois[iBois].transform.position, Quaternion.Euler(aSpawnerBois[iBois].transform.eulerAngles));
+            oCloneBois.transform.parent = aSpawnerBois[iBois].transform;
+        }
+
+        // Générer aléatoirement l'emplacement du fer
+        Shuffle(aSpawnerFer);
+
+        for (int iFer = 0; iFer < aSpawnerFer.Length / 2; iFer++) {
+            GameObject oCloneFer = PhotonNetwork.Instantiate("fer", aSpawnerFer[iFer].transform.position, Quaternion.Euler(aSpawnerFer[iFer].transform.eulerAngles));
+            oCloneFer.transform.parent = aSpawnerFer[iFer].transform;
+        }
+
+        // Générer aléatoirement l'emplacement du cuir
+        Shuffle(aSpawnerCuir);
+
+        for (int iCuir = 0; iCuir < aSpawnerCuir.Length / 2; iCuir++) {
+            GameObject oCloneCuir = PhotonNetwork.Instantiate("cuir", aSpawnerCuir[iCuir].transform.position, Quaternion.Euler(aSpawnerCuir[iCuir].transform.eulerAngles));
+            oCloneCuir.transform.parent = aSpawnerCuir[iCuir].transform;
+        }
+
+    }
+
+
+    /**
+     * Mélanger un tableau sans répétition et doublons
+     * @param GameObject[] aTab
+     * @return void
+     */
+    void Shuffle(GameObject[] aTab) {
+        for (int t = 0; t < aTab.Length; t++) {
+            GameObject tmp = aTab[t];
+            int r = Random.Range(t, aTab.Length);
+            aTab[t] = aTab[r];
+            aTab[r] = tmp;
+        }
     }
 }
