@@ -1214,6 +1214,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c9eccb7dff65346abda9282737414b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bruitSlash: {fileID: 0}
+  bruitAttacked: {fileID: 0}
+  bruitDead: {fileID: 0}
+  bruitConstruction: {fileID: 0}
+  bruitAttackSpecial: {fileID: 0}
+  bruitForge: {fileID: 0}
+  audioSourcePerso: {fileID: 0}
   vitesseDeplacement: 16
   vDeplacement: 0
   vRotation: 5

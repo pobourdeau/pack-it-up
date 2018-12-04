@@ -50,7 +50,7 @@ namespace Photon.Pun.Demo.Asteroids
             cachedRoomList = new Dictionary<string, RoomInfo>();
             roomListEntries = new Dictionary<string, GameObject>();
             
-            PlayerNameInput.text = "Player " + Random.Range(1000, 10000);
+            PlayerNameInput.text = "Joueur " + Random.Range(1000, 10000);
         }
 
         #endregion
@@ -89,7 +89,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
-            string roomName = "Room " + Random.Range(1000, 10000);
+            string roomName = "Partie " + Random.Range(1000, 10000);
 
             RoomOptions options = new RoomOptions {MaxPlayers = 8};
 
@@ -208,7 +208,7 @@ namespace Photon.Pun.Demo.Asteroids
         public void OnCreateRoomButtonClicked()
         {
             string roomName = RoomNameInputField.text;
-            roomName = (roomName.Equals(string.Empty)) ? "Room " + Random.Range(1000, 10000) : roomName;
+            roomName = (roomName.Equals(string.Empty)) ? "Partie " + Random.Range(1000, 10000) : roomName;
 
             byte maxPlayers;
             byte.TryParse(MaxPlayersInputField.text, out maxPlayers);
@@ -242,8 +242,7 @@ namespace Photon.Pun.Demo.Asteroids
             }
             else
             {
-                print(playerName);
-                Debug.LogError("Player Name is invalid.");
+                Debug.LogError("Nom du joueur invalide.");
             }
         }
 
@@ -262,7 +261,7 @@ namespace Photon.Pun.Demo.Asteroids
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
 
-            PhotonNetwork.LoadLevel("DemoAsteroids-GameScene");
+            PhotonNetwork.LoadLevel("SceneJeu");
         }
 
         #endregion

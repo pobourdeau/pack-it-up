@@ -83,6 +83,7 @@ namespace Photon.Pun.Demo.Asteroids
             {
                 if (p.ActorNumber == ownerId)
                 {
+                    //print(p.GetPlayerNumber());
                     PlayerColorImage.color = AsteroidsGame.GetColor(p.GetPlayerNumber());
                 }
             }
@@ -90,7 +91,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public void SetPlayerReady(bool playerReady)
         {
-            PlayerReadyButton.GetComponentInChildren<Text>().text = playerReady ? "Ready!" : "Ready?";
+            PlayerReadyButton.GetComponentInChildren<Text>().text = playerReady ? "Prêt!" : "Prêt?";
             PlayerReadyImage.enabled = playerReady;
         }
     }
