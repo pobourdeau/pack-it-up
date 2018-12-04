@@ -17,7 +17,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public AudioClip bruitSlash;
     public AudioClip bruitAttacked;
     public AudioClip bruitDead;
-    public AudioClip bruitConstruction;
     public AudioClip bruitAttackSpecial;
     public AudioClip bruitForge;
 

@@ -1217,7 +1217,6 @@ MonoBehaviour:
   bruitSlash: {fileID: 0}
   bruitAttacked: {fileID: 0}
   bruitDead: {fileID: 0}
-  bruitConstruction: {fileID: 0}
   bruitAttackSpecial: {fileID: 0}
   bruitForge: {fileID: 0}
   audioSourcePerso: {fileID: 0}
