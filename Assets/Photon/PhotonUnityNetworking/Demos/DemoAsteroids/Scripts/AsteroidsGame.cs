@@ -15,17 +15,21 @@ namespace Photon.Pun.Demo.Asteroids
         public const string PLAYER_READY = "IsPlayerReady";
         public const string PLAYER_LOADED_LEVEL = "PlayerLoadedLevel";
 
-        public static Color GetColor(int colorChoice)
+        public static int GetColor(int colorChoice)
         {
             switch (colorChoice)
             {
-                case 0: return new Color(0.39f, 0.6f, 0.19f, 1f);
+                /*case 0: return new Color(0.39f, 0.6f, 0.19f, 1f);
                 case 1: return new Color(0.37f, 0.64f, 0.63f, 1f);
                 case 2: return new Color(0.72f, 0.53f, 0.26f, 1f);
-                case 3: return new Color(0.55f, 0.17f, 0.15f, 1f);
+                case 3: return new Color(0.55f, 0.17f, 0.15f, 1f);*/
+                case 0: return 0;
+                case 1: return 1;
+                case 2: return 2;
+                case 3: return 3;
             }
 
-            return new Color(0.55f, 0.17f, 0.15f, 1f);
+            return 0;
         }
     }
 }

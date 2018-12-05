@@ -31,4 +31,5 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - UpdateSpriteLobby
   DisableAutoOpenWizard: 1

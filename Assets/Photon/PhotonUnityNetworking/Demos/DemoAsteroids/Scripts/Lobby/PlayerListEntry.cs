@@ -25,7 +25,12 @@ namespace Photon.Pun.Demo.Asteroids
         public Image PlayerColorImage;
         public Button PlayerReadyButton;
         public Image PlayerReadyImage;
+        public Sprite[] PlayerFlag;
+        public Toggle PlayerCharacterKnight;
+        public Toggle PlayerCharacterMage;
+        public GameObject lblPerso;
 
+        public static string nomPerso = "knight";
         private int ownerId;
         private bool isPlayerReady;
 
@@ -41,12 +46,40 @@ namespace Photon.Pun.Demo.Asteroids
             if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
             {
                 PlayerReadyButton.gameObject.SetActive(false);
+
+                // Ne pas afficher les checkbox de l'autre joueur
+                PlayerCharacterKnight.gameObject.SetActive(false);
+                PlayerCharacterMage.gameObject.SetActive(false);
+                lblPerso.SetActive(false);
             }
             else
             {
-                Hashtable initialProps = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}, {AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES}};
+                Hashtable initialProps = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}, {AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES}, {"idPlayer", ownerId } };
                 PhotonNetwork.LocalPlayer.SetCustomProperties(initialProps);
                 PhotonNetwork.LocalPlayer.SetScore(0);
+
+                // Choisir le personnage
+                PlayerCharacterKnight.onValueChanged.AddListener(delegate {
+                    if (PlayerCharacterKnight.isOn) {
+                        PlayerCharacterMage.isOn = false;
+                        nomPerso = "knight";
+                    }
+                    else {
+                        PlayerCharacterMage.isOn = true;
+                        nomPerso = "mage";
+                    }
+                });
+
+                PlayerCharacterMage.onValueChanged.AddListener(delegate {
+                    if (PlayerCharacterMage.isOn) {
+                        PlayerCharacterKnight.isOn = false;
+                        nomPerso = "mage";
+                    }
+                    else {
+                        PlayerCharacterKnight.isOn = true;
+                        nomPerso = "knight";
+                    }
+                });
 
                 PlayerReadyButton.onClick.AddListener(() =>
                 {
@@ -63,6 +96,7 @@ namespace Photon.Pun.Demo.Asteroids
                 });
             }
         }
+
 
         public void OnDisable()
         {
@@ -84,7 +118,7 @@ namespace Photon.Pun.Demo.Asteroids
                 if (p.ActorNumber == ownerId)
                 {
                     //print(p.GetPlayerNumber());
-                    PlayerColorImage.color = AsteroidsGame.GetColor(p.GetPlayerNumber());
+                    PlayerColorImage.sprite = PlayerFlag[AsteroidsGame.GetColor(p.GetPlayerNumber())];
                 }
             }
         }

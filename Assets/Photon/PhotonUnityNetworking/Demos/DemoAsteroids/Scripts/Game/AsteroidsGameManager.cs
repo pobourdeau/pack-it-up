@@ -24,6 +24,9 @@ namespace Photon.Pun.Demo.Asteroids
         public static AsteroidsGameManager Instance = null;
 
         public Text InfoText;
+        public GameObject panDebut;
+        public GameObject[] aSpawnPoint;
+        public GameObject oHUD;
 
         public GameObject[] AsteroidPrefabs;
 
@@ -43,7 +46,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public void Start()
         {
-            InfoText.text = "Waiting for other players...";
+            InfoText.text = "En attentes des autres joueurs...";
 
             Hashtable props = new Hashtable
             {
@@ -91,6 +94,7 @@ namespace Photon.Pun.Demo.Asteroids
                 Vector3 torque = Random.insideUnitSphere * Random.Range(500.0f, 1500.0f);
                 object[] instantiationData = {force, torque, true};
 
+                // CRÉATION DES OBJETS DE LA SCÈNE
                 PhotonNetwork.InstantiateSceneObject("BigAsteroid", position, Quaternion.Euler(Random.value * 360.0f, Random.value * 360.0f, Random.value * 360.0f), 0, instantiationData);
             }
         }
@@ -117,7 +121,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("SceneRejoindre");
         }
 
         public override void OnLeftRoom()
@@ -168,17 +172,25 @@ namespace Photon.Pun.Demo.Asteroids
 
         private void StartGame()
         {
-            float angularStart = (360.0f / PhotonNetwork.CurrentRoom.PlayerCount) * PhotonNetwork.LocalPlayer.GetPlayerNumber();
-            float x = 20.0f * Mathf.Sin(angularStart * Mathf.Deg2Rad);
-            float z = 20.0f * Mathf.Cos(angularStart * Mathf.Deg2Rad);
-            Vector3 position = new Vector3(x, 0.0f, z);
-            Quaternion rotation = Quaternion.Euler(0.0f, angularStart, 0.0f);
 
-            PhotonNetwork.Instantiate("Spaceship", position, rotation, 0);
+            // Récupérer l'id du joueur qui se trouve dans le lobby (chaque joueur à un id unique...)
+            int idPlayer = (int)PhotonNetwork.LocalPlayer.CustomProperties["idPlayer"];
+
+            // Position et rotation de spawn du joueur
+            Vector3 position = aSpawnPoint[idPlayer - 1].transform.position;
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, aSpawnPoint[idPlayer - 1].transform.eulerAngles.y, 0));
+
+            // CRÉATION DES PERSONNAGES
+            GameObject oClone = PhotonNetwork.Instantiate(PlayerListEntry.nomPerso, position, rotation, 0);
+            oClone.GetComponent<DeplacementPerso>().enabled = true;
+            oClone.GetComponent<DeplacementCam>().enabled = true;
+
+            panDebut.SetActive(false);
+            oHUD.SetActive(true);
 
             if (PhotonNetwork.IsMasterClient)
             {
-                StartCoroutine(SpawnAsteroid());
+                //StartCoroutine(SpawnAsteroid()); 
             }
         }
 
