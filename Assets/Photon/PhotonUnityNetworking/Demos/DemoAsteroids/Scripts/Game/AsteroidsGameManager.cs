@@ -28,7 +28,22 @@ namespace Photon.Pun.Demo.Asteroids
         public GameObject[] aSpawnPoint;
         public GameObject oHUD;
 
-        public GameObject[] AsteroidPrefabs;
+        // Variables du perso
+        public AudioClip[] aBruits;
+        private AudioSource audioSrc;
+
+        public GameObject txtConstruireArme;
+        public GameObject txtRecolter;
+        public Image imgConstruire;
+        public GameObject oImgConstruire;
+        public GameObject[] aBarreVie;
+        public Sprite vieVide;
+        public GameObject[] aCrochetInv;
+        public GameObject[] aCaseRougeInv;
+
+        public GameObject[] aSpawnerBois; // Tous les points de spawn du bois
+        public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
+        public GameObject[] aSpawnerCuir; // Tous les points de spawn du cuir
 
         #region UNITY
 
@@ -66,39 +81,6 @@ namespace Photon.Pun.Demo.Asteroids
 
         #region COROUTINES
 
-        private IEnumerator SpawnAsteroid()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(Random.Range(AsteroidsGame.ASTEROIDS_MIN_SPAWN_TIME, AsteroidsGame.ASTEROIDS_MAX_SPAWN_TIME));
-
-                Vector2 direction = Random.insideUnitCircle;
-                Vector3 position = Vector3.zero;
-
-                if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-                {
-                    // Make it appear on the left/right side
-                    position = new Vector3(Mathf.Sign(direction.x) * Camera.main.orthographicSize * Camera.main.aspect, 0, direction.y * Camera.main.orthographicSize);
-                }
-                else
-                {
-                    // Make it appear on the top/bottom
-                    position = new Vector3(direction.x * Camera.main.orthographicSize * Camera.main.aspect, 0, Mathf.Sign(direction.y) * Camera.main.orthographicSize);
-                }
-
-                // Offset slightly so we are not out of screen at creation time (as it would destroy the asteroid right away)
-                position -= position.normalized * 0.1f;
-
-
-                Vector3 force = -position.normalized * 1000.0f;
-                Vector3 torque = Random.insideUnitSphere * Random.Range(500.0f, 1500.0f);
-                object[] instantiationData = {force, torque, true};
-
-                // CRÉATION DES OBJETS DE LA SCÈNE
-                PhotonNetwork.InstantiateSceneObject("BigAsteroid", position, Quaternion.Euler(Random.value * 360.0f, Random.value * 360.0f, Random.value * 360.0f), 0, instantiationData);
-            }
-        }
-
         private IEnumerator EndOfGame(string winner, int score)
         {
             float timer = 5.0f;
@@ -127,14 +109,6 @@ namespace Photon.Pun.Demo.Asteroids
         public override void OnLeftRoom()
         {
             PhotonNetwork.Disconnect();
-        }
-
-        public override void OnMasterClientSwitched(Player newMasterClient)
-        {
-            if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
-            {
-                StartCoroutine(SpawnAsteroid());
-            }
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -173,6 +147,10 @@ namespace Photon.Pun.Demo.Asteroids
         private void StartGame()
         {
 
+            // Créer les ressources
+            GenererRessources();
+
+
             // Récupérer l'id du joueur qui se trouve dans le lobby (chaque joueur à un id unique...)
             int idPlayer = (int)PhotonNetwork.LocalPlayer.CustomProperties["idPlayer"];
 
@@ -185,7 +163,24 @@ namespace Photon.Pun.Demo.Asteroids
             oClone.GetComponent<DeplacementPerso>().enabled = true;
             oClone.GetComponent<DeplacementCam>().enabled = true;
 
-            panDebut.SetActive(false);
+            // Donner les variables au personnage
+            oClone.GetComponent<DeplacementPerso>().bruitSlash = aBruits[0];
+            oClone.GetComponent<DeplacementPerso>().bruitAttacked = aBruits[1];
+            oClone.GetComponent<DeplacementPerso>().bruitDead = aBruits[2];
+            oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial = aBruits[3];
+            oClone.GetComponent<DeplacementPerso>().bruitForge = aBruits[4];
+
+            oClone.GetComponent<DeplacementPerso>().txtConstruireArme = txtConstruireArme;
+            oClone.GetComponent<DeplacementPerso>().txtRecolter = txtRecolter;
+            oClone.GetComponent<DeplacementPerso>().imgConstruire = imgConstruire;
+            oClone.GetComponent<DeplacementPerso>().oImgConstruire = oImgConstruire;
+            oClone.GetComponent<DeplacementPerso>().aBarreVie = aBarreVie;
+            oClone.GetComponent<DeplacementPerso>().vieVide = vieVide;
+            oClone.GetComponent<DeplacementPerso>().aCrochetInv = aCrochetInv;
+            oClone.GetComponent<DeplacementPerso>().aCaseRougeInv = aCaseRougeInv;
+
+
+        panDebut.SetActive(false);
             oHUD.SetActive(true);
 
             if (PhotonNetwork.IsMasterClient)
@@ -257,6 +252,53 @@ namespace Photon.Pun.Demo.Asteroids
         private void OnCountdownTimerIsExpired()
         {
             StartGame();
+        }
+
+        /**
+         * Générer les ressources sur la carte aléatoirement
+         * @param void
+         * @return void
+         * @author Vincent Gagnon
+         */
+        void GenererRessources() {
+            // Générer aléatoirement l'emplacement du bois
+            Shuffle(aSpawnerBois);
+
+            for (int iBois = 0; iBois < aSpawnerBois.Length / 2; iBois++) {
+                GameObject oCloneBois = PhotonNetwork.Instantiate("bois", aSpawnerBois[iBois].transform.position, Quaternion.Euler(aSpawnerBois[iBois].transform.eulerAngles));
+                oCloneBois.transform.parent = aSpawnerBois[iBois].transform;
+            }
+
+            // Générer aléatoirement l'emplacement du fer
+            Shuffle(aSpawnerFer);
+
+            for (int iFer = 0; iFer < aSpawnerFer.Length / 2; iFer++) {
+                GameObject oCloneFer = PhotonNetwork.Instantiate("fer", aSpawnerFer[iFer].transform.position, Quaternion.Euler(aSpawnerFer[iFer].transform.eulerAngles));
+                oCloneFer.transform.parent = aSpawnerFer[iFer].transform;
+            }
+
+            // Générer aléatoirement l'emplacement du cuir
+            Shuffle(aSpawnerCuir);
+
+            for (int iCuir = 0; iCuir < aSpawnerCuir.Length / 2; iCuir++) {
+                GameObject oCloneCuir = PhotonNetwork.Instantiate("cuir", aSpawnerCuir[iCuir].transform.position, Quaternion.Euler(aSpawnerCuir[iCuir].transform.eulerAngles));
+                oCloneCuir.transform.parent = aSpawnerCuir[iCuir].transform;
+            }
+
+        }
+
+        /**
+         * Mélanger un tableau sans répétition et doublons
+         * @param GameObject[] aTab
+         * @return void
+         */
+        void Shuffle(GameObject[] aTab) {
+            for (int t = 0; t < aTab.Length; t++) {
+                GameObject tmp = aTab[t];
+                int r = Random.Range(t, aTab.Length);
+                aTab[t] = aTab[r];
+                aTab[r] = tmp;
+            }
         }
     }
 }

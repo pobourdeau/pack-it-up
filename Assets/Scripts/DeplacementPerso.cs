@@ -20,13 +20,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public AudioClip bruitAttackSpecial;
     public AudioClip bruitForge;
 
-    public AudioSource audioSourcePerso;
-
     public static GameObject LocalPlayerInstance;
 
     private Rigidbody rbPerso; // Rigidbody du joueur
     private Animator animPerso; // Animator du joueur
-    float LongueurRayCast = 100f; // Distance maximale du RayCast
+    private AudioSource audioSourcePerso;
+    private float LongueurRayCast = 100f; // Distance maximale du RayCast
 
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
     public float vDeplacement; // Vélocité de déplacement
@@ -40,10 +39,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     private bool aLarme = false; // S'il a l'arme
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
-    public GameObject camSuivie; // Caméra qui suit le personnage
     public GameObject[] aBarreVie; // Barre de vie
     public Sprite vieVide; // Sprite de coeur vide
     public bool attaque = false; // Si le joueur attaque
+    public GameObject oMain;
 
     public int[] aInventaire; // Inventaire du joueur
     // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
@@ -272,7 +271,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Si on rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
             // Changer la position de la caméra
-            //camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 15f, 8f);
         }
     }
 
@@ -293,7 +291,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 aInventaire[0] = 1;
 
                 // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
-                objCollider.gameObject.SetActive(false);
+                //objCollider.gameObject.SetActive(false);
+                PhotonNetwork.Destroy(objCollider.gameObject);
                 txtRecolter.SetActive(false);
                 aCrochetInv[0].SetActive(true);
             }
@@ -304,7 +303,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 aInventaire[1] = 1;
 
                 // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
-                objCollider.gameObject.SetActive(false);
+                //objCollider.gameObject.SetActive(false);
+                PhotonNetwork.Destroy(objCollider.gameObject);
                 txtRecolter.SetActive(false);
                 aCrochetInv[1].SetActive(true);
             }
@@ -315,7 +315,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 aInventaire[2] = 1;
 
                 // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
-                objCollider.gameObject.SetActive(false);
+                //objCollider.gameObject.SetActive(false);
+                PhotonNetwork.Destroy(objCollider.gameObject);
                 txtRecolter.SetActive(false);
                 aCrochetInv[2].SetActive(true);
             }
@@ -358,7 +359,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Si on quitte le collider de la forge,
         if(objCollider.gameObject.tag == "forge") {
             //Arrêter le bruit de la forge
-            audioSourcePerso.Stop();
+            //audioSourcePerso.Stop();
 
             // Entrain de constuire est à faux
             entrainDeConstruire = false;
@@ -379,7 +380,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Si le personnage rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
             // Changer la position de la caméra
-            //camSuivie.GetComponent<DeplacementCam>().distanceCamera = new Vector3(0, 20f, 10f);
         }
     }
 
@@ -401,10 +401,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         print("Bravo");
 
-        // Afficher l'arme et 
+        // Créer l'arme et l'a donner au joueur 
+        GameObject oArme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
+        oArme.transform.parent = oMain.transform;
         aLarme = true;
-        arme.SetActive(true);
-        animPerso.SetBool("aLarme", true);
     }
 
     /**
@@ -441,7 +441,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // Jouer l'animation de mort
                 animPerso.SetBool("mort", true);
 
-                GameManager.Instance.LeaveRoom();
+                //GameManager.Instance.LeaveRoom();
                 break;
         }
     }

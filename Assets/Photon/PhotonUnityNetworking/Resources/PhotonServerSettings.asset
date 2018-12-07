@@ -32,4 +32,5 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - UpdateSpriteLobby
+  - AfficherArme
   DisableAutoOpenWizard: 1
