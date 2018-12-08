@@ -265,6 +265,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: attaque
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: aLarme
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102089276864489230}
   m_Solo: 0
@@ -285,7 +288,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Magus_Mort
+  m_Name: dead
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -310,7 +313,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Magus_Slap
+  m_Name: slap
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -336,7 +339,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Magus_AttaqueNormal
+  m_Name: attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -362,7 +365,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Magus_Attacked
+  m_Name: attacked
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -388,7 +391,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Blend Tree
+  m_Name: normal
   m_Speed: 1.58
   m_CycleOffset: 0
   m_Transitions:

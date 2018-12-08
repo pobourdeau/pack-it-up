@@ -37,6 +37,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject arme; // Arme du joueur
     private bool entrainDeConstruire = false; // S'il est entrain de construire son arme
     private bool aLarme = false; // S'il a l'arme
+    private bool stunned = false; //Si le joueur s'est récemment fait frappé 
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
     public GameObject[] aBarreVie; // Barre de vie
@@ -147,23 +148,35 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             // Si le joueur appui sur la touche droite de la souris,
             if (photonView.IsMine) {
                 if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
-                    // Faire jouer l'animation d'attaque    
+                    // Faire jouer l'animation d'attaque
+                    if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")==false) audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);    
                     animPerso.SetTrigger("attaque");
                 }
                 else if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme == false) {
+                    if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("slap")== false){
                     animPerso.SetTrigger("attaque");
+                    audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
+                    }
                 }
             }
             
 
             // Gestion de la vie du personnage
-            GestionVie();
+            //GestionVie();
         }
         else {
             StartCoroutine("OuvrirMenu");
         }
     }
 
+    /**
+     * Gérer la priorité des attaques
+     * @param arme
+     *   
+     */
+    void Invulnerable(){
+
+    }
 
     /**
      * Gérer le déplacement du joueur
@@ -257,13 +270,14 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
                 // Arme
                 case "arme":
-
+                    //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
                     if (!photonView.IsMine) {
                         return;
                     }
-
-                    animPerso.SetTrigger("dommage");
                     indVie--;
+                    GestionVie();
+                    animPerso.SetTrigger("dommage");
+                    
                     break;
             }
         }
@@ -425,6 +439,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void GestionVie() {
         // La vie du personnage
+        Debug.Log(indVie);
         switch (indVie) {
             case 2:
                 aBarreVie[2].GetComponent<Image>().sprite = vieVide;

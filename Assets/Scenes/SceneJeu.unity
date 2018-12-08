@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 551020538}
-  m_IndirectSpecularColor: {r: 0.8111245, g: 0.86243945, b: 0.92705446, a: 1}
+  m_IndirectSpecularColor: {r: 0.811119, g: 0.86243814, b: 0.9267098, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4103,7 +4103,6 @@ GameObject:
   - component: {fileID: 529251356}
   - component: {fileID: 529251355}
   - component: {fileID: 529251354}
-  - component: {fileID: 529251357}
   - component: {fileID: 529251353}
   - component: {fileID: 529251352}
   - component: {fileID: 529251351}
@@ -4115,7 +4114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &529251348
 Transform:
   m_ObjectHideFlags: 0
@@ -4123,15 +4122,15 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 529251347}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.835419, y: 45.97876, z: -15.5191345}
+  m_LocalRotation: {x: -0, y: -0.024963995, z: -0, w: 0.9996883}
+  m_LocalPosition: {x: 24.861176, y: 45.97876, z: -15.543953}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1488697700}
   - {fileID: 1157481409}
   m_Father: {fileID: 2024620647}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -2.861, z: 0}
 --- !u!114 &529251349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4318,17 +4317,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &529251357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 529251347}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bab98cec34666994191f282fd0299502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &533721605
 GameObject:
   m_ObjectHideFlags: 0
@@ -6512,12 +6500,42 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1786139033610202, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1392554248003706, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 95390334785135836, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 92196707569453145a698d1f71d76acc, type: 2}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: bruitAttackSpecial
+      value: 
+      objectReference: {fileID: 8300000, guid: c6146f0a5c8cb154f83218c0daa6bdd6, type: 3}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: bruitForge
+      value: 
+      objectReference: {fileID: 8300000, guid: 2008f66b125f973439d93e7bcae1978e, type: 3}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: bruitSlash
+      value: 
+      objectReference: {fileID: 8300000, guid: 19dece0197ede3b47bcf99c27f195202, type: 3}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: bruitAttacked
+      value: 
+      objectReference: {fileID: 8300000, guid: 1c4f604ef3c8c2f47ab433b43c75745a, type: 3}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: bruitDead
+      value: 
+      objectReference: {fileID: 8300000, guid: 7cc9a6502c1d6c54db8888b437f4c52c, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
   m_IsPrefabAsset: 0
