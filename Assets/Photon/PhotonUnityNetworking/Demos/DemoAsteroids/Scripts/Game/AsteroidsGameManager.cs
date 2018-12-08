@@ -40,6 +40,9 @@ namespace Photon.Pun.Demo.Asteroids
         public Sprite vieVide;
         public GameObject[] aCrochetInv;
         public GameObject[] aCaseRougeInv;
+        //public GameObject bras; //Acceder au bras
+        //public GameObject corps; //Acceder au corps
+
 
         public GameObject[] aSpawnerBois; // Tous les points de spawn du bois
         public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
@@ -169,7 +172,8 @@ namespace Photon.Pun.Demo.Asteroids
             oClone.GetComponent<DeplacementPerso>().bruitDead = aBruits[2];
             oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial = aBruits[3];
             oClone.GetComponent<DeplacementPerso>().bruitForge = aBruits[4];
-
+            //oClone.GetComponent<DeplacementPerso>().corps = corps;
+            //oClone.GetComponent<DeplacementPerso>().bras = bras;
             oClone.GetComponent<DeplacementPerso>().txtConstruireArme = txtConstruireArme;
             oClone.GetComponent<DeplacementPerso>().txtRecolter = txtRecolter;
             oClone.GetComponent<DeplacementPerso>().imgConstruire = imgConstruire;

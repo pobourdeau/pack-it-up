@@ -549,6 +549,11 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7ef739e7c11da94a8fe6017cdbcac46, type: 3}
   m_IsPrefabAsset: 0
+--- !u!1 &78634056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1916834960550632, guid: b832582a6d6c53c47aa19172901871bb,
+    type: 2}
+  m_PrefabInternal: {fileID: 789196247}
 --- !u!1001 &79244232
 Prefab:
   m_ObjectHideFlags: 0
@@ -4114,7 +4119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &529251348
 Transform:
   m_ObjectHideFlags: 0
@@ -6500,7 +6505,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1786139033610202, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1392554248003706, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
       propertyPath: m_IsActive
@@ -6536,6 +6541,25 @@ Prefab:
       propertyPath: bruitDead
       value: 
       objectReference: {fileID: 8300000, guid: 7cc9a6502c1d6c54db8888b437f4c52c, type: 3}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: materielPersonnage
+      value: 
+      objectReference: {fileID: 2100000, guid: 24ed909fb00c57d489d3b9a70c8453c9, type: 2}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: bras
+      value: 
+      objectReference: {fileID: 78634056}
+    - target: {fileID: 114029917354092228, guid: b832582a6d6c53c47aa19172901871bb,
+        type: 2}
+      propertyPath: corps
+      value: 
+      objectReference: {fileID: 1488692464}
+    - target: {fileID: 1419544850072584, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
+      propertyPath: m_Name
+      value: perso
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b832582a6d6c53c47aa19172901871bb, type: 2}
   m_IsPrefabAsset: 0
@@ -7279,7 +7303,7 @@ GameObject:
   - component: {fileID: 884666179}
   - component: {fileID: 884666180}
   m_Layer: 0
-  m_Name: polySurface8
+  m_Name: Corps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17548,7 +17572,7 @@ GameObject:
   - component: {fileID: 995075159}
   - component: {fileID: 995075160}
   m_Layer: 0
-  m_Name: main_droite
+  m_Name: Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18541,6 +18565,16 @@ Prefab:
       propertyPath: aSpawnerCuir.Array.data[5]
       value: 
       objectReference: {fileID: 1366980735}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: bras
+      value: 
+      objectReference: {fileID: 995075158}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: corps
+      value: 
+      objectReference: {fileID: 884666178}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf75a8962519b314ba62ef242a36b2a0, type: 2}
   m_IsPrefabAsset: 0
@@ -27137,6 +27171,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: b76ff0aa41a85cf4d9089aa67a761d8e,
     type: 3}
   m_PrefabInternal: {fileID: 1147707195}
+--- !u!1 &1488692464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1992178732469746, guid: b832582a6d6c53c47aa19172901871bb,
+    type: 2}
+  m_PrefabInternal: {fileID: 789196247}
 --- !u!1 &1488697699
 GameObject:
   m_ObjectHideFlags: 0
@@ -27147,7 +27186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1488697700}
   m_Layer: 0
-  m_Name: knight_model
+  m_Name: perso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

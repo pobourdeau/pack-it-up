@@ -35,6 +35,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
     public GameObject arme; // Arme du joueur
+    private Renderer brasRenderer; // renderer du bras
+    private Renderer corpsRenderer; // renderer du corps
+    
     private bool entrainDeConstruire = false; // S'il est entrain de construire son arme
     private bool aLarme = false; // S'il a l'arme
     private bool stunned = false; //Si le joueur s'est récemment fait frappé 
@@ -76,7 +79,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         animPerso = GetComponent<Animator>();
         // Speaker du joueur
         audioSourcePerso = GetComponent<AudioSource>();
-
+        //Chercher le renderer du bras et du corps
+        brasRenderer = GameObject.Find("/perso/Main").GetComponent<SkinnedMeshRenderer>();
+        corpsRenderer = GameObject.Find("/perso/Corps").GetComponent<SkinnedMeshRenderer>();
         // Inventaire du joueur
         aInventaire[0] = 0;
         aInventaire[1] = 0;
@@ -169,14 +174,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
-    /**
-     * Gérer la priorité des attaques
-     * @param arme
-     *   
-     */
-    void Invulnerable(){
-
-    }
 
     /**
      * Gérer le déplacement du joueur
@@ -419,6 +416,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         GameObject oArme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
         oArme.transform.parent = oMain.transform;
         aLarme = true;
+        animPerso.SetBool("aLarme",true);
     }
 
     /**
@@ -439,14 +437,15 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void GestionVie() {
         // La vie du personnage
-        Debug.Log(indVie);
         switch (indVie) {
             case 2:
                 aBarreVie[2].GetComponent<Image>().sprite = vieVide;
+                Invulnerable();
                 audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                 break;
             case 1:
                 aBarreVie[1].GetComponent<Image>().sprite = vieVide;
+                Invulnerable();
                 audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                 break;
             case 0:
@@ -460,7 +459,15 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 break;
         }
     }
-
+    /**
+     * Gérer la priorité des attaques
+     * @param arme
+     *   
+     */
+    void Invulnerable(){
+        brasRenderer.enabled = false;
+    }
+    
     /**
      * Attendre 3 secondes avant de retourner au menu principal
      * @param void
