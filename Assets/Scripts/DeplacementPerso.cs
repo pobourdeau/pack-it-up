@@ -156,14 +156,14 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             if (photonView.IsMine) {
                 if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
                     // Faire jouer l'animation d'attaque
-                    if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")==false) audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);    
+                    audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);    
                     animPerso.SetTrigger("attaque");
                 }
                 else if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme == false) {
-                    if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("slap")== false){
+                    
                     animPerso.SetTrigger("attaque");
                     audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
-                    }
+                    
                 }
             }
             
@@ -422,6 +422,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         print("Bravo");
 
+        //Detruire la hitbox de la main
+        //PhotonNetwork.Destroy(GameObject.Find("perso/Main/hitboxMain"));
         // Créer l'arme et l'a donner au joueur 
         GameObject oArme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
         oArme.transform.parent = oMain.transform;
@@ -445,15 +447,20 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void
      * @author Issam Aloulou
      */
-    private void GestionVie(bool dommaged) {
+    private void GestionVie(bool main) {
         // La vie du personnage
         if(stunned==false){
-            if(dommaged==false)indVie--;
-            else{
-                StartCoroutine("Invulnerable");
-                vitesseDeplacement = 7.5f;
-            }
             animPerso.SetTrigger("dommage");
+            if(main==false){
+                indVie--;
+            }
+            else{
+                Debug.Log(main);
+                StartCoroutine("Invulnerable");
+                vitesseDeplacement = 10f;
+                return;
+            }
+            
             switch (indVie) {
                 case 2:
                     aBarreVie[2].GetComponent<Image>().sprite = vieVide;
@@ -476,6 +483,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
             }
         }
+        return;
     }
     /**
      * Gérer la priorité des attaques
@@ -493,7 +501,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         yield return new WaitForSeconds(0.3f);
         }
         stunned=false;
-        vitesseDeplacement = 10f;
+        vitesseDeplacement = 16f;
     }
     
     /**

@@ -449,6 +449,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1967710035997048
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4073209916662312}
+  - component: {fileID: 65150715877647046}
+  m_Layer: 0
+  m_Name: hitboxMain
+  m_TagString: main
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1970783020672174
 GameObject:
   m_ObjectHideFlags: 1
@@ -511,6 +527,19 @@ Transform:
   m_Father: {fileID: 4921588977215564}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 71.28557, y: -141.69086, z: -139.7613}
+--- !u!4 &4073209916662312
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1967710035997048}
+  m_LocalRotation: {x: 0.019969216, y: -0.025975434, z: -0.20898215, w: -0.97737044}
+  m_LocalPosition: {x: -0.20106997, y: -0.085194364, z: 0.023977045}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4094929428679418}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: -3.0370002, y: -3.1100001, z: -44.284}
 --- !u!4 &4094929428679418
 Transform:
   m_ObjectHideFlags: 1
@@ -523,6 +552,7 @@ Transform:
   m_Children:
   - {fileID: 4401540805616194}
   - {fileID: 4783292253516836}
+  - {fileID: 4073209916662312}
   m_Father: {fileID: 4751656292345170}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -70.15472}
@@ -1113,6 +1143,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!65 &65150715877647046
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1967710035997048}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.399066, y: 0.41218638, z: 0.6872327}
+  m_Center: {x: 0.19953246, y: -0.06206335, z: 0.0059650578}
 --- !u!65 &65692723488493494
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1180,7 +1222,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.322
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1283,7 +1325,7 @@ MonoBehaviour:
   - {fileID: 0}
   vieVide: {fileID: 21300000, guid: baf4f671ba07cd84d8443c96c66ebd67, type: 3}
   attaque: 0
-  oMain: {fileID: 0}
+  oMain: {fileID: 1973837740979614}
   aInventaire: 010000000100000001000000
   aCrochetInv:
   - {fileID: 0}
