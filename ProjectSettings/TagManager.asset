@@ -11,6 +11,7 @@ TagManager:
   - arme
   - lobbyParent
   - networkManager
+  - main
   layers:
   - Default
   - TransparentFX

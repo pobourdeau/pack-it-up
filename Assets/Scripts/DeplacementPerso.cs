@@ -40,7 +40,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     
     private bool entrainDeConstruire = false; // S'il est entrain de construire son arme
     private bool aLarme = false; // S'il a l'arme
-    private bool stunned = false; //Si le joueur s'est récemment fait frappé 
+    private bool stunned = false; //Si le joueur s'est récemment fait frappé
+    private bool mainEpee = false; //Determiner si le joueur est frapper par une main 
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
     public GameObject[] aBarreVie; // Barre de vie
@@ -80,8 +81,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Speaker du joueur
         audioSourcePerso = GetComponent<AudioSource>();
         //Chercher le renderer du bras et du corps
-        brasRenderer = GameObject.Find("/perso/Main").GetComponent<SkinnedMeshRenderer>();
-        corpsRenderer = GameObject.Find("/perso/Corps").GetComponent<SkinnedMeshRenderer>();
+        brasRenderer = GameObject.Find("perso/Main").GetComponent<SkinnedMeshRenderer>();
+        corpsRenderer = GameObject.Find("perso/Corps").GetComponent<SkinnedMeshRenderer>();
+        
         // Inventaire du joueur
         aInventaire[0] = 0;
         aInventaire[1] = 0;
@@ -271,11 +273,19 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     if (!photonView.IsMine) {
                         return;
                     }
-                    indVie--;
-                    GestionVie();
-                    animPerso.SetTrigger("dommage");
+                    mainEpee=false;    
+                    GestionVie(mainEpee);
                     
                     break;
+                case "main":
+                    //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
+                    if (!photonView.IsMine) {
+                        return;
+                    }
+
+                     mainEpee=true;    
+                    GestionVie(mainEpee);
+                break;    
             }
         }
 
@@ -435,28 +445,36 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void
      * @author Issam Aloulou
      */
-    private void GestionVie() {
+    private void GestionVie(bool dommaged) {
         // La vie du personnage
-        switch (indVie) {
-            case 2:
-                aBarreVie[2].GetComponent<Image>().sprite = vieVide;
-                Invulnerable();
-                audioSourcePerso.PlayOneShot(bruitAttacked,1f);
-                break;
-            case 1:
-                aBarreVie[1].GetComponent<Image>().sprite = vieVide;
-                Invulnerable();
-                audioSourcePerso.PlayOneShot(bruitAttacked,1f);
-                break;
-            case 0:
-                aBarreVie[0].GetComponent<Image>().sprite = vieVide;
-                audioSourcePerso.PlayOneShot(bruitDead,1f);
+        if(stunned==false){
+            if(dommaged==false)indVie--;
+            else{
+                StartCoroutine("Invulnerable");
+                vitesseDeplacement = 7.5f;
+            }
+            animPerso.SetTrigger("dommage");
+            switch (indVie) {
+                case 2:
+                    aBarreVie[2].GetComponent<Image>().sprite = vieVide;
+                    StartCoroutine("Invulnerable");
+                    audioSourcePerso.PlayOneShot(bruitAttacked,1f);
+                    break;
+                case 1:
+                    aBarreVie[1].GetComponent<Image>().sprite = vieVide;
+                    StartCoroutine("Invulnerable");
+                    audioSourcePerso.PlayOneShot(bruitAttacked,1f);
+                    break;
+                case 0:
+                    aBarreVie[0].GetComponent<Image>().sprite = vieVide;
+                    audioSourcePerso.PlayOneShot(bruitDead,1f);
 
-                // Jouer l'animation de mort
-                animPerso.SetBool("mort", true);
+                    // Jouer l'animation de mort
+                    animPerso.SetBool("mort", true);
 
-                //GameManager.Instance.LeaveRoom();
-                break;
+                    //GameManager.Instance.LeaveRoom();
+                    break;
+            }
         }
     }
     /**
@@ -464,8 +482,18 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @param arme
      *   
      */
-    void Invulnerable(){
-        brasRenderer.enabled = false;
+    public IEnumerator Invulnerable(){
+        stunned=true;
+        for(int i = 0; i<3 ; i++){
+        brasRenderer.enabled= false;
+        corpsRenderer.enabled= false;
+        yield return new WaitForSeconds(0.3f);
+        brasRenderer.enabled= true;
+        corpsRenderer.enabled= true;
+        yield return new WaitForSeconds(0.3f);
+        }
+        stunned=false;
+        vitesseDeplacement = 10f;
     }
     
     /**
