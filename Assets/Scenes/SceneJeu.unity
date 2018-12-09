@@ -26642,7 +26642,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Clic gauche pour r\xE9colter"
+  m_Text: "Pesez ''E'' pour r\xE9colter"
 --- !u!222 &1522443627
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -30445,7 +30445,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Clic gauche pour construire
+  m_Text: Pesez "E" pour construire
 --- !u!222 &1942624361
 CanvasRenderer:
   m_ObjectHideFlags: 0

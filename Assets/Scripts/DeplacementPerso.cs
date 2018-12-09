@@ -154,15 +154,18 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
             // Si le joueur appui sur la touche droite de la souris,
             if (photonView.IsMine) {
-                if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme) {
+                if (Input.GetKeyDown(KeyCode.Mouse0)) {
                     // Faire jouer l'animation d'attaque
-                    audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);    
-                    animPerso.SetTrigger("attaque");
+                    if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned==false){
+                        audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);    
+                        animPerso.SetTrigger("attaque");
+                    }
                 }
-                else if (Input.GetKeyDown(KeyCode.Mouse0) && aLarme == false) {
+                else if (Input.GetKeyDown(KeyCode.Mouse1)) {
                     
-                    animPerso.SetTrigger("attaque");
-                    audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
+                    if(stunned==false && aLarme){
+                        attaqueSpecial();
+                    }
                     
                 }
             }
@@ -304,7 +307,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void OnTriggerStay(Collider objCollider) {
         // Si on appuie sur la touche Gauche de la souris et que le joueur n'a pas construit son arme,
-        if (Input.GetMouseButtonDown(0) && aLarme == false) {
+        if (Input.GetKeyDown(KeyCode.E) && aLarme == false) {
 
             // Si l'objet toucher est le bois et que le joueur n'en dispose pas dans son inventaire,
             if(objCollider.gameObject.tag == "bois" && aInventaire[0] < 1) {
@@ -552,6 +555,21 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
             // Faire pivoter le joueur
             rbPerso.MoveRotation(rotation);
+        }
+    }
+
+    /**
+     * Identifier le personnage choisi pour effectuer l'attaque special de celui-ci
+     * @param void
+     * @return void;
+     */
+    void attaqueSpecial() {
+
+        if(name == "knight(Clone)"){
+            Debug.Log("knight");
+        }
+        else{
+            Debug.Log("mage");
         }
     }
 }
