@@ -189,8 +189,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     void FixedUpdate() {
 
         // Si le personnage n'est pas mort,
+        /* 
         if (animPerso.GetBool("mort") == false) {
-            /* 
+             
             // Si le personnage n'est pas mort,
             if (animPerso.GetBool("mort") == false) {
                 // Déplacer le personnage
@@ -201,7 +202,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
             }
             */
-             
+            if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+                return;
+            } 
             var vDeplacement = Input.GetAxis("Vertical");
             //var hDeplacement = Input.GetAxis("Horizontal");
             
@@ -226,7 +229,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     void OnTriggerEnter(Collider objCollider) {
-
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+            return;
+        }
         // Si le joueur n'a pas d'arme
         if (aLarme == false) {
             // Tag de l'objCollider
@@ -320,6 +325,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     private void OnTriggerStay(Collider objCollider) {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+            return;
+        }
         // Si on appuie sur la touche Gauche de la souris et que le joueur n'a pas construit son arme,
         if (Input.GetKeyDown(KeyCode.E) && aLarme == false) {
 
@@ -388,7 +396,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     void OnTriggerExit(Collider objCollider) {
-
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+            return;
+        }
         // Si on quitte le collider du bois, du fer et du cuir,
         if(objCollider.gameObject.tag == "bois" || objCollider.gameObject.tag == "fer" || objCollider.gameObject.tag == "cuir") {
             txtRecolter.SetActive(false);
@@ -428,6 +438,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     private IEnumerator ConstructionArme() {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+            return;
+        }
         // Attendre que l'arme se construise
         yield return new WaitForSeconds(5f);
         oImgConstruire.SetActive(false);
