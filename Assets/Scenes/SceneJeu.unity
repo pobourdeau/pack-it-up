@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 551020538}
-  m_IndirectSpecularColor: {r: 0.811119, g: 0.86243814, b: 0.9267098, a: 1}
+  m_IndirectSpecularColor: {r: 0.8111245, g: 0.86243945, b: 0.92705446, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1026,7 +1026,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &127987132
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2750,7 +2750,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &346688277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16863,7 +16863,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &991878284
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20511,7 +20511,7 @@ GameObject:
   - component: {fileID: 1363633923}
   - component: {fileID: 1363633922}
   m_Layer: 0
-  m_Name: debutFumer
+  m_Name: debutFumee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
