@@ -498,7 +498,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void GestionVie(bool main) {
         // La vie du personnage
-        Debug.Log(stunned);
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+            return;
+        }
 
         if(stunned==false){
             animPerso.SetTrigger("dommage");
