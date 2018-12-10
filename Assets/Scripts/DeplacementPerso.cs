@@ -191,18 +191,29 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Si le personnage n'est pas mort,
         if (animPerso.GetBool("mort") == false) {
 
-             var vDeplacement = Input.GetAxis("Vertical");
-             var hDeplacement = Input.GetAxis("Horizontal");
+            // Si le personnage n'est pas mort,
+            if (animPerso.GetBool("mort") == false) {
+                // Déplacer le personnage
+                transform.Rotate(0, Input.GetAxis("Horizontal") * vRotation, 0);
 
-             rbPerso.velocity = new Vector3(hDeplacement, 0, vDeplacement).normalized * vitesseDeplacement;
+                vDeplacement = Input.GetAxis("Vertical") * vitesseDeplacement;
 
-             // Gestion du mouvement du blend tree
-             animPerso.SetFloat("VelY", vDeplacement);
-             animPerso.SetFloat("VelX", hDeplacement);
+                rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
+            }
 
-             // Faire pivoter le joueur
-             Pivoter();
-         }
+
+            /*var vDeplacement = Input.GetAxis("Vertical");
+            var hDeplacement = Input.GetAxis("Horizontal");
+
+            rbPerso.velocity = new Vector3(hDeplacement, 0, vDeplacement).normalized * vitesseDeplacement;
+
+            // Gestion du mouvement du blend tree
+            animPerso.SetFloat("VelY", vDeplacement);
+            animPerso.SetFloat("VelX", hDeplacement);
+
+            // Faire pivoter le joueur
+            Pivoter();*/
+        }
 
 
     }
@@ -276,6 +287,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     if (!photonView.IsMine) {
                         return;
                     }
+
+                    print(objCollider.transform.position);
                     mainEpee=false;    
                     GestionVie(mainEpee);
                     
