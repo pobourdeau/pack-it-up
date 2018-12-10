@@ -201,15 +201,15 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
             }
             */
-
+             
             var vDeplacement = Input.GetAxis("Vertical");
-            var hDeplacement = Input.GetAxis("Horizontal");
-
-            rbPerso.velocity = new Vector3(hDeplacement, 0, vDeplacement).normalized * vitesseDeplacement;
+            //var hDeplacement = Input.GetAxis("Horizontal");
+            
+            rbPerso.velocity = transform.forward * vDeplacement * vitesseDeplacement;
 
             // Gestion du mouvement du blend tree
             animPerso.SetFloat("VelY", vDeplacement);
-            animPerso.SetFloat("VelX", hDeplacement);
+            //animPerso.SetFloat("VelX", hDeplacement);
 
             // Faire pivoter le joueur
             Pivoter();
@@ -288,7 +288,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                         return;
                     }
 
-                    print(objCollider.transform.position);
+                    //print(objCollider.transform.position);
+                    rbPerso.AddForce(objCollider.transform.forward);
                     mainEpee=false;    
                     GestionVie(mainEpee);
                     
@@ -511,9 +512,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         return;
     }
     /**
-     * Gérer la priorité des attaques
+     * Si le personnage se fait attaquer, le faire clignoter et l'empecher d'attaquer ou de se faire attaquer
      * @param arme
-     *   
+     * @return void
+     * Auteur: Issam Aloulou  
      */
     public IEnumerator Invulnerable(){
         stunned=true;
@@ -560,6 +562,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * Faire pivoter le personnage en fonction de la souris du joueur
      * @param void
      * @return void;
+     * Auteur: Issam Aloulou
      */
     void Pivoter() {
 
@@ -584,14 +587,38 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * Identifier le personnage choisi pour effectuer l'attaque special de celui-ci
      * @param void
      * @return void;
+     * Auteur: Issam Aloulou
      */
     void attaqueSpecial() {
 
         if(name == "knight(Clone)"){
-            Debug.Log("knight");
+            StartCoroutine("Sprint");
         }
         else{
-            Debug.Log("mage");
+            BouleDeFeu();
         }
     }
+
+    /**
+     * 
+     * @param void
+     * @return void;
+     * Auteur: Issam Aloulou
+     */
+    public IEnumerator Sprint(){
+        vitesseDeplacement = 25f;
+        yield return new WaitForSeconds(0.3f);
+        if(stunned==false) vitesseDeplacement = 16f;
+    }
+
+    /**
+     * 
+     * @param void
+     * @return void;
+     * Auteur: Issam Aloulou
+     */
+    void BouleDeFeu(){
+
+    }
+
 }
