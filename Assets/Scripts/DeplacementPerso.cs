@@ -163,8 +163,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     // Faire jouer l'animation d'attaque
                     if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned==false){
                         audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
-                        if(aLarme)hitboxArme.SetActive(true);
-                        else if(aLarme==false)hitboxMain.SetActive(false);    
+                        StartCoroutine("hitboxAttaque");  
                         animPerso.SetTrigger("attaque");
                     }
                 }
@@ -556,6 +555,25 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         vitesseDeplacement = 16f;
     }
     
+    /**
+     * Allumer la hitbox de ce que le personnage utilise pour attaquer
+     * @param arme
+     * @return void
+     * Auteur: Issam Aloulou  
+     */
+    public IEnumerator hitboxAttaque(){
+        if(aLarme){
+            hitboxArme.SetActive(true);
+            yield return new WaitForSeconds(1.25f);
+            hitboxArme.SetActive(false);        
+        }
+        else if(aLarme==false){
+            hitboxMain.SetActive(true);
+            yield return new WaitForSeconds(1.25f);
+            hitboxMain.SetActive(false);   
+        }
+    }
+
     /**
      * Attendre 3 secondes avant de retourner au menu principal
      * @param void
