@@ -287,7 +287,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     if (!photonView.IsMine) {
                         return;
                     }
-
+                    rbPerso.AddForce(objCollider.transform.forward);
                     print(objCollider.transform.position);
                     mainEpee=false;    
                     GestionVie(mainEpee);
