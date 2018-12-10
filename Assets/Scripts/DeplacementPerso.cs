@@ -35,6 +35,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
     public GameObject arme; // Arme du joueur
+    public GameObject hitboxMain;//Hitbox de main
+    public GameObject hitboxArme;//Hitbox de Arme
+
     private Renderer brasRenderer; // renderer du bras
     private Renderer corpsRenderer; // renderer du corps
     
@@ -80,10 +83,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         animPerso = GetComponent<Animator>();
         // Speaker du joueur
         audioSourcePerso = GetComponent<AudioSource>();
+
         //Chercher le renderer du bras et du corps
         brasRenderer = GameObject.Find("perso/Main").GetComponent<SkinnedMeshRenderer>();
         corpsRenderer = GameObject.Find("perso/Corps").GetComponent<SkinnedMeshRenderer>();
         
+
         // Inventaire du joueur
         aInventaire[0] = 0;
         aInventaire[1] = 0;
@@ -157,7 +162,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 if (Input.GetKeyDown(KeyCode.Mouse0)) {
                     // Faire jouer l'animation d'attaque
                     if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned==false){
-                        audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);    
+                        audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
+                        if(aLarme)hitboxArme.SetActive(true);
+                        else if(aLarme==false)hitboxMain.SetActive(false);    
                         animPerso.SetTrigger("attaque");
                     }
                 }
@@ -492,13 +499,14 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void GestionVie(bool main) {
         // La vie du personnage
+        Debug.Log(stunned);
+
         if(stunned==false){
             animPerso.SetTrigger("dommage");
             if(main==false){
                 indVie--;
             }
             else{
-                Debug.Log(main);
                 StartCoroutine("Invulnerable");
                 vitesseDeplacement = 10f;
                 return;
