@@ -288,7 +288,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                         return;
                     }
                     //print(objCollider.transform.position);
-                    rbPerso.AddForce(objCollider.transform.forward);
+                    rbPerso.AddForce(objCollider.transform.forward * 10f);
                     mainEpee=false;    
                     GestionVie(mainEpee);
                     
@@ -504,7 +504,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     // Jouer l'animation de mort
                     animPerso.SetBool("mort", true);
 
-                    //GameManager.Instance.LeaveRoom();
+                    SceneManager.LoadScene("SceneMenu");
                     break;
             }
         }
