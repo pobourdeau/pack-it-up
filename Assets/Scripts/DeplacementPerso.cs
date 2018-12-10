@@ -299,9 +299,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // Arme
                 case "arme":
                     //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                    if (!photonView.IsMine) {
-                        return;
-                    }
+                    
 
                     rbPerso.AddForce(objCollider.transform.forward * 10f);
 
@@ -311,9 +309,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
                 case "main":
                     //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                    if (!photonView.IsMine) {
-                        return;
-                    }
+                    
 
                      mainEpee=true;    
                     GestionVie(mainEpee);
