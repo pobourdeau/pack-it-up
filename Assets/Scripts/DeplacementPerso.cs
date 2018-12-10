@@ -219,7 +219,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
 
 
-    }
+    
 
 
     /**
@@ -229,15 +229,16 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     void OnTriggerEnter(Collider objCollider) {
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
-            return;
-        }
+        
         // Si le joueur n'a pas d'arme
         if (aLarme == false) {
             // Tag de l'objCollider
             switch (objCollider.gameObject.tag) {
                 // Bois
                 case "bois":
+                    if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+                        return;
+                    }
                     // Si le joueur n'a pas de bois dans son inventaire,
                     if (aInventaire[0] < 1) {
                         // Afficher le texte de récolte
@@ -246,6 +247,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
                 // Fer
                 case "fer":
+                    if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+                        return;
+                    }
                     // Si le joueur n'a pas de fer dans son inventaire,
                     if (aInventaire[1] < 1) {
                         // Afficher le texte de récolte
@@ -254,6 +258,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
                 // Cuir
                 case "cuir":
+                    if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+                        return;
+                    }
                     // Si le joueur n'a pas de cuir dans son inventaire,
                     if (aInventaire[2] < 1) {
                         // Afficher le texte de récolte
@@ -262,6 +269,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
                 // Forge
                 case "forge":
+                    if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
+                        return;
+                    }
                     // Si le joueur a récolté toutes les ressources
                     if(aInventaire[0] >= 1 && aInventaire[1] >= 1 && aInventaire[2] >= 1) {
                         // Afficher le texte de construction
@@ -330,7 +340,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
         // Si on appuie sur la touche Gauche de la souris et que le joueur n'a pas construit son arme,
         if (Input.GetKeyDown(KeyCode.E) && aLarme == false) {
-
+            
             // Si l'objet toucher est le bois et que le joueur n'en dispose pas dans son inventaire,
             if(objCollider.gameObject.tag == "bois" && aInventaire[0] < 1) {
                 // L'ajouter dans son inventaire
@@ -438,9 +448,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     private IEnumerator ConstructionArme() {
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
-            return;
-        }
+ 
         // Attendre que l'arme se construise
         yield return new WaitForSeconds(5f);
         oImgConstruire.SetActive(false);
