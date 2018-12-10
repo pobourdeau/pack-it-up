@@ -423,12 +423,21 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         aInventaire[1] = 0;
         aInventaire[2] = 0;
 
-        print("Bravo");
-
         //Detruire la hitbox de la main
         //PhotonNetwork.Destroy(GameObject.Find("perso/Main/hitboxMain"));
-        // Créer l'arme et l'a donner au joueur 
-        GameObject oArme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
+        // Créer l'arme et l'a donner au joueur
+        GameObject oArme;
+
+        // Si le personnage est le knight,
+        if (this.gameObject.tag == "knight") {
+            // Créer et donner une épée comme arme
+            oArme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
+        }
+        else {
+            // Créer et donner un staff comme arme
+            oArme = PhotonNetwork.Instantiate("staff", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(75f, -120f, 0f)));
+        }
+        
         oArme.transform.parent = oMain.transform;
         aLarme = true;
         animPerso.SetBool("aLarme",true);

@@ -12,6 +12,8 @@ TagManager:
   - lobbyParent
   - networkManager
   - main
+  - mage
+  - knight
   layers:
   - Default
   - TransparentFX
