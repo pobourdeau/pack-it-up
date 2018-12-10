@@ -190,7 +190,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         // Si le personnage n'est pas mort,
         if (animPerso.GetBool("mort") == false) {
-
+            /* 
             // Si le personnage n'est pas mort,
             if (animPerso.GetBool("mort") == false) {
                 // Déplacer le personnage
@@ -200,9 +200,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
                 rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
             }
+            */
 
-
-            /*var vDeplacement = Input.GetAxis("Vertical");
+            var vDeplacement = Input.GetAxis("Vertical");
             var hDeplacement = Input.GetAxis("Horizontal");
 
             rbPerso.velocity = new Vector3(hDeplacement, 0, vDeplacement).normalized * vitesseDeplacement;
@@ -212,7 +212,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             animPerso.SetFloat("VelX", hDeplacement);
 
             // Faire pivoter le joueur
-            Pivoter();*/
+            Pivoter();
         }
 
 
