@@ -88,6 +88,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1048499871489912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4755694501257924}
+  - component: {fileID: 65372707164382868}
+  m_Layer: 0
+  m_Name: hitboxEpee
+  m_TagString: arme
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &1089359574066570
 GameObject:
   m_ObjectHideFlags: 1
@@ -451,7 +467,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1967710035997048
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
@@ -464,7 +480,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1970783020672174
 GameObject:
   m_ObjectHideFlags: 1
@@ -533,13 +549,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1967710035997048}
-  m_LocalRotation: {x: 0.019969216, y: -0.025975434, z: -0.20898215, w: -0.97737044}
-  m_LocalPosition: {x: -0.20106997, y: -0.085194364, z: 0.023977045}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.54, y: 1.8199997, z: 3.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4094929428679418}
+  m_Father: {fileID: 4586638901399660}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -3.0370002, y: -3.1100001, z: -44.284}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4094929428679418
 Transform:
   m_ObjectHideFlags: 1
@@ -552,7 +568,6 @@ Transform:
   m_Children:
   - {fileID: 4401540805616194}
   - {fileID: 4783292253516836}
-  - {fileID: 4073209916662312}
   m_Father: {fileID: 4751656292345170}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -70.15472}
@@ -758,6 +773,8 @@ Transform:
   m_Children:
   - {fileID: 4129235447115952}
   - {fileID: 4883023155086520}
+  - {fileID: 4073209916662312}
+  - {fileID: 4755694501257924}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -2.861, z: 0}
@@ -816,6 +833,19 @@ Transform:
   m_Father: {fileID: 4553924406088012}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 2.7942114, y: -0.58866453, z: 5.660966}
+--- !u!4 &4755694501257924
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1048499871489912}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.5399934, y: 1.8199997, z: 3.310001}
+  m_LocalScale: {x: 0.99999994, y: 1, z: 0.99999994}
+  m_Children: []
+  m_Father: {fileID: 4586638901399660}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4783292253516836
 Transform:
   m_ObjectHideFlags: 1
@@ -1153,8 +1183,20 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.399066, y: 0.41218638, z: 0.6872327}
-  m_Center: {x: 0.19953246, y: -0.06206335, z: 0.0059650578}
+  m_Size: {x: 3.0149112, y: 2.169086, z: 1.7564533}
+  m_Center: {x: -0.89850456, y: 0.02912414, z: -0.18046796}
+--- !u!65 &65372707164382868
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1048499871489912}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.0149112, y: 2.169086, z: 1.7564533}
+  m_Center: {x: -0.89850456, y: 0.02912414, z: -0.18046796}
 --- !u!65 &65692723488493494
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1300,7 +1342,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1430728880940154}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6c9eccb7dff65346abda9282737414b, type: 3}
   m_Name: 
@@ -1317,6 +1359,8 @@ MonoBehaviour:
   txtConstruireArme: {fileID: 0}
   txtRecolter: {fileID: 0}
   arme: {fileID: 1527445215247604}
+  hitboxMain: {fileID: 1967710035997048}
+  hitboxArme: {fileID: 1048499871489912}
   imgConstruire: {fileID: 0}
   oImgConstruire: {fileID: 0}
   aBarreVie:
