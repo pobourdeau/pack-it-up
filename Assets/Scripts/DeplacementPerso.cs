@@ -59,6 +59,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject[] aCaseRougeInv; // Les cases rouges de l'inventaire 
     // aCaseRougeInv[0] = case Bois, aCaseRougeInv[1] = case Fer, aCaseRougeInv[2] = case Cuir
 
+    public GameObject firePoint; //Endroit d'ou le projectile est tiré
+    public List<GameObject> vfx = new List<GameObject>(); //liste de vfx
+    private GameObject effectToSpawn;//vfx choisi
     
 
     
@@ -76,7 +79,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @param void
      * @return void
      */
-    void Start () {
+    void Start() {
         // Rigidbody du joueur
         rbPerso = GetComponent<Rigidbody>();
         // Animator du joueur
@@ -87,7 +90,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         //Chercher le renderer du bras et du corps
         brasRenderer = GameObject.Find("perso/Main").GetComponent<SkinnedMeshRenderer>();
         corpsRenderer = GameObject.Find("perso/Corps").GetComponent<SkinnedMeshRenderer>();
-        
+
 
         // Inventaire du joueur
         aInventaire[0] = 0;
@@ -105,6 +108,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         else {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
         }
+
+        effectToSpawn = vfx[0];
     }
 
 
@@ -167,7 +172,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                         animPerso.SetTrigger("attaque");
                     }
                 }
-                else if (Input.GetKeyDown(KeyCode.Mouse1)) {
+                if (Input.GetKeyDown(KeyCode.Mouse1)) {
                     
                     if(stunned==false && aLarme){
                         attaqueSpecial();
@@ -662,8 +667,37 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void;
      * Auteur: Issam Aloulou
      */
-    void BouleDeFeu(){
+    void BouleDeFeu() {
+        GameObject vfx;
 
+        if (firePoint != null)
+        {
+            vfx = Instantiate(effectToSpawn, firePoint.transform.position, firePoint.transform.rotation);
+
+            Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(camRay, out hit, LongueurRayCast))
+            {
+                // Create a vector from the player to the point on the floor the raycast from the mouse hit.
+                Vector3 pointARegarder = hit.point - transform.position;
+
+                pointARegarder.y = 0f;
+                //pointARegarder.z = 90f;
+                // Regarder le nouveau point
+                vfx.transform.localRotation = Quaternion.LookRotation(pointARegarder);
+                //vfx.transform.Rotate (180, 180, 0);
+                // Faire pivoter le joueur
+                //rbPerso.MoveRotation(rotation);
+            }
+            //vfx.transform.localRotation = firePoint.transform.rotation;
+            //RaycastHit hit;
+           // Vector3 pointARegarder = hit.point - transform.position;
+        }
+        else
+        {
+            Debug.Log("No fire point");
+        }
     }
 
 }
