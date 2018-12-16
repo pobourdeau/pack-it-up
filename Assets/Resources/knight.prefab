@@ -1371,6 +1371,8 @@ MonoBehaviour:
   attaque: 0
   oMain: {fileID: 1973837740979614}
   aInventaire: 010000000100000001000000
+  oInventaire: {fileID: 0}
+  txtSpectateur: {fileID: 0}
   aCrochetInv:
   - {fileID: 0}
   - {fileID: 0}
@@ -1379,6 +1381,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  firePoint: {fileID: 0}
+  vfx: []
 --- !u!114 &114570061335738786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1446,7 +1450,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1430728880940154}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97d7651f087da814b8f696fb34fdf382, type: 3}
   m_Name: 
@@ -1456,6 +1460,8 @@ MonoBehaviour:
   heightSmoothLag: 0.3
   centerOffset: {x: 0, y: 4, z: 0}
   followOnStart: 1
+  isFollowing: 0
+  posInitiale: {x: -205, y: 25, z: -30}
 --- !u!136 &136344987915616874
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -25,16 +25,20 @@ public class DeplacementCam : MonoBehaviour {
     private bool followOnStart = false;
 
     Transform cameraTransform;
-    bool isFollowing;
+    public bool isFollowing;
     private float heightVelocity;
     private float targetHeight = 100000.0f;
 
+    public Vector3 posInitiale;
+
 
     void Start() {
+
         // Start following the target if wanted.
         if (followOnStart) {
             OnStartFollowing();
         }
+
     }
 
     void LateUpdate() {
@@ -108,5 +112,10 @@ public class DeplacementCam : MonoBehaviour {
         Quaternion yRotation = Quaternion.LookRotation(new Vector3(offsetToCenter.x, 0, offsetToCenter.z));
         Vector3 relativeOffset = Vector3.forward * distance + Vector3.down * height;
         cameraTransform.rotation = yRotation * Quaternion.LookRotation(relativeOffset);
+    }
+
+    public void PositionnerCameraMort() {
+        cameraTransform.position = new Vector3(-205f, 25f, -30f);
+        cameraTransform.eulerAngles = new Vector3(14f, 0f, 0f);
     }
 }

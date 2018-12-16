@@ -3,11 +3,15 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Photon.Pun.Demo.Asteroids
 {
     public class LobbyMainPanel : MonoBehaviourPunCallbacks
     {
+
+        public GameObject btnMenu;
+
         [Header("Login Panel")]
         public GameObject LoginPanel;
 
@@ -315,6 +319,14 @@ namespace Photon.Pun.Demo.Asteroids
             JoinRandomRoomPanel.SetActive(activePanel.Equals(JoinRandomRoomPanel.name));
             RoomListPanel.SetActive(activePanel.Equals(RoomListPanel.name));    // UI should call OnRoomListButtonClicked() to activate this
             InsideRoomPanel.SetActive(activePanel.Equals(InsideRoomPanel.name));
+
+            if(activePanel != "SelectionPanel") {
+                btnMenu.SetActive(false);
+            }
+            else {
+                btnMenu.SetActive(true);
+            }
+            
         }
 
         private void UpdateCachedRoomList(List<RoomInfo> roomList)
@@ -356,6 +368,18 @@ namespace Photon.Pun.Demo.Asteroids
 
                 roomListEntries.Add(info.Name, entry);
             }
+        }
+
+        /**
+         * Retourner au menu principal à partir du menu rejoindre
+         * @param void
+         * @return void
+         * @author Pier-Olivier Bourdeau
+         */
+        public void RetourMenuPrinc() {
+            PhotonNetwork.Disconnect();
+
+            SceneManager.LoadScene("SceneMenu");
         }
     }
 }

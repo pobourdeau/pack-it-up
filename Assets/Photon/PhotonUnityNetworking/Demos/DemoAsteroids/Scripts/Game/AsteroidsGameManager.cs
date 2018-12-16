@@ -27,6 +27,8 @@ namespace Photon.Pun.Demo.Asteroids
         public GameObject panDebut;
         public GameObject[] aSpawnPoint;
         public GameObject oHUD;
+        public GameObject panFin;
+        public Text txtGagnant;
 
         // Variables du perso
         public AudioClip[] aBruits;
@@ -40,9 +42,8 @@ namespace Photon.Pun.Demo.Asteroids
         public Sprite vieVide;
         public GameObject[] aCrochetInv;
         public GameObject[] aCaseRougeInv;
-        //public GameObject bras; //Acceder au bras
-        //public GameObject corps; //Acceder au corps
-
+        public GameObject oInventaire;
+        public GameObject txtSpectateur;
 
         public GameObject[] aSpawnerBois; // Tous les points de spawn du bois
         public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
@@ -86,11 +87,15 @@ namespace Photon.Pun.Demo.Asteroids
 
         private IEnumerator EndOfGame(string winner, int score)
         {
+            oHUD.SetActive(false);
+            panFin.SetActive(true);
+            txtGagnant.text = "Le gagnant est " + winner;
+
             float timer = 5.0f;
 
             while (timer > 0.0f)
             {
-                InfoText.text = string.Format("Player {0} won with {1} points.\n\n\nReturning to login screen in {2} seconds.", winner, score, timer.ToString("n2"));
+                txtGagnant.text = "Le gagnant est " + winner;
 
                 yield return new WaitForEndOfFrame();
 
@@ -172,8 +177,6 @@ namespace Photon.Pun.Demo.Asteroids
             oClone.GetComponent<DeplacementPerso>().bruitDead = aBruits[2];
             oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial = aBruits[3];
             oClone.GetComponent<DeplacementPerso>().bruitForge = aBruits[4];
-            //oClone.GetComponent<DeplacementPerso>().corps = corps;
-            //oClone.GetComponent<DeplacementPerso>().bras = bras;
             oClone.GetComponent<DeplacementPerso>().txtConstruireArme = txtConstruireArme;
             oClone.GetComponent<DeplacementPerso>().txtRecolter = txtRecolter;
             oClone.GetComponent<DeplacementPerso>().imgConstruire = imgConstruire;
@@ -182,9 +185,11 @@ namespace Photon.Pun.Demo.Asteroids
             oClone.GetComponent<DeplacementPerso>().vieVide = vieVide;
             oClone.GetComponent<DeplacementPerso>().aCrochetInv = aCrochetInv;
             oClone.GetComponent<DeplacementPerso>().aCaseRougeInv = aCaseRougeInv;
+            oClone.GetComponent<DeplacementPerso>().oInventaire = oInventaire;
+            oClone.GetComponent<DeplacementPerso>().txtSpectateur = txtSpectateur;
 
 
-        panDebut.SetActive(false);
+            panDebut.SetActive(false);
             oHUD.SetActive(true);
 
             if (PhotonNetwork.IsMasterClient)
@@ -212,7 +217,7 @@ namespace Photon.Pun.Demo.Asteroids
 
             return true;
         }
-
+    
         private void CheckEndOfGame()
         {
             bool allDestroyed = true;

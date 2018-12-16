@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 /**
  * Gérer les déplacements du joueur, attaques, dégâts(vie) et les interractions avec les ressources (inventaire et assemblage de l'arme)
@@ -53,6 +54,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject oMain;
 
     public int[] aInventaire; // Inventaire du joueur
+    public GameObject oInventaire;
+    public GameObject txtSpectateur;
     // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
     public GameObject[] aCrochetInv; // Les crochets de l'inventaire 
     // aCrochetInv[0] = crochet Bois, aCrochetInv[1] = crochet Fer, aCrochetInv[2] = crochet Cuir
@@ -124,7 +127,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
         }
-
 
         Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit infoCollision;
@@ -213,6 +215,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
             }
             */
+
             if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
                 return;
             } 
@@ -502,6 +505,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Issam Aloulou
      */
     private void GestionVie(bool main) {
+
         // La vie du personnage
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
@@ -536,11 +540,17 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     // Jouer l'animation de mort
                     animPerso.SetBool("mort", true);
 
-                    SceneManager.LoadScene("SceneMenu");
+                    Mourir();
                     break;
             }
+
+            if (photonView.IsMine) {
+                object lives;
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("PlayerLives", out lives)) {
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "PlayerLives", ((int)lives <= 1) ? 0 : ((int)lives - 1) } });
+                }
+            }
         }
-        return;
     }
     /**
      * Si le personnage se fait attaquer, le faire clignoter et l'empecher d'attaquer ou de se faire attaquer
@@ -589,8 +599,22 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     public IEnumerator OuvrirMenu() {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("SceneMenu");
+        //SceneManager.LoadScene("SceneMenu");
     }
+
+    public void Mourir() {
+        GetComponent<DeplacementCam>().isFollowing = false;
+        GetComponent<DeplacementCam>().PositionnerCameraMort();
+
+        aBarreVie[2].SetActive(false);
+        aBarreVie[1].SetActive(false);
+        aBarreVie[0].SetActive(false);
+        oInventaire.SetActive(false);
+
+        gameObject.SetActive(false);
+
+        txtSpectateur.SetActive(true);
+}
 
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
