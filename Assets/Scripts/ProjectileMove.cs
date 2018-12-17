@@ -5,7 +5,7 @@ using UnityEngine;
 public class ProjectileMove : MonoBehaviour {
 
     public float speed;
-    
+    public float fireRate;
 
 	// Use this for initialization
 	void Start () {

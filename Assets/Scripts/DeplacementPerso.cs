@@ -65,9 +65,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject firePoint; //Endroit d'ou le projectile est tiré
     public List<GameObject> vfx = new List<GameObject>(); //liste de vfx
     private GameObject effectToSpawn;//vfx choisi
-    
+    private float timeToFire = 0;
 
-    
+
+
     void Awake() {
         if (photonView.IsMine) {
             DeplacementPerso.LocalPlayerInstance = this.gameObject;
@@ -176,8 +177,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 }
                 if (Input.GetKeyDown(KeyCode.Mouse1)) {
                     
-                    if(stunned==false && aLarme){
+                    if(stunned==false && aLarme && Time.time >= timeToFire){
+                        timeToFire = Time.time + 12 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
                         attaqueSpecial();
+                        //WaitDude();
                     }
                     
                 }
@@ -329,6 +332,15 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     GestionVie(mainEpee);
                 break;    
             }
+        }
+
+        //Test spell collider
+       if (objCollider.gameObject.tag == "spell")
+        {
+            mainEpee = false;
+            GestionVie(mainEpee);
+
+            Destroy(objCollider.gameObject);
         }
 
         // Si on rentre dans la maison,
@@ -670,6 +682,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
         else{
             BouleDeFeu();
+            
         }
     }
 
@@ -696,7 +709,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         if (firePoint != null)
         {
-            vfx = Instantiate(effectToSpawn, firePoint.transform.position, firePoint.transform.rotation);
+            vfx = Instantiate(effectToSpawn, firePoint.transform.position, Quaternion.identity);
+            vfx.transform.eulerAngles = new Vector3(90f, 180f, 0f);
+            //vfx.transform.direction = transform.forward;
+
 
             Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -722,6 +738,13 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         {
             Debug.Log("No fire point");
         }
+
+
+    }
+
+    public IEnumerator WaitDude()
+    {
+        yield return new WaitForSeconds(5);
     }
 
 }

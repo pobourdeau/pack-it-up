@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114852206673297242}
   m_Layer: 0
   m_Name: Fireball
-  m_TagString: Untagged
+  m_TagString: spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 16
+  fireRate: 5
 --- !u!198 &198432838245393888
 ParticleSystem:
   m_ObjectHideFlags: 1
