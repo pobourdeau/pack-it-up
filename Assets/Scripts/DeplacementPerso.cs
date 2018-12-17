@@ -190,10 +190,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
         else {
             StartCoroutine("OuvrirMenu");
-        }
-
-
-        
+        } 
     }
 
 
@@ -223,6 +220,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
                 return;
             } 
+
             var vDeplacement = Input.GetAxis("Vertical");
             //var hDeplacement = Input.GetAxis("Horizontal");
             
@@ -323,8 +321,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     break;
                 case "main":
                     //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                    
-
                      mainEpee=true;    
                     GestionVie(mainEpee);
                 break;    
@@ -343,6 +339,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Si on rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
             // Changer la position de la caméra
+            GetComponent<DeplacementCam>().distance = 10f;
+            GetComponent<DeplacementCam>().height = 10f;
         }
     }
 
@@ -357,6 +355,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
         }
+
         // Si on appuie sur la touche Gauche de la souris et que le joueur n'a pas construit son arme,
         if (Input.GetKeyDown(KeyCode.E) && aLarme == false) {
             
@@ -366,8 +365,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 aInventaire[0] = 1;
 
                 // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
-                //objCollider.gameObject.SetActive(false);
-                PhotonNetwork.Destroy(objCollider.gameObject);
+                int pvID = objCollider.gameObject.GetComponent<PhotonView>().ViewID;
+                photonView.RPC("DetruireObjet", RpcTarget.MasterClient, pvID);
+
                 txtRecolter.SetActive(false);
                 aCrochetInv[0].SetActive(true);
             }
@@ -378,8 +378,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 aInventaire[1] = 1;
 
                 // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
-                //objCollider.gameObject.SetActive(false);
-                PhotonNetwork.Destroy(objCollider.gameObject);
+                int pvID = objCollider.gameObject.GetComponent<PhotonView>().ViewID;
+                photonView.RPC("DetruireObjet", RpcTarget.MasterClient, pvID);
+
                 txtRecolter.SetActive(false);
                 aCrochetInv[1].SetActive(true);
             }
@@ -390,8 +391,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 aInventaire[2] = 1;
 
                 // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
-                //objCollider.gameObject.SetActive(false);
-                PhotonNetwork.Destroy(objCollider.gameObject);
+                int pvID = objCollider.gameObject.GetComponent<PhotonView>().ViewID;
+                photonView.RPC("DetruireObjet", RpcTarget.MasterClient, pvID);
+
                 txtRecolter.SetActive(false);
                 aCrochetInv[2].SetActive(true);
             }
@@ -417,6 +419,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
+    [PunRPC]
+    public void DetruireObjet(int pvID) {
+        PhotonNetwork.Destroy(PhotonView.Find(pvID));
+    }
 
     /**
      * À la sortie de la collision avec un collider
@@ -457,6 +463,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Si le personnage rentre dans la maison,
         if (objCollider.gameObject.name == "maison") {
             // Changer la position de la caméra
+            GetComponent<DeplacementCam>().distance = 12.66f;
+            GetComponent<DeplacementCam>().height = 16f;
         }
     }
 
@@ -587,6 +595,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         /*brasRenderer.enabled = bEtat;
         corpsRenderer.enabled = bEtat;*/
     }
+
+
     
     /**
      * Allumer la hitbox de ce que le personnage utilise pour attaquer

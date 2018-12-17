@@ -150,6 +150,7 @@ namespace Photon.Pun.Demo.Asteroids
          * @author Exit Games
          */
         public override void OnDisconnected(DisconnectCause cause){
+            CheckEndOfGame();
             UnityEngine.SceneManagement.SceneManager.LoadScene("SceneRejoindre");
         }
 
@@ -161,6 +162,7 @@ namespace Photon.Pun.Demo.Asteroids
          * @author Exit Games
          */
         public override void OnLeftRoom(){
+            CheckEndOfGame();
             PhotonNetwork.Disconnect();
         }
 
@@ -232,7 +234,9 @@ namespace Photon.Pun.Demo.Asteroids
             InvokeRepeating("Timer", 0, 1f);
 
             // Créer les ressources
-            GenererRessources();
+            if (PhotonNetwork.IsMasterClient) {
+                GenererRessources();
+            }
 
             // Récupérer l'id du joueur qui se trouve dans le lobby (chaque joueur à un id unique...)
             int idPlayer = (int)PhotonNetwork.LocalPlayer.CustomProperties["idPlayer"];
@@ -369,7 +373,7 @@ namespace Photon.Pun.Demo.Asteroids
             Shuffle(aSpawnerBois);
 
             for (int iBois = 0; iBois < aSpawnerBois.Length / 2; iBois++) {
-                GameObject oCloneBois = PhotonNetwork.Instantiate("bois", aSpawnerBois[iBois].transform.position, Quaternion.Euler(aSpawnerBois[iBois].transform.eulerAngles));
+                GameObject oCloneBois = PhotonNetwork.InstantiateSceneObject("bois", aSpawnerBois[iBois].transform.position, Quaternion.Euler(aSpawnerBois[iBois].transform.eulerAngles));
                 oCloneBois.transform.parent = aSpawnerBois[iBois].transform;
             }
 
@@ -377,7 +381,7 @@ namespace Photon.Pun.Demo.Asteroids
             Shuffle(aSpawnerFer);
 
             for (int iFer = 0; iFer < aSpawnerFer.Length / 2; iFer++) {
-                GameObject oCloneFer = PhotonNetwork.Instantiate("fer", aSpawnerFer[iFer].transform.position, Quaternion.Euler(aSpawnerFer[iFer].transform.eulerAngles));
+                GameObject oCloneFer = PhotonNetwork.InstantiateSceneObject("fer", aSpawnerFer[iFer].transform.position, Quaternion.Euler(aSpawnerFer[iFer].transform.eulerAngles));
                 oCloneFer.transform.parent = aSpawnerFer[iFer].transform;
             }
 
@@ -385,7 +389,7 @@ namespace Photon.Pun.Demo.Asteroids
             Shuffle(aSpawnerCuir);
 
             for (int iCuir = 0; iCuir < aSpawnerCuir.Length / 2; iCuir++) {
-                GameObject oCloneCuir = PhotonNetwork.Instantiate("cuir", aSpawnerCuir[iCuir].transform.position, Quaternion.Euler(aSpawnerCuir[iCuir].transform.eulerAngles));
+                GameObject oCloneCuir = PhotonNetwork.InstantiateSceneObject("cuir", aSpawnerCuir[iCuir].transform.position, Quaternion.Euler(aSpawnerCuir[iCuir].transform.eulerAngles));
                 oCloneCuir.transform.parent = aSpawnerCuir[iCuir].transform;
             }
 

@@ -35,4 +35,5 @@ MonoBehaviour:
   - AfficherArme
   - DisparaitreJoueur
   - FlasherPerso
+  - DetruireObjet
   DisableAutoOpenWizard: 1

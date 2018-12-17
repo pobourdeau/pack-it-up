@@ -10,10 +10,10 @@ using UnityEngine;
 public class DeplacementCam : MonoBehaviour {
 
     [SerializeField]
-    private float distance = 7.0f;
+    public float distance = 7.0f;
 
     [SerializeField]
-    private float height = 3.0f;
+    public float height = 3.0f;
 
     [SerializeField]
     private float heightSmoothLag = 0.3f;
