@@ -112,7 +112,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
         }
 
-        //effectToSpawn = vfx[0];
+        effectToSpawn = vfx[0];
     }
 
 
@@ -177,7 +177,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     if (Input.GetKeyDown(KeyCode.Mouse1)) {
 
                         if (stunned == false && aLarme && Time.time >= timeToFire) {
-                            timeToFire = Time.time + 12 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
                             attaqueSpecial();
                             //WaitDude();
                         }
@@ -693,12 +692,28 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     void attaqueSpecial() {
 
         if(name == "knight(Clone)"){
+            timeToFire = Time.time + 3;
+            //StartCoroutine("WaitWarrior");
             StartCoroutine("Sprint");
+         
         }
         else{
+            timeToFire = Time.time + 12 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
             BouleDeFeu();
             
         }
+    }
+
+    /**
+       * 
+       * @param void
+       * @return void;
+       * Auteur: Vincent
+       */
+    public IEnumerator WaitWarrior()
+    {
+        yield return new WaitForSeconds(2f);
+
     }
 
     /**
@@ -708,16 +723,17 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * Auteur: Issam Aloulou
      */
     public IEnumerator Sprint(){
-        vitesseDeplacement = 25f;
+        vitesseDeplacement = 50f;
         yield return new WaitForSeconds(0.3f);
         if(stunned==false) vitesseDeplacement = 16f;
+       
     }
 
     /**
      * 
      * @param void
      * @return void;
-     * Auteur: Issam Aloulou
+     * Auteur: Vincent Gagnon
      */
     void BouleDeFeu() {
         GameObject vfx;
@@ -726,8 +742,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         {
             vfx = Instantiate(effectToSpawn, firePoint.transform.position, Quaternion.identity);
             vfx.transform.eulerAngles = new Vector3(90f, 180f, 0f);
-            //vfx.transform.direction = transform.forward;
-
+           
+            StartCoroutine(WaitDude(vfx));
 
             Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -736,18 +752,17 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             {
                 // Create a vector from the player to the point on the floor the raycast from the mouse hit.
                 Vector3 pointARegarder = hit.point - transform.position;
-
                 pointARegarder.y = 0f;
-                //pointARegarder.z = 90f;
-                // Regarder le nouveau point
+                
+
+                //Permet à la boule de feu de partir vers la direction du clic
                 vfx.transform.localRotation = Quaternion.LookRotation(pointARegarder);
-                //vfx.transform.Rotate (180, 180, 0);
-                // Faire pivoter le joueur
-                //rbPerso.MoveRotation(rotation);
+
+                //COMMENT ROTATE LA BOULE DE FEU DANS LA BONNE DIRECTION?
+
+             
             }
-            //vfx.transform.localRotation = firePoint.transform.rotation;
-            //RaycastHit hit;
-           // Vector3 pointARegarder = hit.point - transform.position;
+          
         }
         else
         {
@@ -757,9 +772,17 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
     }
 
-    public IEnumerator WaitDude()
+   /**
+   * 
+   * @param void
+   * @return void;
+   * Auteur: Vincent Gagnon
+   */
+    public IEnumerator WaitDude(GameObject objectToDestroy)
     {
+        print("it works the thing yayay");
         yield return new WaitForSeconds(5);
+        Destroy(objectToDestroy);
     }
 
     [PunRPC]
