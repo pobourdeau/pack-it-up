@@ -68,7 +68,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     private float timeToFire = 0;
 
 
-
     void Awake() {
         if (photonView.IsMine) {
             DeplacementPerso.LocalPlayerInstance = this.gameObject;
@@ -113,7 +112,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
         }
 
-        effectToSpawn = vfx[0];
+        //effectToSpawn = vfx[0];
     }
 
 
@@ -167,23 +166,22 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
             // Si le joueur appui sur la touche droite de la souris,
             if (photonView.IsMine) {
-                if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                    // Faire jouer l'animation d'attaque
-                    if(animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned==false){
-                        audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
-                        StartCoroutine("hitboxAttaque");  
-                        animPerso.SetTrigger("attaque");
+                    if (Input.GetKeyDown(KeyCode.Mouse0)) {
+                        // Faire jouer l'animation d'attaque
+                        if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned == false) {
+                            audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
+                            StartCoroutine("hitboxAttaque");
+                            animPerso.SetTrigger("attaque");
+                        }
                     }
-                }
-                if (Input.GetKeyDown(KeyCode.Mouse1)) {
-                    
-                    if(stunned==false && aLarme && Time.time >= timeToFire){
-                        timeToFire = Time.time + 12 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
-                        attaqueSpecial();
-                        //WaitDude();
-                    }
-                    
-                }
+                    if (Input.GetKeyDown(KeyCode.Mouse1)) {
+
+                        if (stunned == false && aLarme && Time.time >= timeToFire) {
+                            timeToFire = Time.time + 12 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
+                            attaqueSpecial();
+                            //WaitDude();
+                        }
+                    }               
             }
             
 
@@ -193,6 +191,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         else {
             StartCoroutine("OuvrirMenu");
         }
+
+
+        
     }
 
 
@@ -233,7 +234,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
             // Faire pivoter le joueur
             Pivoter();
-        }
+    }
 
 
     
@@ -316,11 +317,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // Arme
                 case "arme":
                     //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                    
-
-                    rbPerso.AddForce(objCollider.transform.forward * 10f);
-
-                    mainEpee=false;    
+                    mainEpee =false;    
                     GestionVie(mainEpee);
                     
                     break;
@@ -572,16 +569,23 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     public IEnumerator Invulnerable(){
         stunned=true;
+
         for(int i = 0; i<3 ; i++){
-        brasRenderer.enabled= false;
-        corpsRenderer.enabled= false;
-        yield return new WaitForSeconds(0.3f);
-        brasRenderer.enabled= true;
-        corpsRenderer.enabled= true;
-        yield return new WaitForSeconds(0.3f);
+            //photonView.RPC("FlasherPerso", RpcTarget.AllViaServer, false, gameObject.GetComponent<PhotonView>().Owner);
+            yield return new WaitForSeconds(0.3f);
+            //photonView.RPC("FlasherPerso", RpcTarget.AllViaServer, true, gameObject.GetComponent<PhotonView>().Owner);
+            yield return new WaitForSeconds(0.3f);
         }
+
         stunned=false;
         vitesseDeplacement = 16f;
+    }
+
+    [PunRPC]
+    public void FlasherPerso(bool bEtat, GameObject go) {
+        go.SetActive(bEtat);
+        /*brasRenderer.enabled = bEtat;
+        corpsRenderer.enabled = bEtat;*/
     }
     
     /**
@@ -623,7 +627,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         aBarreVie[0].SetActive(false);
         oInventaire.SetActive(false);
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        photonView.RPC("DisparaitreJoueur", RpcTarget.AllViaServer);
 
         txtSpectateur.SetActive(true);
 }
@@ -747,4 +752,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         yield return new WaitForSeconds(5);
     }
 
+    [PunRPC]
+    public void DisparaitreJoueur() {
+        gameObject.SetActive(false);
+    }
 }

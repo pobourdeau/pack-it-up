@@ -33,4 +33,6 @@ MonoBehaviour:
   - RespawnSpaceship
   - UpdateSpriteLobby
   - AfficherArme
+  - DisparaitreJoueur
+  - FlasherPerso
   DisableAutoOpenWizard: 1

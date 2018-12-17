@@ -49,22 +49,34 @@ namespace Photon.Pun.Demo.Asteroids
         public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
         public GameObject[] aSpawnerCuir; // Tous les points de spawn du cuir
 
-        #region UNITY
+        public int[] aTabVieJoueur;
+        public int iSecondeRestante; // Seconde restante
+        public int iMinuteRestante; // Minute restante
+        private int iSecondeTotal;
+        public Text txtTimer; // UI text où le temps est écrit
+        public Image imgTimer; // Image du timer
 
+        private bool bFin = false;
+
+
+        /**
+         * Créer une instance du script
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
         public void Awake()
         {
             Instance = this;
         }
 
-        public override void OnEnable()
-        {
-            base.OnEnable();
-
-            CountdownTimer.OnCountdownTimerHasExpired += OnCountdownTimerIsExpired;
-        }
-
-        public void Start()
-        {
+        /**
+         * À l'ouverture de la partie, donner les propriétés
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        public void Start() {
             InfoText.text = "En attentes des autres joueurs...";
 
             Hashtable props = new Hashtable
@@ -74,6 +86,25 @@ namespace Photon.Pun.Demo.Asteroids
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
 
+        /**
+         * Commencer le timer pour commencer la partie
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        public override void OnEnable()
+        {
+            base.OnEnable();
+
+            CountdownTimer.OnCountdownTimerHasExpired += OnCountdownTimerIsExpired;
+        }
+
+        /**
+         * Annuler le timer pour commencer la partie
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
         public override void OnDisable()
         {
             base.OnDisable();
@@ -81,16 +112,22 @@ namespace Photon.Pun.Demo.Asteroids
             CountdownTimer.OnCountdownTimerHasExpired -= OnCountdownTimerIsExpired;
         }
 
-        #endregion
+        /**
+         * Afficher le menu de fin de partie avec le gagnant
+         * @param void
+         * @return String winner, int score
+         * @author Exit Games et Pier-Olivier Bourdeau
+         */
+        private IEnumerator EndOfGame(string winner, int score){
 
-        #region COROUTINES
-
-        private IEnumerator EndOfGame(string winner, int score)
-        {
+            // Ouvrir le menu de fin
             oHUD.SetActive(false);
             panFin.SetActive(true);
+
+            // Écrire le gagnant de la partie
             txtGagnant.text = "Le gagnant est " + winner;
 
+            // Démarrer un timer pour fermer la partie
             float timer = 5.0f;
 
             while (timer > 0.0f)
@@ -102,30 +139,50 @@ namespace Photon.Pun.Demo.Asteroids
                 timer -= Time.deltaTime;
             }
 
+            // Retourner au menu principal
             PhotonNetwork.LeaveRoom();
         }
 
-        #endregion
-
-        #region PUN CALLBACKS
-
-        public override void OnDisconnected(DisconnectCause cause)
-        {
+        /**
+         * À la déconnexion de la partie, retourner à la scène de connexion
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        public override void OnDisconnected(DisconnectCause cause){
             UnityEngine.SceneManagement.SceneManager.LoadScene("SceneRejoindre");
         }
 
-        public override void OnLeftRoom()
-        {
+
+        /**
+         * Quand un joueur quitte la partie
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        public override void OnLeftRoom(){
             PhotonNetwork.Disconnect();
         }
 
-        public override void OnPlayerLeftRoom(Player otherPlayer)
-        {
+
+        /**
+         * Quand un joueur a quitter la partie
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        public override void OnPlayerLeftRoom(Player otherPlayer){
             CheckEndOfGame();
         }
 
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-        {
+
+        /**
+         * Lorsque les propriétés des joueurs changent
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps){
             if (changedProps.ContainsKey(AsteroidsGame.PLAYER_LIVES))
             {
                 CheckEndOfGame();
@@ -150,14 +207,32 @@ namespace Photon.Pun.Demo.Asteroids
             }
         }
 
-        #endregion
 
-        private void StartGame()
-        {
+        /**
+         * Débuter la partie (Créer les personnages, les ressources, le timer, etc)
+         * @param void
+         * @return void
+         * @author Pier-Olivier Bourdeau
+         */
+        private void StartGame() {
+
+            // Remplir le tableau de vie en fonction du nombre de joueur dans la partie
+            int iCompteur = 0;
+            foreach (Player p in PhotonNetwork.PlayerList) {
+                aTabVieJoueur[iCompteur] = 3;
+                iCompteur++;
+            }
+
+            //CheckEndOfGame();
+
+            // Calculer le nombre de seconde total à la partie
+            iSecondeTotal = iMinuteRestante * 60 + iSecondeRestante;
+
+            // Appeler la fonction timer à chaque seconde
+            InvokeRepeating("Timer", 0, 1f);
 
             // Créer les ressources
             GenererRessources();
-
 
             // Récupérer l'id du joueur qui se trouve dans le lobby (chaque joueur à un id unique...)
             int idPlayer = (int)PhotonNetwork.LocalPlayer.CustomProperties["idPlayer"];
@@ -188,18 +263,19 @@ namespace Photon.Pun.Demo.Asteroids
             oClone.GetComponent<DeplacementPerso>().oInventaire = oInventaire;
             oClone.GetComponent<DeplacementPerso>().txtSpectateur = txtSpectateur;
 
-
+            // Fermer le panneau de début et ouvrir le panneau du jeu
             panDebut.SetActive(false);
             oHUD.SetActive(true);
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                //StartCoroutine(SpawnAsteroid()); 
-            }
         }
 
-        private bool CheckAllPlayerLoadedLevel()
-        {
+
+        /**
+         * Vérifier si tous les joueurs ont chargé la scene de jeu
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        private bool CheckAllPlayerLoadedLevel() {
             foreach (Player p in PhotonNetwork.PlayerList)
             {
                 object playerLoadedLevel;
@@ -218,50 +294,68 @@ namespace Photon.Pun.Demo.Asteroids
             return true;
         }
     
-        private void CheckEndOfGame()
-        {
-            bool allDestroyed = true;
+        /**
+         * Vérifier si la partie est terminée
+         * @param void
+         * @return void
+         * @author Exit Games et Pier-Olivier Bourdeau
+         */
+        private void CheckEndOfGame() {
 
-            foreach (Player p in PhotonNetwork.PlayerList)
-            {
+            int iCompteur = 0;
+            
+            // Stocker le nombre de vie restante de tous les joueurs dans un tableau
+            foreach (Player p in PhotonNetwork.PlayerList) {
                 object lives;
-                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out lives))
-                {
-                    if ((int) lives > 0)
-                    {
-                        allDestroyed = false;
-                        break;
-                    }
+                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out lives)) {
+                    aTabVieJoueur[iCompteur] = (int)lives;
+                }
+                iCompteur++;
+            }
+
+            // Déterminer combien de joueur il reste en fonction du nombre de vie
+            int iNbJoueurRestant = 4;
+            for(int i=0; i<aTabVieJoueur.Length; i++) {
+                if(aTabVieJoueur[i] <= 0) {
+                    iNbJoueurRestant--;
                 }
             }
 
-            if (allDestroyed)
-            {
-                if (PhotonNetwork.IsMasterClient)
-                {
+            // S'il reste qu'un joueur en vie,
+            if(iNbJoueurRestant <= 1 || bFin) {
+                if (PhotonNetwork.IsMasterClient) {
                     StopAllCoroutines();
                 }
 
+                // Déterminer le joueur vainqueur
                 string winner = "";
                 int score = -1;
 
-                foreach (Player p in PhotonNetwork.PlayerList)
-                {
-                    if (p.GetScore() > score)
-                    {
-                        winner = p.NickName;
-                        score = p.GetScore();
+                foreach (Player p in PhotonNetwork.PlayerList) {
+                    object lives;
+                    if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out lives)) {
+                        if ((int)lives > score) {
+                            winner = p.NickName;
+                            score = (int)lives;
+                        }
                     }
                 }
 
+                // Afficher l'écran de fin de jeu
                 StartCoroutine(EndOfGame(winner, score));
             }
         }
 
-        private void OnCountdownTimerIsExpired()
-        {
+        /**
+         * À la fin du countdown d'attente des joueurs, partir la partie
+         * @param void
+         * @return void
+         * @author Exit Games
+         */
+        private void OnCountdownTimerIsExpired(){
             StartGame();
         }
+
 
         /**
          * Générer les ressources sur la carte aléatoirement
@@ -270,6 +364,7 @@ namespace Photon.Pun.Demo.Asteroids
          * @author Vincent Gagnon
          */
         void GenererRessources() {
+
             // Générer aléatoirement l'emplacement du bois
             Shuffle(aSpawnerBois);
 
@@ -296,6 +391,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         }
 
+
         /**
          * Mélanger un tableau sans répétition et doublons
          * @param GameObject[] aTab
@@ -307,6 +403,44 @@ namespace Photon.Pun.Demo.Asteroids
                 int r = Random.Range(t, aTab.Length);
                 aTab[t] = aTab[r];
                 aTab[r] = tmp;
+            }
+        }
+
+
+        /**
+         * Gérer le temps restant de la partie
+         * @param void
+         * @return void
+         * @author Issam Aloulou
+         */
+        void Timer() {
+
+            // S'il reste plus que 0 seconde, diminuer la seconde
+            if (iSecondeRestante > 0) {
+                iSecondeRestante--;
+            }
+            // Sinon, remettre 59 secondes et diminuer la minute
+            else {
+                iSecondeRestante = 59;
+                iMinuteRestante--;
+            }
+
+            // Formatage du chronomètre
+            if (iSecondeRestante < 10) {
+                txtTimer.text = iMinuteRestante + ":0" + iSecondeRestante;
+            }
+            else {
+                txtTimer.text = iMinuteRestante + ":" + iSecondeRestante;
+            }
+
+            imgTimer.fillAmount = (float)(iMinuteRestante * 60 + iSecondeRestante) / iSecondeTotal;
+
+            // S'il ne reste plus de temps, annuler l'appel de la fonction
+            if (iMinuteRestante == 0 && iSecondeRestante == 0) {
+                CancelInvoke();
+
+                bFin = true;
+                CheckEndOfGame();
             }
         }
     }
