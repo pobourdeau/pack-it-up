@@ -1500,6 +1500,7 @@ MonoBehaviour:
   firePoint: {fileID: 1571859424559804}
   vfx:
   - {fileID: 1874234040071582, guid: adc6b3a966f53d74cacd0395a8e298aa, type: 2}
+  GuerrierTrail: {fileID: 0}
 --- !u!114 &114263755781614800
 MonoBehaviour:
   m_ObjectHideFlags: 1

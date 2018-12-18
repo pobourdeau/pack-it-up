@@ -66,6 +66,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public List<GameObject> vfx = new List<GameObject>(); //liste de vfx
     private GameObject effectToSpawn;//vfx choisi
     private float timeToFire = 0;
+    public GameObject GuerrierTrail;
 
 
     void Awake() {
@@ -724,9 +725,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     public IEnumerator Sprint(){
         vitesseDeplacement = 50f;
+        GuerrierTrail.SetActive(true);
         yield return new WaitForSeconds(0.3f);
-        if(stunned==false) vitesseDeplacement = 16f;
-       
+        if (stunned==false) vitesseDeplacement = 16f;
+        yield return new WaitForSeconds(0.4f);
+        GuerrierTrail.SetActive(false);
+
     }
 
     /**
