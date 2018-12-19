@@ -1513,7 +1513,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   firePoint: {fileID: 0}
-  vfx: []
   GuerrierTrail: {fileID: 1689547494921490}
 --- !u!114 &114570061335738786
 MonoBehaviour:

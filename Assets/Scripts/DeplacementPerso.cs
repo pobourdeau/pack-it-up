@@ -9,23 +9,23 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 /**
  * Gérer les déplacements du joueur, attaques, dégâts(vie) et les interractions avec les ressources (inventaire et assemblage de l'arme)
  * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou
- * @version 2018-11-12
+ * @version 2018-12-18
  */
-
 public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
-
-    // Les sons
-    public AudioClip bruitSlash;
-    public AudioClip bruitAttacked;
-    public AudioClip bruitDead;
-    public AudioClip bruitAttackSpecial;
-    public AudioClip bruitForge;
 
     public static GameObject LocalPlayerInstance;
 
+    // Les sons
+    public AudioClip bruitSlash; // Son de slash
+    public AudioClip bruitAttacked; // Son d'attaqué
+    public AudioClip bruitDead; // Son de mort
+    public AudioClip bruitAttackSpecial; // Son d'attaque spéciale
+    public AudioClip bruitForge; // Son de la forge
+
+
     private Rigidbody rbPerso; // Rigidbody du joueur
     private Animator animPerso; // Animator du joueur
-    private AudioSource audioSourcePerso;
+    private AudioSource audioSourcePerso; // AudioSource du joueur
     private float LongueurRayCast = 100f; // Distance maximale du RayCast
 
     public float vitesseDeplacement = 10f; // Vitesse de déplacement du joueur
@@ -51,24 +51,23 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject[] aBarreVie; // Barre de vie
     public Sprite vieVide; // Sprite de coeur vide
     public bool attaque = false; // Si le joueur attaque
-    public GameObject oMain;
+    public GameObject oMain; // La main du joueur
 
     public int[] aInventaire; // Inventaire du joueur
-    public GameObject oInventaire;
-    public GameObject txtSpectateur;
-    // aInventaire[0] = Bois, aInventaire[1] = Fer, aInventaire[2] = Cuir
+    public GameObject oInventaire; // Objet de l'inventaire du joueur
+    public GameObject txtSpectateur; // Texte qui dit si le joueur devient un spectateur
     public GameObject[] aCrochetInv; // Les crochets de l'inventaire 
-    // aCrochetInv[0] = crochet Bois, aCrochetInv[1] = crochet Fer, aCrochetInv[2] = crochet Cuir
     public GameObject[] aCaseRougeInv; // Les cases rouges de l'inventaire 
-    // aCaseRougeInv[0] = case Bois, aCaseRougeInv[1] = case Fer, aCaseRougeInv[2] = case Cuir
 
     public GameObject firePoint; //Endroit d'ou le projectile est tiré
-    public List<GameObject> vfx = new List<GameObject>(); //liste de vfx
-    private GameObject effectToSpawn;//vfx choisi
     private float timeToFire = 0;
     public GameObject GuerrierTrail;
 
-
+    /**
+     * Déterminer si c'est le joueur de l'ordinateur client
+     * @param void
+     * @return void
+     */
     void Awake() {
         if (photonView.IsMine) {
             DeplacementPerso.LocalPlayerInstance = this.gameObject;
@@ -86,8 +85,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     void Start() {
         // Rigidbody du joueur
         rbPerso = GetComponent<Rigidbody>();
+
         // Animator du joueur
         animPerso = GetComponent<Animator>();
+
         // Speaker du joueur
         audioSourcePerso = GetComponent<AudioSource>();
 
@@ -95,13 +96,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         brasRenderer = GameObject.Find("perso/Main").GetComponent<SkinnedMeshRenderer>();
         corpsRenderer = GameObject.Find("perso/Corps").GetComponent<SkinnedMeshRenderer>();
 
-
         // Inventaire du joueur
-        aInventaire[0] = 0;
-        aInventaire[1] = 0;
-        aInventaire[2] = 0;
+        aInventaire[0] = 1;
+        aInventaire[1] = 1;
+        aInventaire[2] = 1;
 
-
+        // Faire en sorte que la caméra suit le joueur de l'ordinateur client
         DeplacementCam _cameraWork = this.gameObject.GetComponent<DeplacementCam>();
 
         if (_cameraWork != null) {
@@ -109,11 +109,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 _cameraWork.OnStartFollowing();
             }
         }
-        else {
-            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
-        }
-
-        effectToSpawn = vfx[0];
     }
 
 
@@ -146,6 +141,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
             // Attaque est à true
             attaque = true;
+
+            print("attaque");
+
+            /*int pvID = arme.gameObject.GetComponent<PhotonView>().ViewID;
+            photonView.RPC("Attaquer", RpcTarget.AllViaServer, pvID);*/
         }
         else {
             attaque = false;
@@ -165,34 +165,57 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 StopCoroutine("ConstructionArme");
             }
 
-            // Si le joueur appui sur la touche droite de la souris,
             if (photonView.IsMine) {
-                    if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                        // Faire jouer l'animation d'attaque
-                        if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned == false) {
-                            audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
-                            StartCoroutine("hitboxAttaque");
-                            animPerso.SetTrigger("attaque");
+                // Si le joueur appui sur la touche gauche de la souris,
+               if (Input.GetKeyDown(KeyCode.Mouse0)) {
+       
+                    // Faire jouer l'animation d'attaque
+                    if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned == false) {
+                        audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
+                        StartCoroutine("hitboxAttaque");
+                        animPerso.SetTrigger("attaque");
+
+                        // Si le joueur à une arme
+                        if (aLarme) {
+                            // Permettre d'attaquer
+                            StartCoroutine("Attaque");
                         }
+                        
                     }
-                    if (Input.GetKeyDown(KeyCode.Mouse1)) {
+                }
 
-                        if (stunned == false && aLarme && Time.time >= timeToFire) {
-                            attaqueSpecial();
-                            //WaitDude();
-                        }
-                    }               
+                // Si le joueur appui sur la touche droite de la souris
+                if (Input.GetKeyDown(KeyCode.Mouse1)) {
+
+                    if (stunned == false && aLarme && Time.time >= timeToFire) {
+                        attaqueSpecial();
+                        //WaitDude();
+                    }
+                }               
             }
-            
-
-            // Gestion de la vie du personnage
-            //GestionVie();
         }
-        else {
-            StartCoroutine("OuvrirMenu");
-        } 
     }
 
+    /**
+     * Créer un hitbox devant le joueur pour émettre des dégats aux autres joueurs
+     * @param void
+     * @return void
+     * @author Pier-Olivier Bourdeau
+     */
+    public IEnumerator Attaque() {
+        // Attendre 0.3 sec
+        yield return new WaitForSeconds(0.3f);
+
+        // Créer un objet devant le joueur et le parainer
+        GameObject goHitBox = PhotonNetwork.Instantiate("HitBoxArme", transform.position + transform.forward * 2.5f, gameObject.transform.rotation);
+        goHitBox.transform.parent = this.gameObject.transform;
+
+        // Attendre 0.2 sec
+        yield return new WaitForSeconds(0.2f);
+
+        // Détruire l'objet
+        PhotonNetwork.Destroy(goHitBox);
+    }
 
     /**
      * Gérer le déplacement du joueur
@@ -203,38 +226,46 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     void FixedUpdate() {
 
         // Si le personnage n'est pas mort,
-        /* 
         if (animPerso.GetBool("mort") == false) {
-             
-            // Si le personnage n'est pas mort,
-            if (animPerso.GetBool("mort") == false) {
-                // Déplacer le personnage
-                transform.Rotate(0, Input.GetAxis("Horizontal") * vRotation, 0);
-
-                vDeplacement = Input.GetAxis("Vertical") * vitesseDeplacement;
-
-                rbPerso.velocity = (transform.forward * vDeplacement) + new Vector3(0, rbPerso.velocity.y, 0);
-            }
-            */
 
             if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
                 return;
-            } 
+            }
 
+            // Gestion des touches du clavier
             var vDeplacement = Input.GetAxis("Vertical");
-            //var hDeplacement = Input.GetAxis("Horizontal");
             
+            // Déplacer le joueur vers l'avant ou l'arrière
             rbPerso.velocity = transform.forward * vDeplacement * vitesseDeplacement;
 
             // Gestion du mouvement du blend tree
             animPerso.SetFloat("VelY", vDeplacement);
-            //animPerso.SetFloat("VelX", hDeplacement);
 
             // Faire pivoter le joueur
             Pivoter();
+        }
     }
 
 
+    /**
+     * Si l'arme rentre en collision avec le personnage
+     * @param Collision collision
+     * @return void
+     * @author Pier-Olivier Bourdeau
+     */
+    public void OnCollisionEnter(Collision collision) {
+        // Si on se fait toucher par une arme,
+        if(collision.gameObject.tag == "arme") {
+            // Descendre la vie
+            GestionVie(false);
+        }
+
+        // Si on se fait toucher par un spell,
+        if (collision.gameObject.tag == "spell") {
+            // Descendre la vie
+            GestionVie(false);
+        }
+    }
     
 
 
@@ -244,7 +275,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void
      * @author Pier-Olivier Bourdeau
      */
-    void OnTriggerEnter(Collider objCollider) {
+    public void OnTriggerEnter(Collider objCollider) {
         
         // Si le joueur n'a pas d'arme
         if (aLarme == false) {
@@ -312,35 +343,17 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                         aCaseRougeInv[2].GetComponent<Animator>().enabled = true;
                     }
                     break;
-                // Arme
-                case "arme":
-                    //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                    mainEpee =false;    
-                    GestionVie(mainEpee);
-                    
-                    break;
                 case "main":
                     //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                     mainEpee=true;    
+                     mainEpee=true;
                     GestionVie(mainEpee);
-                break;    
+                break;
+                case "maison":
+                    // Changer la position de la caméra
+                    GetComponent<DeplacementCam>().distance = 10f;
+                    GetComponent<DeplacementCam>().height = 10f;
+                    break;
             }
-        }
-
-        //Test spell collider
-       if (objCollider.gameObject.tag == "spell")
-        {
-            mainEpee = false;
-            GestionVie(mainEpee);
-
-            Destroy(objCollider.gameObject);
-        }
-
-        // Si on rentre dans la maison,
-        if (objCollider.gameObject.name == "maison") {
-            // Changer la position de la caméra
-            GetComponent<DeplacementCam>().distance = 10f;
-            GetComponent<DeplacementCam>().height = 10f;
         }
     }
 
@@ -419,6 +432,13 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
+
+    /**
+     * Détruire un objet sur tous les ordinateurs en même temps
+     * @param int pvID
+     * @return void
+     * @author Pier-Olivier Bourdeau
+     */
     [PunRPC]
     public void DetruireObjet(int pvID) {
         PhotonNetwork.Destroy(PhotonView.Find(pvID));
@@ -487,20 +507,18 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         //Detruire la hitbox de la main
         //PhotonNetwork.Destroy(GameObject.Find("perso/Main/hitboxMain"));
-        // Créer l'arme et l'a donner au joueur
-        GameObject oArme;
-
+        // Créer l'arme et l'a donner au joueu
         // Si le personnage est le knight,
         if (this.gameObject.tag == "knight") {
             // Créer et donner une épée comme arme
-            oArme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
+            arme = PhotonNetwork.Instantiate("epee", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(74.65f, -12.11f, 0f)));
         }
         else {
             // Créer et donner un staff comme arme
-            oArme = PhotonNetwork.Instantiate("staff", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(75f, -120f, 0f)));
+            arme = PhotonNetwork.Instantiate("staff", oMain.transform.position, oMain.transform.rotation * Quaternion.Euler(new Vector3(75f, -120f, 0f)));
         }
-        
-        oArme.transform.parent = oMain.transform;
+
+        arme.transform.parent = oMain.transform;
         aLarme = true;
         animPerso.SetBool("aLarme",true);
     }
@@ -523,12 +541,13 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void GestionVie(bool main) {
 
-        // La vie du personnage
+        
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
         }
 
-        if(stunned==false){
+        // La vie du personnage
+        if (stunned==false){
             animPerso.SetTrigger("dommage");
             if(main==false){
                 indVie--;
@@ -538,29 +557,35 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 vitesseDeplacement = 10f;
                 return;
             }
-            
+
+            // Gestion de la vie du personnage
             switch (indVie) {
                 case 2:
+                    // Enlever un coeur et faire jouer un son
                     aBarreVie[2].GetComponent<Image>().sprite = vieVide;
                     StartCoroutine("Invulnerable");
                     audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                     break;
                 case 1:
+                    // Enlever deux coeurs et faire jouer un son
                     aBarreVie[1].GetComponent<Image>().sprite = vieVide;
                     StartCoroutine("Invulnerable");
                     audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                     break;
                 case 0:
+                    // Enlever trois coeurs et faire jouer un son
                     aBarreVie[0].GetComponent<Image>().sprite = vieVide;
                     audioSourcePerso.PlayOneShot(bruitDead,1f);
 
                     // Jouer l'animation de mort
                     animPerso.SetBool("mort", true);
 
+                    // Faire mourir le personnage
                     Mourir();
                     break;
             }
 
+            // Mettre à jour le nombre de vie du joueur pour tout le monde
             if (photonView.IsMine) {
                 object lives;
                 if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("PlayerLives", out lives)) {
@@ -589,6 +614,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         vitesseDeplacement = 16f;
     }
 
+    /**
+     * Faire flasher le personnage sur tous les ordinateurs
+     * @param bool bEtat, GameObject go
+     * @return void
+     * @author Pier-Olivier Bourdeau
+     */
     [PunRPC]
     public void FlasherPerso(bool bEtat, GameObject go) {
         go.SetActive(bEtat);
@@ -617,33 +648,49 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
     }
 
+
     /**
-     * Attendre 3 secondes avant de retourner au menu principal
+     * Faire mourir le joueur
      * @param void
      * @return void
      * @author Pier-Olivier Bourdeau
      */
-    public IEnumerator OuvrirMenu() {
-        yield return new WaitForSeconds(3f);
-        //SceneManager.LoadScene("SceneMenu");
-    }
-
     public void Mourir() {
+        // Arrêter de suivre le personnage et positionner la caméra dans l'action
         GetComponent<DeplacementCam>().isFollowing = false;
         GetComponent<DeplacementCam>().PositionnerCameraMort();
 
+        // Enlever les coeurs de l'écran
         aBarreVie[2].SetActive(false);
         aBarreVie[1].SetActive(false);
         aBarreVie[0].SetActive(false);
         oInventaire.SetActive(false);
 
-        //gameObject.SetActive(false);
+        // Faire disparaitre le joueur sur tous les ordinateurs
         photonView.RPC("DisparaitreJoueur", RpcTarget.AllViaServer);
 
+        // Activer le mode spectateur
         txtSpectateur.SetActive(true);
-}
+    }
+
+    /**
+     * Faire disparaitre le joueur sur tous les ordinateurs
+     * @param void
+     * @return void
+     * @author Pier-Olivier Bourdeau
+     */
+    [PunRPC]
+    public void DisparaitreJoueur() {
+        gameObject.SetActive(false);
+    }
 
 
+    /**
+     * Rentre les mouvements des personnages le plus fluide possible
+     * @param PhotonStream stream, PhotonMessageInfo info
+     * @return void
+     * @author Pier-Olivier Bourdeau, Exit Games
+     */
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 
         if (stream.IsWriting) {
@@ -692,16 +739,14 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     void attaqueSpecial() {
 
-        if(name == "knight(Clone)"){
+        if(this.gameObject.tag == "knight") {
             timeToFire = Time.time + 3;
             //StartCoroutine("WaitWarrior");
             StartCoroutine("Sprint");
-         
         }
         else{
-            timeToFire = Time.time + 12 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
+            timeToFire = Time.time + 3;
             BouleDeFeu();
-            
         }
     }
 
@@ -726,11 +771,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public IEnumerator Sprint(){
         vitesseDeplacement = 50f;
         GuerrierTrail.SetActive(true);
+
         yield return new WaitForSeconds(0.3f);
         if (stunned==false) vitesseDeplacement = 16f;
+
         yield return new WaitForSeconds(0.4f);
         GuerrierTrail.SetActive(false);
-
     }
 
     /**
@@ -740,40 +786,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * Auteur: Vincent Gagnon
      */
     void BouleDeFeu() {
-        GameObject vfx;
 
-        if (firePoint != null)
-        {
-            vfx = Instantiate(effectToSpawn, firePoint.transform.position, Quaternion.identity);
-            vfx.transform.eulerAngles = new Vector3(90f, 180f, 0f);
-           
-            StartCoroutine(WaitDude(vfx));
-
-            Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(camRay, out hit, LongueurRayCast))
-            {
-                // Create a vector from the player to the point on the floor the raycast from the mouse hit.
-                Vector3 pointARegarder = hit.point - transform.position;
-                pointARegarder.y = 0f;
-                
-
-                //Permet à la boule de feu de partir vers la direction du clic
-                vfx.transform.localRotation = Quaternion.LookRotation(pointARegarder);
-
-                //COMMENT ROTATE LA BOULE DE FEU DANS LA BONNE DIRECTION?
-
-             
-            }
-          
+        if (firePoint != null) {
+            GameObject vfx = PhotonNetwork.Instantiate("Fireball", firePoint.transform.position, firePoint.transform.rotation);
+            StartCoroutine(WaitDude(vfx, 5f));
         }
-        else
-        {
-            Debug.Log("No fire point");
-        }
-
-
     }
 
    /**
@@ -782,15 +799,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
    * @return void;
    * Auteur: Vincent Gagnon
    */
-    public IEnumerator WaitDude(GameObject objectToDestroy)
-    {
-        print("it works the thing yayay");
-        yield return new WaitForSeconds(5);
-        Destroy(objectToDestroy);
-    }
-
-    [PunRPC]
-    public void DisparaitreJoueur() {
-        gameObject.SetActive(false);
+    public IEnumerator WaitDude(GameObject objectToDestroy, float temps){
+        yield return new WaitForSeconds(temps);
+        PhotonNetwork.Destroy(objectToDestroy);
     }
 }

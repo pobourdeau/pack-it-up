@@ -19,44 +19,49 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Photon.Pun.Demo.Asteroids
 {
+    /**
+     * Gestionnaire du jeu. Gérer les connexions des joueurs, la fin de la partie, le chrono de la partie, l'affichage des menus.
+     * @author Pier-Olivier Bourdeau, Vincent Gagnon, Issam Aloulou, Exit Games
+     * @version 2018-12-18
+     */
     public class AsteroidsGameManager : MonoBehaviourPunCallbacks
     {
         public static AsteroidsGameManager Instance = null;
 
-        public Text InfoText;
-        public GameObject panDebut;
-        public GameObject[] aSpawnPoint;
-        public GameObject oHUD;
-        public GameObject panFin;
-        public Text txtGagnant;
+        // UI
+        public Text InfoText; // Info de la partie
+        public GameObject panDebut; // UI début de la partie
+        public GameObject[] aSpawnPoint; // Tous les spawns point disponible
+        public GameObject oHUD; // UI du HUD du joueur
+        public GameObject panFin; // UI du menu de fin
+        public Text txtGagnant; // UI contenant le nom du joueur gagnant
 
         // Variables du perso
-        public AudioClip[] aBruits;
-        private AudioSource audioSrc;
-
-        public GameObject txtConstruireArme;
-        public GameObject txtRecolter;
-        public Image imgConstruire;
-        public GameObject oImgConstruire;
-        public GameObject[] aBarreVie;
-        public Sprite vieVide;
-        public GameObject[] aCrochetInv;
-        public GameObject[] aCaseRougeInv;
-        public GameObject oInventaire;
-        public GameObject txtSpectateur;
+        public AudioClip[] aBruits; // Array contenant tous les sons
+        public GameObject txtConstruireArme; // Texte de construction de l'arme
+        public GameObject txtRecolter; // Texte de récolte de ressources
+        public Image imgConstruire;  // Image timer de construction
+        public GameObject oImgConstruire; // GameObject du timer de construction
+        public GameObject[] aBarreVie; // Barre de vie
+        public Sprite vieVide; // Sprite de coeur vide
+        public GameObject[] aCrochetInv; // Les crochets de l'inventaire 
+        public GameObject[] aCaseRougeInv; // Les cases rouges de l'inventaire 
+        public GameObject oInventaire; // Inventaire du joueur
+        public GameObject txtSpectateur; // Texte qui dit si le joueur devient un spectateur
 
         public GameObject[] aSpawnerBois; // Tous les points de spawn du bois
         public GameObject[] aSpawnerFer; // Tous les points de spawn du fer
         public GameObject[] aSpawnerCuir; // Tous les points de spawn du cuir
 
-        public int[] aTabVieJoueur;
+        public int[] aTabVieJoueur; // Nombre de vie pour tous les joueurs
         public int iSecondeRestante; // Seconde restante
         public int iMinuteRestante; // Minute restante
-        private int iSecondeTotal;
+        private int iSecondeTotal; // Transformer les minutes en secondes
         public Text txtTimer; // UI text où le temps est écrit
         public Image imgTimer; // Image du timer
 
-        private bool bFin = false;
+        private bool bFin = false; // Est-ce que la partie est finie?
+
 
 
         /**
@@ -437,12 +442,14 @@ namespace Photon.Pun.Demo.Asteroids
                 txtTimer.text = iMinuteRestante + ":" + iSecondeRestante;
             }
 
+            // Animer le temps restant
             imgTimer.fillAmount = (float)(iMinuteRestante * 60 + iSecondeRestante) / iSecondeTotal;
 
             // S'il ne reste plus de temps, annuler l'appel de la fonction
             if (iMinuteRestante == 0 && iSecondeRestante == 0) {
                 CancelInvoke();
 
+                // Terminer la partie
                 bFin = true;
                 CheckEndOfGame();
             }
