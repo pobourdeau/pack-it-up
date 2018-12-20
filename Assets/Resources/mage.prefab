@@ -117,22 +117,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1209636016284802
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4151657669375506}
-  - component: {fileID: 65096211938074402}
-  m_Layer: 0
-  m_Name: hitboxMain
-  m_TagString: main
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &1286790280321124
 GameObject:
   m_ObjectHideFlags: 1
@@ -570,22 +554,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1799261181912528
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4197663342809750}
-  - component: {fileID: 65465893379022616}
-  m_Layer: 0
-  m_Name: hitboxEpee
-  m_TagString: arme
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &1829281283444462
 GameObject:
   m_ObjectHideFlags: 1
@@ -802,19 +770,6 @@ Transform:
   m_Father: {fileID: 4006139123439286}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4151657669375506
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1209636016284802}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.95, y: 1.8199997, z: 2.68}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4357603316544058}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4165549473038444
 Transform:
   m_ObjectHideFlags: 1
@@ -852,20 +807,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4357603316544058}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4197663342809750
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1799261181912528}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.94999695, y: 1.8199997, z: 2.6799994}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4357603316544058}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4206172537012558
 Transform:
@@ -907,8 +849,6 @@ Transform:
   m_Children:
   - {fileID: 4535126171897954}
   - {fileID: 4006139123439286}
-  - {fileID: 4151657669375506}
-  - {fileID: 4197663342809750}
   - {fileID: 4180357579737128}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -1315,30 +1255,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!65 &65096211938074402
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1209636016284802}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.0149112, y: 2.169086, z: 2.0436666}
-  m_Center: {x: -0.8985045, y: 0.02912414, z: -0.0368613}
---- !u!65 &65465893379022616
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1799261181912528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.0149112, y: 2.169086, z: 2.449354}
-  m_Center: {x: -0.8985045, y: 0.02912414, z: 0.16598237}
 --- !u!82 &82948052894020602
 AudioSource:
   m_ObjectHideFlags: 1
@@ -1475,8 +1391,8 @@ MonoBehaviour:
   txtConstruireArme: {fileID: 0}
   txtRecolter: {fileID: 0}
   arme: {fileID: 1057703939386098, guid: fc2f42fb99770ef459e30f047fcd5874, type: 2}
-  hitboxMain: {fileID: 1209636016284802}
-  hitboxArme: {fileID: 1799261181912528}
+  hitboxMain: {fileID: 0}
+  hitboxArme: {fileID: 0}
   imgConstruire: {fileID: 0}
   oImgConstruire: {fileID: 0}
   aBarreVie:
@@ -1572,7 +1488,7 @@ MonoBehaviour:
   - {fileID: 114135880519822974}
   - {fileID: 114263755781614800}
   viewIdField: 0
-  InstantiationId: 2
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!114 &114882321418904058
 MonoBehaviour:

@@ -36,16 +36,12 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject txtConstruireArme; // Texte de construction de l'arme
     public GameObject txtRecolter; // Texte de récolte de ressources
     public GameObject arme; // Arme du joueur
-    public GameObject hitboxMain;//Hitbox de main
-    public GameObject hitboxArme;//Hitbox de Arme
 
-    private Renderer brasRenderer; // renderer du bras
-    private Renderer corpsRenderer; // renderer du corps
+    private GameObject corps;
     
     private bool entrainDeConstruire = false; // S'il est entrain de construire son arme
     private bool aLarme = false; // S'il a l'arme
     private bool stunned = false; //Si le joueur s'est récemment fait frappé
-    private bool mainEpee = false; //Determiner si le joueur est frapper par une main 
     public Image imgConstruire; // Image timer de construction
     public GameObject oImgConstruire; // GameObject du timer de construction
     public GameObject[] aBarreVie; // Barre de vie
@@ -93,8 +89,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         audioSourcePerso = GetComponent<AudioSource>();
 
         //Chercher le renderer du bras et du corps
-        brasRenderer = GameObject.Find("perso/Main").GetComponent<SkinnedMeshRenderer>();
-        corpsRenderer = GameObject.Find("perso/Corps").GetComponent<SkinnedMeshRenderer>();
+        corps = transform.Find("perso").gameObject;
 
         // Inventaire du joueur
         aInventaire[0] = 1;
@@ -141,11 +136,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("attack")) {
             // Attaque est à true
             attaque = true;
-
-            print("attaque");
-
-            /*int pvID = arme.gameObject.GetComponent<PhotonView>().ViewID;
-            photonView.RPC("Attaquer", RpcTarget.AllViaServer, pvID);*/
         }
         else {
             attaque = false;
@@ -178,7 +168,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                         // Si le joueur à une arme
                         if (aLarme) {
                             // Permettre d'attaquer
-                            StartCoroutine("Attaque");
+                            StartCoroutine("Attaque", "arme");
+                        }
+                        else {
+                            StartCoroutine("Attaque", "main");
                         }
                         
                     }
@@ -202,16 +195,24 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void
      * @author Pier-Olivier Bourdeau
      */
-    public IEnumerator Attaque() {
+    public IEnumerator Attaque(string sTypeAttaque) {
         // Attendre 0.3 sec
         yield return new WaitForSeconds(0.3f);
 
         // Créer un objet devant le joueur et le parainer
-        GameObject goHitBox = PhotonNetwork.Instantiate("HitBoxArme", transform.position + transform.forward * 2.5f, gameObject.transform.rotation);
+        GameObject goHitBox;
+
+        if (sTypeAttaque == "arme") {
+            goHitBox = PhotonNetwork.Instantiate("HitBoxArme", transform.position + transform.forward * 2.5f, gameObject.transform.rotation);
+        }
+        else {
+            goHitBox = PhotonNetwork.Instantiate("HitBoxMain", transform.position + transform.forward * 2.5f, gameObject.transform.rotation);
+        }
+
         goHitBox.transform.parent = this.gameObject.transform;
 
         // Attendre 0.2 sec
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(2f);
 
         // Détruire l'objet
         PhotonNetwork.Destroy(goHitBox);
@@ -264,6 +265,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (collision.gameObject.tag == "spell") {
             // Descendre la vie
             GestionVie(false);
+        }
+
+        if(collision.gameObject.tag == "main") {
+            GestionVie(true);
         }
     }
     
@@ -343,11 +348,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                         aCaseRougeInv[2].GetComponent<Animator>().enabled = true;
                     }
                     break;
-                case "main":
-                    //Si le personnage attaqué est celui du joueur finir la fonction, sinon jouer la fonction de gestion de vie
-                     mainEpee=true;
-                    GestionVie(mainEpee);
-                break;
                 case "maison":
                     // Changer la position de la caméra
                     GetComponent<DeplacementCam>().distance = 10f;
@@ -541,7 +541,6 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     private void GestionVie(bool main) {
 
-        
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true) {
             return;
         }
@@ -549,7 +548,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // La vie du personnage
         if (stunned==false){
             animPerso.SetTrigger("dommage");
-            if(main==false){
+
+            if(main == false){
                 indVie--;
             }
             else{
@@ -600,17 +600,20 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void
      * Auteur: Issam Aloulou  
      */
-    public IEnumerator Invulnerable(){
+    public void Invulnerable(GameObject corps){
         stunned=true;
+        photonView.RPC("FlasherPersoPartout", RpcTarget.AllViaServer);
+    }
 
-        for(int i = 0; i<3 ; i++){
-            //photonView.RPC("FlasherPerso", RpcTarget.AllViaServer, false, gameObject.GetComponent<PhotonView>().Owner);
+    public IEnumerator FlasherPerso(GameObject go) {
+        for(int i=0; i<3; i++) {
+            go.SetActive(false);
             yield return new WaitForSeconds(0.3f);
-            //photonView.RPC("FlasherPerso", RpcTarget.AllViaServer, true, gameObject.GetComponent<PhotonView>().Owner);
+            go.SetActive(true);
             yield return new WaitForSeconds(0.3f);
         }
 
-        stunned=false;
+        stunned = false;
         vitesseDeplacement = 16f;
     }
 
@@ -621,33 +624,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @author Pier-Olivier Bourdeau
      */
     [PunRPC]
-    public void FlasherPerso(bool bEtat, GameObject go) {
-        go.SetActive(bEtat);
-        /*brasRenderer.enabled = bEtat;
-        corpsRenderer.enabled = bEtat;*/
+    public void FlasherPersoPartout() {
+        StartCoroutine("FlasherPerso", corps);
     }
-
-
-    
-    /**
-     * Allumer la hitbox de ce que le personnage utilise pour attaquer
-     * @param arme
-     * @return void
-     * Auteur: Issam Aloulou  
-     */
-    public IEnumerator hitboxAttaque(){
-        if(aLarme){
-            hitboxArme.SetActive(true);
-            yield return new WaitForSeconds(1.25f);
-            hitboxArme.SetActive(false);        
-        }
-        else if(aLarme==false){
-            hitboxMain.SetActive(true);
-            yield return new WaitForSeconds(1.25f);
-            hitboxMain.SetActive(false);   
-        }
-    }
-
 
     /**
      * Faire mourir le joueur
@@ -751,13 +730,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     /**
-       * 
        * @param void
        * @return void;
        * Auteur: Vincent
        */
-    public IEnumerator WaitWarrior()
-    {
+    public IEnumerator WaitWarrior() {
         yield return new WaitForSeconds(2f);
 
     }
