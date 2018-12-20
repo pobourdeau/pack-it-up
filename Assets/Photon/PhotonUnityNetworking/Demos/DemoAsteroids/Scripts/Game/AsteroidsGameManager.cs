@@ -64,6 +64,8 @@ namespace Photon.Pun.Demo.Asteroids
 
         private bool bFin = false; // Est-ce que la partie est finie?
 
+        int nbJoueurConnecte = 0;
+
 
 
         /**
@@ -348,7 +350,7 @@ namespace Photon.Pun.Demo.Asteroids
 
             // Déterminer combien de joueur il reste en fonction du nombre de vie
             int iNbJoueurRestant = 4;
-            for(int i=0; i<aTabVieJoueur.Length; i++) {
+            for (int i=0; i<aTabVieJoueur.Length; i++) {
                 if(aTabVieJoueur[i] <= 0) {
                     iNbJoueurRestant--;
                 }
@@ -398,10 +400,14 @@ namespace Photon.Pun.Demo.Asteroids
          */
         void GenererRessources() {
 
+            foreach (Player p in PhotonNetwork.PlayerList) {
+                nbJoueurConnecte++;
+            }
+
             // Générer aléatoirement l'emplacement du bois
             Shuffle(aSpawnerBois);
 
-            for (int iBois = 0; iBois < aSpawnerBois.Length / 2; iBois++) {
+            for (int iBois = 0; iBois < 4; iBois++) {
                 GameObject oCloneBois = PhotonNetwork.InstantiateSceneObject("bois", aSpawnerBois[iBois].transform.position, Quaternion.Euler(aSpawnerBois[iBois].transform.eulerAngles));
                 oCloneBois.transform.parent = aSpawnerBois[iBois].transform;
             }
@@ -409,7 +415,7 @@ namespace Photon.Pun.Demo.Asteroids
             // Générer aléatoirement l'emplacement du fer
             Shuffle(aSpawnerFer);
 
-            for (int iFer = 0; iFer < aSpawnerFer.Length / 2; iFer++) {
+            for (int iFer = 0; iFer < 5; iFer++) {
                 GameObject oCloneFer = PhotonNetwork.InstantiateSceneObject("fer", aSpawnerFer[iFer].transform.position, Quaternion.Euler(aSpawnerFer[iFer].transform.eulerAngles));
                 oCloneFer.transform.parent = aSpawnerFer[iFer].transform;
             }
@@ -417,7 +423,7 @@ namespace Photon.Pun.Demo.Asteroids
             // Générer aléatoirement l'emplacement du cuir
             Shuffle(aSpawnerCuir);
 
-            for (int iCuir = 0; iCuir < aSpawnerCuir.Length / 2; iCuir++) {
+            for (int iCuir = 0; iCuir < 4; iCuir++) {
                 GameObject oCloneCuir = PhotonNetwork.InstantiateSceneObject("cuir", aSpawnerCuir[iCuir].transform.position, Quaternion.Euler(aSpawnerCuir[iCuir].transform.eulerAngles));
                 oCloneCuir.transform.parent = aSpawnerCuir[iCuir].transform;
             }
