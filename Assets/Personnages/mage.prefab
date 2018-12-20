@@ -1374,6 +1374,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 0
     Name: attaque
+  - Type: 9
+    SynchronizeType: 1
+    Name: special
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -1406,7 +1409,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1792668335301632}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6c9eccb7dff65346abda9282737414b, type: 3}
   m_Name: 
@@ -1415,6 +1418,7 @@ MonoBehaviour:
   bruitAttacked: {fileID: 8300000, guid: 1c4f604ef3c8c2f47ab433b43c75745a, type: 3}
   bruitDead: {fileID: 8300000, guid: 7cc9a6502c1d6c54db8888b437f4c52c, type: 3}
   bruitAttackSpecial: {fileID: 8300000, guid: c6146f0a5c8cb154f83218c0daa6bdd6, type: 3}
+  bruitAttackSpecial2: {fileID: 0}
   bruitForge: {fileID: 8300000, guid: 2008f66b125f973439d93e7bcae1978e, type: 3}
   vitesseDeplacement: 16
   vDeplacement: 0
@@ -1433,6 +1437,8 @@ MonoBehaviour:
   attaque: 0
   oMain: {fileID: 0}
   aInventaire: 010000000100000001000000
+  oInventaire: {fileID: 0}
+  txtSpectateur: {fileID: 0}
   aCrochetInv:
   - {fileID: 0}
   - {fileID: 0}
@@ -1441,6 +1447,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  firePoint: {fileID: 0}
+  GuerrierTrail: {fileID: 0}
 --- !u!114 &114556301714183498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1457,6 +1465,8 @@ MonoBehaviour:
   heightSmoothLag: 0.3
   centerOffset: {x: 0, y: 4, z: 0}
   followOnStart: 1
+  isFollowing: 0
+  posInitiale: {x: 0, y: 0, z: 0}
 --- !u!114 &114965460363661802
 MonoBehaviour:
   m_ObjectHideFlags: 1

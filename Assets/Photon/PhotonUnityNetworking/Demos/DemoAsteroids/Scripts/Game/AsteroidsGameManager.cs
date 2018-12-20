@@ -38,6 +38,8 @@ namespace Photon.Pun.Demo.Asteroids
 
         // Variables du perso
         public AudioClip[] aBruits; // Array contenant tous les sons
+        public AudioClip[] aBruitsMage; // Array contenant tous les sons
+        public AudioClip[] aBruitsKnight; // Array contenant tous les sons
         public GameObject txtConstruireArme; // Texte de construction de l'arme
         public GameObject txtRecolter; // Texte de récolte de ressources
         public Image imgConstruire;  // Image timer de construction
@@ -256,11 +258,32 @@ namespace Photon.Pun.Demo.Asteroids
             oClone.GetComponent<DeplacementCam>().enabled = true;
 
             // Donner les variables au personnage
+            if(PlayerListEntry.nomPerso == "knight") {
+                // Bruit dommange du chevalier
+                oClone.GetComponent<DeplacementPerso>().bruitAttacked = aBruitsKnight[0];
+
+                // Bruit attaque spéciale du chevalier
+                oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial = aBruitsKnight[1];
+                oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial2 = aBruitsKnight[2];
+
+                // Bruit de mort du chevalier
+                oClone.GetComponent<DeplacementPerso>().bruitDead = aBruitsKnight[3];
+            }
+            else {
+                // Bruit dommange du magicien
+                oClone.GetComponent<DeplacementPerso>().bruitAttacked = aBruitsMage[0];
+
+                // Bruit attaque spéciale du magicien
+                oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial = aBruitsMage[1];
+                oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial2 = aBruitsMage[2];
+
+                // Bruit de mort du magicien
+                oClone.GetComponent<DeplacementPerso>().bruitDead = aBruitsMage[3];
+            }
+
             oClone.GetComponent<DeplacementPerso>().bruitSlash = aBruits[0];
-            oClone.GetComponent<DeplacementPerso>().bruitAttacked = aBruits[1];
-            oClone.GetComponent<DeplacementPerso>().bruitDead = aBruits[2];
-            oClone.GetComponent<DeplacementPerso>().bruitAttackSpecial = aBruits[3];
-            oClone.GetComponent<DeplacementPerso>().bruitForge = aBruits[4];
+            oClone.GetComponent<DeplacementPerso>().bruitForge = aBruits[1];
+
             oClone.GetComponent<DeplacementPerso>().txtConstruireArme = txtConstruireArme;
             oClone.GetComponent<DeplacementPerso>().txtRecolter = txtRecolter;
             oClone.GetComponent<DeplacementPerso>().imgConstruire = imgConstruire;

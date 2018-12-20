@@ -7926,7 +7926,7 @@ Prefab:
     - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
         type: 2}
       propertyPath: aBruits.Array.size
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
         type: 2}
@@ -7950,6 +7950,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
         type: 2}
+      propertyPath: aBruitsMage.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
       propertyPath: aSpawnerBois.Array.size
       value: 9
       objectReference: {fileID: 0}
@@ -7966,6 +7971,11 @@ Prefab:
     - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
         type: 2}
       propertyPath: aTabVieJoueur.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsKnight.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4623919566971864, guid: bf75a8962519b314ba62ef242a36b2a0, type: 2}
@@ -8049,7 +8059,7 @@ Prefab:
         type: 2}
       propertyPath: aBruits.Array.data[1]
       value: 
-      objectReference: {fileID: 8300000, guid: fbd404b9682c50a4b83d41161cbd9866, type: 3}
+      objectReference: {fileID: 8300000, guid: 2008f66b125f973439d93e7bcae1978e, type: 3}
     - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
         type: 2}
       propertyPath: aBruits.Array.data[2]
@@ -8291,6 +8301,46 @@ Prefab:
       propertyPath: iMinuteRestante
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruits.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: 0cc043659fc9296409d3882be4b2ba53, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsMage.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 1c4f604ef3c8c2f47ab433b43c75745a, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsMage.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 0cc043659fc9296409d3882be4b2ba53, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsMage.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: c6146f0a5c8cb154f83218c0daa6bdd6, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsMage.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7cc9a6502c1d6c54db8888b437f4c52c, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsKnight.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 3b5d46f480cadb64993ae271b54b1009, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsKnight.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: fbd404b9682c50a4b83d41161cbd9866, type: 3}
+    - target: {fileID: 114721519423803692, guid: bf75a8962519b314ba62ef242a36b2a0,
+        type: 2}
+      propertyPath: aBruitsKnight.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 543bbc2d3b55f3f41aea542002164136, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf75a8962519b314ba62ef242a36b2a0, type: 2}
   m_IsPrefabAsset: 0

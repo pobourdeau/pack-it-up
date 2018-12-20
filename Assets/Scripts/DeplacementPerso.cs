@@ -20,6 +20,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public AudioClip bruitAttacked; // Son d'attaqué
     public AudioClip bruitDead; // Son de mort
     public AudioClip bruitAttackSpecial; // Son d'attaque spéciale
+    public AudioClip bruitAttackSpecial2; // Son d'attaque spéciale
     public AudioClip bruitForge; // Son de la forge
 
 
@@ -265,6 +266,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (collision.gameObject.tag == "spell") {
             // Descendre la vie
             GestionVie(false);
+            audioSourcePerso.PlayOneShot(bruitAttackSpecial2, 0.7f);
         }
 
         if(collision.gameObject.tag == "main") {
@@ -594,38 +596,20 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             }
         }
     }
+
+
     /**
      * Si le personnage se fait attaquer, le faire clignoter et l'empecher d'attaquer ou de se faire attaquer
      * @param arme
      * @return void
      * Auteur: Issam Aloulou  
      */
-    public void Invulnerable(GameObject corps){
+    public IEnumerator Invulnerable(GameObject corps){
         stunned=true;
-        photonView.RPC("FlasherPersoPartout", RpcTarget.AllViaServer);
-    }
-
-    public IEnumerator FlasherPerso(GameObject go) {
-        for(int i=0; i<3; i++) {
-            go.SetActive(false);
-            yield return new WaitForSeconds(0.3f);
-            go.SetActive(true);
-            yield return new WaitForSeconds(0.3f);
-        }
+        yield return new WaitForSeconds(2f);
 
         stunned = false;
         vitesseDeplacement = 16f;
-    }
-
-    /**
-     * Faire flasher le personnage sur tous les ordinateurs
-     * @param bool bEtat, GameObject go
-     * @return void
-     * @author Pier-Olivier Bourdeau
-     */
-    [PunRPC]
-    public void FlasherPersoPartout() {
-        StartCoroutine("FlasherPerso", corps);
     }
 
     /**
@@ -720,11 +704,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         if(this.gameObject.tag == "knight") {
             timeToFire = Time.time + 3;
-            //StartCoroutine("WaitWarrior");
             StartCoroutine("Sprint");
         }
         else{
             timeToFire = Time.time + 3;
+            animPerso.SetTrigger("special");
             BouleDeFeu();
         }
     }
@@ -742,18 +726,23 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     /**
      * 
      * @param void
-     * @return void;
-     * Auteur: Issam Aloulou
+     * @return void
+     * @author: Issam Aloulou
      */
     public IEnumerator Sprint(){
         vitesseDeplacement = 50f;
-        GuerrierTrail.SetActive(true);
+
+        // Créer une trace de trainer
+        GameObject oTrail = PhotonNetwork.Instantiate("Trail", transform.position, transform.rotation);
+        oTrail.transform.parent = gameObject.transform;
 
         yield return new WaitForSeconds(0.3f);
-        if (stunned==false) vitesseDeplacement = 16f;
+        if (stunned == false) {
+            vitesseDeplacement = 16f;
+        }
 
         yield return new WaitForSeconds(0.4f);
-        GuerrierTrail.SetActive(false);
+        PhotonNetwork.Destroy(oTrail);
     }
 
     /**
@@ -766,6 +755,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
         if (firePoint != null) {
             GameObject vfx = PhotonNetwork.Instantiate("Fireball", firePoint.transform.position, firePoint.transform.rotation);
+            audioSourcePerso.PlayOneShot(bruitAttackSpecial, 0.7f);
             StartCoroutine(WaitDude(vfx, 5f));
         }
     }
