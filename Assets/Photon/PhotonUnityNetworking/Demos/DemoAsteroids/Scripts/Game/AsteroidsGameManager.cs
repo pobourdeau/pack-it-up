@@ -232,7 +232,8 @@ namespace Photon.Pun.Demo.Asteroids
                 iCompteur++;
             }
 
-            //CheckEndOfGame();
+            // Vérifier s'il y a plus d'un joueur sur la carte
+            CheckEndOfGame();
 
             // Calculer le nombre de seconde total à la partie
             iSecondeTotal = iMinuteRestante * 60 + iSecondeRestante;

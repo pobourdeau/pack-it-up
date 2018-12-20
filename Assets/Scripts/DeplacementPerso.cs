@@ -93,9 +93,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         corps = transform.Find("perso").gameObject;
 
         // Inventaire du joueur
-        aInventaire[0] = 1;
-        aInventaire[1] = 1;
-        aInventaire[2] = 1;
+        aInventaire[0] = 0;
+        aInventaire[1] = 0;
+        aInventaire[2] = 0;
 
         // Faire en sorte que la caméra suit le joueur de l'ordinateur client
         DeplacementCam _cameraWork = this.gameObject.GetComponent<DeplacementCam>();
@@ -183,9 +183,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
                     if (stunned == false && aLarme && Time.time >= timeToFire) {
                         attaqueSpecial();
-                        //WaitDude();
                     }
-                }               
+                }
             }
         }
     }
@@ -604,9 +603,15 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * @return void
      * Auteur: Issam Aloulou  
      */
-    public IEnumerator Invulnerable(GameObject corps){
+    public IEnumerator Invulnerable(){
         stunned=true;
+
+        GameObject oDommage = PhotonNetwork.Instantiate("Dommage", transform.position + transform.up * 5.75f, Quaternion.identity);
+        oDommage.transform.parent = gameObject.transform;
+
         yield return new WaitForSeconds(2f);
+
+        PhotonNetwork.Destroy(oDommage);
 
         stunned = false;
         vitesseDeplacement = 16f;
