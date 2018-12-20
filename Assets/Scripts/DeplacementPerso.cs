@@ -738,7 +738,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         vitesseDeplacement = 50f;
 
         // Créer une trace de trainer
-        GameObject oTrail = PhotonNetwork.Instantiate("Trail", transform.position, transform.rotation);
+        GameObject oTrail = PhotonNetwork.Instantiate("Trail", transform.position + transform.up * 2.5f, transform.rotation);
         oTrail.transform.parent = gameObject.transform;
 
         yield return new WaitForSeconds(0.3f);
