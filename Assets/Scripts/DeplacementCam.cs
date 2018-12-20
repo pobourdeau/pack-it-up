@@ -9,27 +9,32 @@ using UnityEngine;
  */
 public class DeplacementCam : MonoBehaviour {
 
+    //Valeur float pour la caméra
     [SerializeField]
     public float distance = 7.0f;
 
+    //Valeur float pour la caméra
     [SerializeField]
     public float height = 3.0f;
 
+    //Valeur float pour la caméra
     [SerializeField]
     private float heightSmoothLag = 0.3f;
 
+    //Valeur Vector 3 pour la caméra
     [SerializeField]
     private Vector3 centerOffset = Vector3.zero;
 
+    //Valeur de suivi de caméra
     [SerializeField]
     private bool followOnStart = false;
 
-    Transform cameraTransform;
-    public bool isFollowing;
-    private float heightVelocity;
-    private float targetHeight = 100000.0f;
+    Transform cameraTransform;//Camera
+    public bool isFollowing;//Suivi ou non
+    private float heightVelocity;//Hauteur vélocité pour la caméra
+    private float targetHeight = 100000.0f;//Hauteur de la cible
 
-    public Vector3 posInitiale;
+    public Vector3 posInitiale;//La position de base de la caméra
 
 
     void Start() {
@@ -41,24 +46,48 @@ public class DeplacementCam : MonoBehaviour {
 
     }
 
+    /**
+  * Détection si la caméra existe ou pas 
+  * @param void
+  * @return void
+  * 
+  * Pier-Olivier Bourdeau
+  */
     void LateUpdate() {
 
+        //Si la caméra est inexistante
         if (cameraTransform == null && isFollowing) {
             OnStartFollowing();
         }
 
+        //Si la caméra suit déjà
         if (isFollowing) {
             Apply();
         }
     }
 
+    /**
+     * On fait suivre la caméra
+     * @param void
+     * @return void
+     * 
+     * Pier-Olivier Bourdeau
+     */
     public void OnStartFollowing() {
         cameraTransform = Camera.main.transform;
+        //La caméra suit maintenant
         isFollowing = true;
 
         Cut();
     }
 
+    /**
+  * La caméra s'ajuste à chacun des personnage avec les bonnes options
+  * @param void
+  * @return void
+  * 
+  * Pier-Olivier Bourdeau
+  */
     void Apply() {
         Vector3 targetCenter = transform.position + centerOffset;
 
@@ -91,7 +120,13 @@ public class DeplacementCam : MonoBehaviour {
         SetUpRotation(targetCenter);
     }
 
-
+    /**
+  * Ajustement de la hauteur si nécéssaire
+  * @param void
+  * @return void
+  * 
+  * Pier-Olivier Bourdeau
+  */
     void Cut() {
         float oldHeightSmooth = heightSmoothLag;
 
@@ -102,7 +137,13 @@ public class DeplacementCam : MonoBehaviour {
         heightSmoothLag = oldHeightSmooth;
     }
 
-
+    /**
+  * Rotation de la caméra addéquate
+  * @param void
+  * @return void
+  * 
+  * Pier-Olivier Bourdeau
+  */
     void SetUpRotation(Vector3 centerPos) {
 
         Vector3 cameraPos = cameraTransform.position;

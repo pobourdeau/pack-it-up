@@ -13,6 +13,8 @@ public class VieEnnemi : MonoBehaviour {
      * Si il y a des collision avec les objets 
      * @param void
      * @return void
+     * 
+     * Pier-Olivier Bourdeau
      */
     void OnTriggerEnter(Collider infoObj) {
 

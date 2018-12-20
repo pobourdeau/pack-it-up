@@ -57,8 +57,8 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     public GameObject[] aCaseRougeInv; // Les cases rouges de l'inventaire 
 
     public GameObject firePoint; //Endroit d'ou le projectile est tiré
-    private float timeToFire = 0;
-    public GameObject GuerrierTrail;
+    private float timeToFire = 0; //Valeur de temps pour le cooldown
+    public GameObject GuerrierTrail; //La trace de particule quand le guerrier utilise son attaque spéciale
 
     /**
      * Déterminer si c'est le joueur de l'ordinateur client
@@ -75,7 +75,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
 
     /**
-     * Initialisation des variables
+     * Initialisation des variables au début de la partie
      * @param void
      * @return void
      */
@@ -100,6 +100,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         // Faire en sorte que la caméra suit le joueur de l'ordinateur client
         DeplacementCam _cameraWork = this.gameObject.GetComponent<DeplacementCam>();
 
+        //Attribution de la caméra aux personnages en multijoueur
         if (_cameraWork != null) {
             if (photonView.IsMine) {
                 _cameraWork.OnStartFollowing();
@@ -109,10 +110,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
 
     /**
-     * Vérifier si le joueur est entrain de construire son arme
+     * Gestion de la mort du personnage, du raycast, des attaques normales et de attaques spéciales
      * @param void
      * @return void
-     * @author Vincent Gagnon
+     * @author Vincent Gagnon, Pier-Oliver Bourdeau
      */
     void Update() {
 
@@ -162,8 +163,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
        
                     // Faire jouer l'animation d'attaque
                     if (animPerso.GetCurrentAnimatorStateInfo(0).IsName("normal") && stunned == false) {
+                        //Bruit de coup d'arme
                         audioSourcePerso.PlayOneShot(bruitSlash, 0.7F);
+                        //Exécution de la fonction IE pour les zones d'attaques normales
                         StartCoroutine("hitboxAttaque");
+                        //Animation d'attaque des personnages
                         animPerso.SetTrigger("attaque");
 
                         // Si le joueur à une arme
@@ -172,6 +176,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                             StartCoroutine("Attaque", "arme");
                         }
                         else {
+                            //Attaque avec la main puisque le personnage n'a pas d'arme
                             StartCoroutine("Attaque", "main");
                         }
                         
@@ -181,7 +186,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // Si le joueur appui sur la touche droite de la souris
                 if (Input.GetKeyDown(KeyCode.Mouse1)) {
 
+                    //Si le joueur n'est pas stun, qu'il a l'arme et que son attaque est prete
                     if (stunned == false && aLarme && Time.time >= timeToFire) {
+                        //exécution de la fonction pour les attaques spéciales
                         attaqueSpecial();
                     }
                 }
@@ -203,9 +210,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         GameObject goHitBox;
 
         if (sTypeAttaque == "arme") {
+            //Créer une zone d'attaque devant le personnage durant une courte periode pour l'arme
             goHitBox = PhotonNetwork.Instantiate("HitBoxArme", transform.position + transform.forward * 2.5f, gameObject.transform.rotation);
         }
         else {
+            //Créer une zone d'attaque devant le personnage durant une courte periode pour la main
             goHitBox = PhotonNetwork.Instantiate("HitBoxMain", transform.position + transform.forward * 2.5f, gameObject.transform.rotation);
         }
 
@@ -265,6 +274,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (collision.gameObject.tag == "spell") {
             // Descendre la vie
             GestionVie(false);
+            //Joue le son quand la boule de feu touche un adversaire
             audioSourcePerso.PlayOneShot(bruitAttackSpecial2, 0.7f);
         }
 
@@ -337,14 +347,17 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
                     // Faire clignoter les case vides de l'inventaire
                     if(aInventaire[0] < 1) {
+                        //La case 1 devient rouge
                         aCaseRougeInv[0].SetActive(true);
                         aCaseRougeInv[0].GetComponent<Animator>().enabled = true;
                     }
                     if(aInventaire[1] < 1) {
+                        //La case 2 devient rouge
                         aCaseRougeInv[1].SetActive(true);
                         aCaseRougeInv[1].GetComponent<Animator>().enabled = true;
                     }
                     if (aInventaire[2] < 1) {
+                        //La case 3 devient rouge
                         aCaseRougeInv[2].SetActive(true);
                         aCaseRougeInv[2].GetComponent<Animator>().enabled = true;
                     }
@@ -382,7 +395,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 int pvID = objCollider.gameObject.GetComponent<PhotonView>().ViewID;
                 photonView.RPC("DetruireObjet", RpcTarget.MasterClient, pvID);
 
+                //Texte de récolte désactiver
                 txtRecolter.SetActive(false);
+                //L'item est coché dans l'inventaire pour signifier qu'il a été récolté
                 aCrochetInv[0].SetActive(true);
             }
 
@@ -391,10 +406,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // L'ajouter dans son inventaire
                 aInventaire[1] = 1;
 
-                // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
+                // Cacher le morceau de fer pour ne pas le réutiliser et l'afficher dans l'inventaire
                 int pvID = objCollider.gameObject.GetComponent<PhotonView>().ViewID;
                 photonView.RPC("DetruireObjet", RpcTarget.MasterClient, pvID);
 
+                //Texte de récolte désactiver
                 txtRecolter.SetActive(false);
                 aCrochetInv[1].SetActive(true);
             }
@@ -404,10 +420,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                 // L'ajouter dans son inventaire
                 aInventaire[2] = 1;
 
-                // Cacher le morceau de bois pour ne pas le réutiliser et l'afficher dans l'inventaire
+                // Cacher le morceau de cuir pour ne pas le réutiliser et l'afficher dans l'inventaire
                 int pvID = objCollider.gameObject.GetComponent<PhotonView>().ViewID;
                 photonView.RPC("DetruireObjet", RpcTarget.MasterClient, pvID);
 
+                //Texte de récolte désactiver
                 txtRecolter.SetActive(false);
                 aCrochetInv[2].SetActive(true);
             }
@@ -425,7 +442,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
                     // Afficher le timer de construction
                     oImgConstruire.SetActive(true);
                     imgConstruire.fillAmount = 1;
+                    //Texte de construction d'arme désactiver
                     txtConstruireArme.SetActive(false);
+                    //Activation de la coroutine pour construire l'arme
                     StartCoroutine("ConstructionArme"); 
                 }
             }
@@ -457,6 +476,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
         // Si on quitte le collider du bois, du fer et du cuir,
         if(objCollider.gameObject.tag == "bois" || objCollider.gameObject.tag == "fer" || objCollider.gameObject.tag == "cuir") {
+            //À ce moment, le texte est désactivé
             txtRecolter.SetActive(false);
         }
         
@@ -471,7 +491,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
             oImgConstruire.SetActive(false);
             txtConstruireArme.SetActive(false);
 
-            // Désactiver le clignotement les case vides de l'inventaire
+            // Désactiver le clignotement des case vides de l'inventaire
             aCaseRougeInv[0].GetComponent<Animator>().enabled = false;
             aCaseRougeInv[1].GetComponent<Animator>().enabled = false;
             aCaseRougeInv[2].GetComponent<Animator>().enabled = false;
@@ -520,7 +540,9 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         }
 
         arme.transform.parent = oMain.transform;
+        //Le joueur a l'arme
         aLarme = true;
+        //Modification du paramètre dans le animator
         animPerso.SetBool("aLarme",true);
     }
 
@@ -550,32 +572,44 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
         if (stunned==false){
             animPerso.SetTrigger("dommage");
 
+            //Si ce n'est pas la main qui a frappée
             if(main == false){
+                //Perte de vie
                 indVie--;
             }
             else{
+                //Le joueur ne peut pas recevoir de dégat après avoir été attaqué pour une courte periode de temps
                 StartCoroutine("Invulnerable");
+                //Vitesse de déplacement diminue
                 vitesseDeplacement = 10f;
                 return;
             }
 
             // Gestion de la vie du personnage
             switch (indVie) {
+                //Dans ce cas, le joueur est à 2 coeurs
                 case 2:
                     // Enlever un coeur et faire jouer un son
                     aBarreVie[2].GetComponent<Image>().sprite = vieVide;
+                    //Invulnérable pour une courte période de temps
                     StartCoroutine("Invulnerable");
+                    //Le personnage joue un son de cris quand il se fait attaquer
                     audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                     break;
+                //Dans ce cas, le joueur est à 1 coeur
                 case 1:
                     // Enlever deux coeurs et faire jouer un son
                     aBarreVie[1].GetComponent<Image>().sprite = vieVide;
+                    //Invulnérable pour une courte période de temps
                     StartCoroutine("Invulnerable");
+                    //Le personnage joue un son de cris quand il se fait attaquer
                     audioSourcePerso.PlayOneShot(bruitAttacked,1f);
                     break;
+                //Dans ce cas, le joueur est à 0 coeur
                 case 0:
                     // Enlever trois coeurs et faire jouer un son
                     aBarreVie[0].GetComponent<Image>().sprite = vieVide;
+                    //Le personnage joue un son de cris final quand il meurt
                     audioSourcePerso.PlayOneShot(bruitDead,1f);
 
                     // Jouer l'animation de mort
@@ -604,16 +638,22 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      * Auteur: Issam Aloulou  
      */
     public IEnumerator Invulnerable(){
+        //Le personnage est stun
         stunned=true;
 
+        //Création de l'animation de dégat reçu (Des étoiles au dessus de la tête du personnage)
         GameObject oDommage = PhotonNetwork.Instantiate("Dommage", transform.position + transform.up * 5.75f, Quaternion.identity);
         oDommage.transform.parent = gameObject.transform;
 
+        //Petit timer
         yield return new WaitForSeconds(2f);
 
+        //Destruction de l'animation
         PhotonNetwork.Destroy(oDommage);
 
+        //Le personnage n'est plus stun/attaqué
         stunned = false;
+        //Retour à la vitesse de déplacement normale
         vitesseDeplacement = 16f;
     }
 
@@ -649,6 +689,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
      */
     [PunRPC]
     public void DisparaitreJoueur() {
+        //Le joueur disparaît en multijoueur
         gameObject.SetActive(false);
     }
 
@@ -701,9 +742,10 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
 
     /**
      * Identifier le personnage choisi pour effectuer l'attaque special de celui-ci
+     * 
      * @param void
      * @return void;
-     * Auteur: Issam Aloulou
+     * Auteur: Vincent Gagnon, Issam Aloulou
      */
     void attaqueSpecial() {
 
@@ -719,9 +761,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     /**
+     * Cooldown - Pas utilisé pour l'instant
+     * 
        * @param void
        * @return void;
-       * Auteur: Vincent
+       * Auteur: Vincent Gagnon
        */
     public IEnumerator WaitWarrior() {
         yield return new WaitForSeconds(2f);
@@ -729,10 +773,11 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     /**
+     * Excécution de l'attaque spécial du guerrier, de sa vitesse et de la trace de particule qui l'accompagne
      * 
      * @param void
      * @return void
-     * @author: Issam Aloulou
+     * @author: Issam Aloulou, Vincent Gagnon
      */
     public IEnumerator Sprint(){
         vitesseDeplacement = 50f;
@@ -751,6 +796,7 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
     /**
+     * Apparition de la boule de feu
      * 
      * @param void
      * @return void;
@@ -759,20 +805,26 @@ public class DeplacementPerso : MonoBehaviourPunCallbacks, IPunObservable {
     void BouleDeFeu() {
 
         if (firePoint != null) {
+            //Création de la boule de feu devant le mage
             GameObject vfx = PhotonNetwork.Instantiate("Fireball", firePoint.transform.position, firePoint.transform.rotation);
+            //Son de la boule de feu
             audioSourcePerso.PlayOneShot(bruitAttackSpecial, 0.7f);
+            //Activation de la coroutine qui fera disparaître la boule de feu
             StartCoroutine(WaitDude(vfx, 5f));
         }
     }
 
    /**
+   * Destruction de la boule de feu après un certain temps
    * 
-   * @param void
+   * @param Object à détruire et le temps qu'on le laisse vivant
    * @return void;
    * Auteur: Vincent Gagnon
    */
     public IEnumerator WaitDude(GameObject objectToDestroy, float temps){
+        //Cooldown avant de faire disparaitre la boule de feu
         yield return new WaitForSeconds(temps);
+        //Destruction de la boule de feu
         PhotonNetwork.Destroy(objectToDestroy);
     }
 }

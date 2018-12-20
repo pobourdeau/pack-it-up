@@ -4,6 +4,11 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
+/**
+ * Gestionnaire Photo pour démarrer une partie en multijoueur
+ * @author Pier-Olivier Bourdeau
+ * @version 2018-12-12
+ */
 public class Launcher : MonoBehaviourPunCallbacks {
     string gameVersion = "1";
     [SerializeField]
@@ -24,10 +29,12 @@ public class Launcher : MonoBehaviourPunCallbacks {
 	}
 	
 	void Awake () {
+        //Syncronisation de la scène
         PhotonNetwork.AutomaticallySyncScene = true;
 	}
 
     public void Connect() {
+        //Le joueur est connecté
         estConnecte = true;
 
         progressionConnexion.SetActive(true);
@@ -44,6 +51,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnConnectedToMaster() {
         if (estConnecte) {
+            //On peut rejoindre au hazard
             PhotonNetwork.JoinRandomRoom();
         }
     }
@@ -54,6 +62,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedRoom() {
 
+        //Load la map
             PhotonNetwork.LoadLevel("SceneJeu");
     }
 
